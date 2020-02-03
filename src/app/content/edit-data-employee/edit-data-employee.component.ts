@@ -138,18 +138,18 @@ export class EditDataEmployeeComponent implements OnInit {
         };
         console.log(dataEmp);
 
-        this.manageUserService.updateEmployee(this.personalId, dataEmp).subscribe(
-          res => {
-            if (res['status'] === 'Success') {
-              this.showToast('alertMessage', 'แก้ไขข้อมูลสำเร็จ');
-            } else {
-              this.showToast('alertMessage', 'แก้ไขข้อมูลไม่สำเร็จ');
-            }
-          },
-          err => {
-            console.log(err);
-          }
-        );
+        // this.manageUserService.updateEmployee(this.personalId, dataEmp).subscribe(
+        //   res => {
+        //     if (res['status'] === 'Success') {
+        //       this.showToast('alertMessage', 'แก้ไขข้อมูลสำเร็จ');
+        //     } else {
+        //       this.showToast('alertMessage', 'แก้ไขข้อมูลไม่สำเร็จ');
+        //     }
+        //   },
+        //   err => {
+        //     console.log(err);
+        //   }
+        // );
         break;
       }
       default: { break; }

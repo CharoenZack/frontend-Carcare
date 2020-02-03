@@ -49,9 +49,18 @@ export class ManageUserService {
       })
     );
   }
-  createEmployee(dataUser) {
-    return this.http.post(ApiConstants.baseURl + '/employee/create',
-      dataUser, {
+  createEmployee(data) {
+    const payload = {
+      username : data.username,
+      password : data.password,
+      fname : data.fname,
+      lname : data.lname,
+      tel : data.tel,
+      status : 1,
+      position : 2
+    }
+    return this.http.post('/employee/create',
+    payload, {
       headers: {
         Authorization: `${localStorage.getItem('access-token')}`
       }
@@ -64,12 +73,14 @@ export class ManageUserService {
       )
     );
   }
-  updateEmployee(id, dataUser) {
-    const data = {
-      ...dataUser
-    };
-    console.log(data);
-    return this.http.put(ApiConstants.baseURl + `/manageEmployee/edit/${id}`, data, {
+  updateEmployee(data) {
+    const payload = {
+      fname : data.editfname,
+      lname : data.editlname,
+      tel : data.editTel,
+      id : data.id
+    }
+    return this.http.patch(`/employee/edit`, payload, {
       headers: {
         Authorization: `${localStorage.getItem('access-token')}`
       }
@@ -84,22 +95,19 @@ export class ManageUserService {
 
   }
   getAllUsers() {
-    console.log(localStorage.getItem('access-token'));
-    return this.http.get(ApiConstants.baseURl + '/employee', {
+    return this.http.get('/employee', {
       headers: {
         Authorization: `${localStorage.getItem('access-token')}`
       }
     }).pipe(
       map(res => {
-        return {
-          status: res['result'],
-          data: res['data'][0]
-        };
+        console.log(res);
+        return res['data']
       })
     );
   }
   deleteEmployee(id) {
-    return this.http.delete(ApiConstants.baseURl + `/manageEmployee/${id}`, {
+    return this.http.delete(`/employee/${id}`, {
       headers: {
         Authorization: `${localStorage.getItem('access-token')}`
       }
