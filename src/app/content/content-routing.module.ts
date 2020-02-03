@@ -19,108 +19,10 @@ import { WithdrawReturnComponent } from './withdraw-return/withdraw-return.compo
 import { ManageWithdrawReturnComponent } from './manage-withdraw-return/manage-withdraw-return.component';
 import { ScheduleComponent } from './schedule/schedule.component';
 import { ManageChannelComponent } from './manage-channel/manage-channel.component';
+import { MainComponent } from '../main/main.component';
 
 
 const routes: Routes = [
-  {
-    path: '',
-    component: ContentComponent,
-    canActivate: [AuthGuard],
-    children: [
-      {
-        path: '',
-        component: HomeComponent,
-      },
-      {
-        path: 'manageManager',
-        component: ManageManagerComponent,
-      },
-
-      {
-        path: 'car',
-        component: ManageTypecarComponent,
-      },
-      {
-        path: 'manageCarservice',
-        component: ManageCarserviceComponent,
-      },
-
-      {
-        path: 'manageTool',
-        component: ManageToolsComponent,
-      },
-      {
-        path: 'manageEmployee',
-        children: [
-          {
-            path: '',
-            component: ManageEmployeeComponent,
-          },
-          {
-            path: 'create',
-            component: EditFormComponent,
-            data: {
-              urlback: '/manageEmployee',
-              messageback: 'กลับสู่หน้าจัดการพนักงาน'
-            }
-          },
-          {
-            path: 'edit/:id',
-            component: EditDataEmployeeComponent,
-            data: {
-              urlback: '/manageEmployee',
-              messageback: 'กลับสู่หน้าจัดการพนักงาน'
-            }
-          },
-          {
-            path: ':id',
-            component: ProfileComponent
-          }
-        ]
-      },
-      {
-        path: 'managePromotion',
-        component: ManagePromotionComponent
-      },
-      {
-        path: 'manageBooking',
-        children: [
-          {
-            path: '',
-            component: BookingComponent
-          },
-          {
-            path: 'create',
-            component: BookingFormComponent,
-            data: {
-              urlback: '/manageBooking',
-            }
-          },
-          {
-            path: 'detail/:id',
-            component: BookingDetailComponent,
-          }
-        ]
-      },
-      {
-        path: 'withdraw',
-        component: WithdrawReturnComponent,
-      },
-      {
-        path: 'manageWithdraw',
-        component: ManageWithdrawReturnComponent,
-      },
-      {
-        path: 'schedule',
-        component: ScheduleComponent,
-      },
-      {
-        path: 'manageChannel',
-        component: ManageChannelComponent
-      }
-
-    ]
-  }
 ]
 @NgModule({
   imports: [RouterModule.forChild(routes)],

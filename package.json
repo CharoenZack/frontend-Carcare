@@ -27,6 +27,7 @@
     "dateformat": "^3.0.3",
     "moment": "^2.24.0",
     "ngx-spinner": "^8.1.0",
+    "primeflex": "^1.0.0",
     "primeicons": "^2.0.0",
     "primeng": "^9.0.0-rc.2",
     "rxjs": "~6.4.0",

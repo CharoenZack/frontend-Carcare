@@ -45,6 +45,7 @@ import { ListboxModule } from 'primeng/listbox';
 import { ManageChannelComponent } from './manage-channel/manage-channel.component';
 import { TooltipModule } from 'primeng/tooltip';
 import { KeyFilterModule } from 'primeng/keyfilter';
+import { ManageUserService } from '../shared/services/manage-user.service';
 
 @NgModule({
   declarations: [
@@ -65,8 +66,7 @@ import { KeyFilterModule } from 'primeng/keyfilter';
     BookingFormComponent,
     WithdrawReturnComponent,
     ManageWithdrawReturnComponent,
-    ManageChannelComponent,
-
+    ManageChannelComponent
   ],
   imports: [
     CommonModule,
@@ -93,9 +93,9 @@ import { KeyFilterModule } from 'primeng/keyfilter';
     OrderListModule,
     ListboxModule,
     TooltipModule,
-    KeyFilterModule,
-    ToastModule
+    KeyFilterModule
   ],
-  providers: [AuthService, AuthGuard, HttpClientService, ConfirmationService],
+  providers: [AuthService , ManageUserService ,  AuthGuard, HttpClientService, ConfirmationService],
+  exports : [ContentComponent]
 })
 export class ContentModule { }

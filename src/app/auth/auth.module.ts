@@ -9,7 +9,7 @@ import { ToastModule } from 'primeng/toast';
 @NgModule({
   declarations: [
     AuthComponent,
-    LoginComponent
+    LoginComponent,
   ],
   imports: [
     CommonModule,
@@ -18,5 +18,6 @@ import { ToastModule } from 'primeng/toast';
     ReactiveFormsModule,
     ToastModule
   ],
+  exports : [AuthComponent]
 })
 export class AuthModule { }

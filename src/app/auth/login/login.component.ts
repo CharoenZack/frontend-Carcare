@@ -67,11 +67,12 @@ export class LoginComponent implements OnInit {
       this.authService.login(username, password).toPromise().then(res => {
         if (res['result'] === true) {
           const accessToken = res['token'];
-          console.log(accessToken);
-
           localStorage.setItem('access-token', accessToken);
-          this.authService.isLoggedIn().next(true);
-          this.router.navigate(['/']);
+          localStorage.setItem('name', res['fname']);
+          localStorage.setItem('isLoggedIn', 'true');
+          localStorage.setItem('position', res['position']);
+          localStorage.setItem('userId' , res['id']);
+          this.router.navigate(['/content' , { isLoggedin : 'true' , position : res['position'] } ]);
         }
       }).catch(err => {
         this.messageService.add({

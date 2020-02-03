@@ -1,17 +1,14 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { MainComponent } from './main/main.component';
+import { AuthComponent } from './auth/auth.component';
+import { AuthGuard } from './shared/guard/auth.guard';
 
 const routes: Routes = [
-  { path: '', loadChildren: () => import(`./content/content.module`).then(content => content.ContentModule) },
   { path: 'auth', loadChildren: () => import(`./auth/auth.module`).then(auth => auth.AuthModule) },
-  {
-    path: '',
-    redirectTo: '',
-    pathMatch: 'full'
-  }
-];
+]
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

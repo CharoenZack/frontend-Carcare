@@ -50,7 +50,7 @@ export class ManageUserService {
     );
   }
   createEmployee(dataUser) {
-    return this.http.post(ApiConstants.baseURl + '/manageEmployee',
+    return this.http.post(ApiConstants.baseURl + '/employee/create',
       dataUser, {
       headers: {
         Authorization: `${localStorage.getItem('access-token')}`
@@ -84,7 +84,8 @@ export class ManageUserService {
 
   }
   getAllUsers() {
-    return this.http.get(ApiConstants.baseURl + '/manageEmployee', {
+    console.log(localStorage.getItem('access-token'));
+    return this.http.get(ApiConstants.baseURl + '/employee', {
       headers: {
         Authorization: `${localStorage.getItem('access-token')}`
       }
