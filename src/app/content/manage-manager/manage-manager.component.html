@@ -5,7 +5,7 @@
     </div>
     <div class="container">
       <div class="line"></div>
-      <br>
+      <br />
       <div class="row">
         <div class="ui-g">
           <div class="ui-g-12 ui-lg-12">
@@ -14,52 +14,74 @@
                 <div style="text-align:left">
                   <!-- <button pButton type="button" id="btn-Increase" label="เพิ่ม" class="ui-button-temple"
                     style="width: 20%"></button> -->
-                    <button pButton type="button" label="เพิ่ม" class="ui-button-rounded ui-button-success"
-                    style="font-size: 15px; width: 10%;" ></button>
+                  <button
+                    pButton
+                    type="button"
+                    label="เพิ่ม"
+                    class="ui-button-rounded ui-button-success"
+                    style="font-size: 15px; width: 10%;"
+                    (click)="addManager()"
+                  ></button>
                 </div>
-
               </ng-template>
               <ng-template pTemplate="header" let-columns>
                 <tr>
                   <th pSortableColumn="name">
                     ชื่อ-นามสุกล
-                    <p-sortIcon field="nameAbbr" ariaLabel="Activate to sort"
+                    <p-sortIcon
+                      field="nameAbbr"
+                      ariaLabel="Activate to sort"
                       ariaLabelDesc="Activate to sort in descending order"
-                      ariaLabelAsc="Activate to sort in ascending order">
+                      ariaLabelAsc="Activate to sort in ascending order"
+                    >
                     </p-sortIcon>
                   </th>
                   <th pSortableColumn="tel">
                     เบอร์โทร
-                    <p-sortIcon field="name" ariaLabel="Activate to sort"
+                    <p-sortIcon
+                      field="name"
+                      ariaLabel="Activate to sort"
                       ariaLabelDesc="Activate to sort in descending order"
-                      ariaLabelAsc="Activate to sort in ascending order">
+                      ariaLabelAsc="Activate to sort in ascending order"
+                    >
                     </p-sortIcon>
                   </th>
                   <th pSortableColumn="date">
                     วันที่สร้าง
-                    <p-sortIcon field="name" ariaLabel="Activate to sort"
+                    <p-sortIcon
+                      field="name"
+                      ariaLabel="Activate to sort"
                       ariaLabelDesc="Activate to sort in descending order"
-                      ariaLabelAsc="Activate to sort in ascending order">
+                      ariaLabelAsc="Activate to sort in ascending order"
+                    >
                     </p-sortIcon>
                   </th>
-                  <th>
-
-                  </th>
+                  <th></th>
                 </tr>
               </ng-template>
               <ng-template pTemplate="body" let-rowData let-columns="columns">
                 <tr>
-                  <td *ngFor="let col of columns;">
-                    <span class="ui-column-title">{{col.header}}</span> {{rowData[col.field]}}
+                  <td *ngFor="let col of columns">
+                    <span class="ui-column-title">{{ col.header }}</span>
+                    {{ rowData[col.field] }}
                   </td>
                   <td>
                     <div style="text-align:center">
-                      <button pButton type="button" label="แก้ไข" class="ui-button-warning"
-                        style="width: 40%;"></button>
-                      <button pButton type="button" label="ลบ" class="ui-button-danger"
-                        style="width: 40%;margin-left: 5mm"></button>
+                      <button
+                        pButton
+                        type="button"
+                        label="แก้ไข"
+                        class="ui-button-warning"
+                        style="width: 40%;"
+                      ></button>
+                      <button
+                        pButton
+                        type="button"
+                        label="ลบ"
+                        class="ui-button-danger"
+                        style="width: 40%;margin-left: 5mm"
+                      ></button>
                     </div>
-
                   </td>
                 </tr>
               </ng-template>
@@ -70,3 +92,56 @@
     </div>
   </div>
 </div>
+<p-dialog
+  header="เพิ่มเจ้าของร้าน"
+  [(visible)]="display"
+  [modal]="true"
+  [style]="{ width: '50vw' }"
+  [maximizable]="true"
+  [baseZIndex]="10000"
+  [draggable]="false"
+  [resizable]="false"
+>
+  <div class="p-grid" [formGroup]="formEmployee">
+    <div class="p-col-4" style="text-align: right;">
+      <label for="username">UserName</label>
+    </div>
+    <div class="p-col-8">
+      <input type="text" pInputText formControlName="username" id ="username"/>
+    </div>
+    <div class="p-col-4" style="text-align: right;">
+      <label for="fname">Password</label>
+    </div>
+    <div class="p-col-8">
+      <input type="text" pInputText formControlName="password" id ="password"/>
+    </div>
+      <div class="p-col-4" style="text-align: right;">
+        <label for="fname">ชื่อ</label>
+      </div>
+      <div class="p-col-8">
+        <input type="text" pInputText formControlName="fname" id="fname"/>
+      </div>
+      <div class="p-col-4" style="text-align: right;">
+        <label for="lname">นามสกุล</label>
+      </div>
+      <div class="p-col-8">
+        <input type="text" pInputText formControlName="lname" id="lname"/>
+      </div>
+      <div class="p-col-4" style="text-align: right;">
+        <label for="phone">เบอร์โทรศัพท์</label>
+      </div>
+      <div class="p-col-8">
+        <input type="text" pInputText formControlName="tel" id ="tel"/>
+      </div>
+      <div class="p-col-12" style="text-align: center;">
+        <button
+      type="button"
+      pButton
+      icon="pi pi-check"
+      (click)="display = false"
+      label="บันทึก"
+      (click)="submitFormEmployee()"
+    ></button>
+      </div>
+  </div>
+</p-dialog>

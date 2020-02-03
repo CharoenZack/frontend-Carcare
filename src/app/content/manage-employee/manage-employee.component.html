@@ -1,5 +1,5 @@
-<div class="ui-g">
-  <div class="ui-g-12 ui-lg-12">
+<div class="p-grid">
+  <div class="p-col-12">
     <div style="text-align:center">
       <h1>จัดการพนักงาน</h1>
     </div>
@@ -7,11 +7,11 @@
       <div class="line"></div>
       <br>
       <div class="row">
-        <div class="ui-g">
-          <div class="ui-g-12 ui-lg-12 ui-md-12 ui-sm-12">
+        <div class="p-grid">
+          <div class="p-col-12">
             <p-messages [(value)]="msgs"></p-messages>
           </div>
-          <div class="ui-g-12 ui-lg-12">
+          <div class="p-col-12">
             <p-table [paginator]="true" [value]='personal' [rows]="5" [responsive]="true" selectionMode="single">
               <ng-template pTemplate="caption">
                 <div style="text-align:left">

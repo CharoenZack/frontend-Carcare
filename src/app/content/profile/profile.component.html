@@ -5,61 +5,54 @@
       <div style="text-align:center">
         <h1>ข้อมูลส่วนตัว</h1>
       </div>
-      <div class="line"></div>
+      <hr>
       <br>
       <p-card>
-        <div class="ui-g">
-          <div class="ui-g-12 ui-lg-12 ">
-            <div class="ui-g-12 ui-lg-6">
-              <div class="ui-g-12 ui-lg-12" style=" text-align: center;">
+        <div class="p-grid">
+            <div class="p-col-6">
+              <div style=" text-align: center;">
                 <img src="Card" src="assets/images/no-images.png" class="img-info">
               </div>
             </div>
-            <div class="ui-g-12 ui-lg-6">
-              <div class="ui-g-5 ui-lg-3 text-info" style="text-align:right;">
-                <span>Username : </span>
-              </div>
-              <div class="ui-g-5 ui-lg-8 " style="text-align:left;">
-                <span>{{(userData) ? userData['employee_username']: ''}} </span>
-              </div>
-              <!-- {{userData.employee_username | json }} -->
-              <!-- <div class="ui-g-5 ui-lg-3 text-info" style="text-align:right;">
-                <span>Password : </span>
-              </div>
-              <div class="ui-g-5 ui-lg-8 " style="text-align:left;">
-                <span>{{(userData) ? userData.employee_password: ''}} </span>
-              </div> -->
-              <div class="ui-g-5 ui-lg-3 text-info" style="text-align:right;">
-                <span>ชื่อ : </span>
-              </div>
-              <div class="ui-g-5 ui-lg-8 " style="text-align:left;">
-                <span>{{(userData) ? userData['employee_fname']: ''}} </span>
-              </div>
-              <div class="ui-g-5 ui-lg-3 text-info" style="text-align: right;">
-                <span>นามสกุล :</span>
-              </div>
-              <div class="ui-g-5 ui-lg-8 " style="text-align: left;">
-                <span>{{(userData) ? userData['employee_lname']: ''}} </span>
-              </div>
-              <div class="ui-g-5 ui-lg-3 text-info " style="text-align:right;">
-                <span>เบอร์โทรศัพท์ : </span>
-              </div>
-              <div class="ui-g-8 ui-lg-8" style="text-align:left;">
-                <span>{{(userData) ? userData['employee_tel']: ''}} </span>
-              </div>
-              <div class="ui-g-5 ui-lg-3 text-info " style="text-align:right;">
-                <span>ตำแหน่ง : </span>
-              </div>
-              <div class="ui-g-5 ui-lg-8" style="text-align:left;">
-                <span>{{(userData) ? userData['position_role']: ''}} </span>
-              </div>
-              <div class="ui-g-5 ui-lg-12" style="text-align:center;">
-                <button pButton type="button" label="แก้ไข" class="ui-button-raised ui-button-raised"
-                (click)="showEdit(userData['employee_id'])"></button>
+            <div class="p-col-6">
+              <div class="p-grid">
+                <div class="p-col-6 text-info" style = "text-align:left;">
+                  <span>Username : </span>
+                </div>
+                <div class="p-col-6 " style="text-align:right;">
+                  <span>{{(userData) ? userData['employee_username']: ''}} </span>
+                </div>
+                <div class="p-col-6 text-info" style = "text-align:left;">
+                  <span>FirstName : </span>
+                </div>
+                <div class="p-col-6 " style="text-align:right;">
+                  <span>{{(userData) ? userData['employee_fname']: ''}} </span>
+                </div>
+                <div class="p-col-6 text-info" style = "text-align:left;">
+                  <span>LastName : </span>
+                </div>
+                <div class="p-col-6 " style="text-align:right;">
+                  <span>{{(userData) ? userData['employee_lname']: ''}} </span>
+                </div>
+                <div class="p-col-6 text-info" style = "text-align:left;">
+                  <span>Telephone Number : </span>
+                </div>
+                <div class="p-col-6 " style="text-align:right;">
+                  <span>{{(userData) ? userData['employee_tel']: ''}} </span>
+                </div>
+                <div class="p-col-6 text-info" style = "text-align:left;">
+                  <span>Position : </span>
+                </div>
+                <div class="p-col-6 " style="text-align:right;">
+                  <span>{{(userData) ? userData['position_role']: ''}} </span>
+                </div>
+                <div class="p-col-12" style="text-align:center;">
+                  <button pButton type="button" label="แก้ไข" class="ui-button-raised ui-button-raised"
+                  (click)="showEdit(userData['employee_id'])"></button>
+                </div>
               </div>
             </div>
           </div>
-        </div>
       </p-card>
     </div>
   </div>

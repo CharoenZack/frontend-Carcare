@@ -7,21 +7,16 @@ import { AuthModule } from './auth/auth.module';
 import { ContentModule } from './content/content.module';
 import { AccordionModule } from 'primeng/accordion';
 import { NgxSpinnerModule } from 'ngx-spinner';
-import { FooterComponent } from './core/footer/footer.component';
-import { TopbarComponent } from './core/topbar/topbar.component';
-import { MenubarModule } from 'primeng/menubar';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
 import { MessageService } from 'primeng/api';
-import { MenubarComponent } from './core/menubar/menubar.component';
-import { MenuModule } from 'primeng/menu';
+import { MainComponent } from './main/main.component';
+import { MainModule } from './main/main.module';
+
 
 @NgModule({
   declarations: [
     AppComponent,
-    FooterComponent,
-    TopbarComponent,
-    MenubarComponent,
     FormatSelectItemPipe
   ],
   imports: [
@@ -31,10 +26,10 @@ import { MenuModule } from 'primeng/menu';
     ContentModule,
     AccordionModule,
     NgxSpinnerModule,
-    MenubarModule,
     BrowserAnimationsModule,
     HttpClientModule,
-    MenuModule,
+    MainModule
+
   ],
   providers: [
     MessageService,

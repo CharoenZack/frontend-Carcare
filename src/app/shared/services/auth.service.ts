@@ -34,16 +34,10 @@ export class AuthService {
     const body = {
       username, password
     };
-    return this.http.post(ApiConstants.baseURl + '/auth/login', body);
+    return this.http.post(ApiConstants.baseURl + '/employee/login', body);
   }
 
   isLoggedIn(): BehaviorSubject<boolean> {
     return this.loggedIn;
-  }
-
-  logout() {
-    localStorage.clear();
-    this.loggedIn.next(false);
-    this.router.navigate(['/auth/login']);
   }
 }
