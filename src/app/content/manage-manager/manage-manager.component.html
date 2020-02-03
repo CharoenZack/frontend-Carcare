@@ -1,15 +1,11 @@
-<div class="ui-g">
-  <div class="ui-g-12 ui-lg-12">
+<div class="p-grid">
+  <div class="p-col-12">
     <div style="text-align:center">
       <h1>จัดการเจ้าของร้าน</h1>
     </div>
-    <div class="container">
-      <div class="line"></div>
-      <br />
-      <div class="row">
-        <div class="ui-g">
-          <div class="ui-g-12 ui-lg-12">
-            <p-table [paginator]="true" [rows]="10" [responsive]="true">
+      <hr />
+      <p-messages [(value)]="msgs"></p-messages>
+            <p-table [paginator]="true" [rows]="10" [responsive]="true" [value]="user">
               <ng-template pTemplate="caption">
                 <div style="text-align:left">
                   <!-- <button pButton type="button" id="btn-Increase" label="เพิ่ม" class="ui-button-temple"
@@ -47,7 +43,7 @@
                     </p-sortIcon>
                   </th>
                   <th pSortableColumn="date">
-                    วันที่สร้าง
+                    ตำแหน่ง
                     <p-sortIcon
                       field="name"
                       ariaLabel="Activate to sort"
@@ -61,10 +57,9 @@
               </ng-template>
               <ng-template pTemplate="body" let-rowData let-columns="columns">
                 <tr>
-                  <td *ngFor="let col of columns">
-                    <span class="ui-column-title">{{ col.header }}</span>
-                    {{ rowData[col.field] }}
-                  </td>
+                <td>{{ rowData.employee_fname }} {{ rowData.employee_lname }}</td>
+                <td>{{ rowData.employee_tel }}</td>
+                <td>ผู้จัดการร้าน</td>
                   <td>
                     <div style="text-align:center">
                       <button
@@ -73,6 +68,7 @@
                         label="แก้ไข"
                         class="ui-button-warning"
                         style="width: 40%;"
+                        (click) = "editEmployee(rowData)"
                       ></button>
                       <button
                         pButton
@@ -80,6 +76,7 @@
                         label="ลบ"
                         class="ui-button-danger"
                         style="width: 40%;margin-left: 5mm"
+                        (click)="confirm(rowData.employee_id)"
                       ></button>
                     </div>
                   </td>
@@ -88,10 +85,6 @@
             </p-table>
           </div>
         </div>
-      </div>
-    </div>
-  </div>
-</div>
 <p-dialog
   header="เพิ่มเจ้าของร้าน"
   [(visible)]="display"
@@ -106,33 +99,90 @@
     <div class="p-col-4" style="text-align: right;">
       <label for="username">UserName</label>
     </div>
-    <div class="p-col-8">
+    <div class="p-col-4">
       <input type="text" pInputText formControlName="username" id ="username"/>
     </div>
-    <div class="p-col-4" style="text-align: right;">
-      <label for="fname">Password</label>
+    <div class="p-col-4" style="text-align: left;">
+      <div *ngIf="formError.username" class="text-danger text-invalid">{{formError.username }}</div>
     </div>
-    <div class="p-col-8">
-      <input type="text" pInputText formControlName="password" id ="password"/>
+    <div class="p-col-4" style="text-align: right;">
+      <label for="password">Password</label>
+    </div>
+    <div class="p-col-4">
+      <input type="password" pInputText formControlName="password" id ="password"/>
+    </div>
+    <div class="p-col-4" style="text-align: left;">
+      <div *ngIf="formError.password" class="text-danger text-invalid">{{formError.password }}</div>
     </div>
       <div class="p-col-4" style="text-align: right;">
         <label for="fname">ชื่อ</label>
       </div>
-      <div class="p-col-8">
+      <div class="p-col-4">
         <input type="text" pInputText formControlName="fname" id="fname"/>
+      </div>
+      <div class="p-col-4" style="text-align: left;">
+        <div *ngIf="formError.fname" class="text-danger text-invalid">{{formError.fname }}</div>
       </div>
       <div class="p-col-4" style="text-align: right;">
         <label for="lname">นามสกุล</label>
       </div>
-      <div class="p-col-8">
+      <div class="p-col-4">
         <input type="text" pInputText formControlName="lname" id="lname"/>
+      </div>
+      <div class="p-col-4" style="text-align: left;">
+        <div *ngIf="formError.lname" class="text-danger text-invalid">{{formError.lname }}</div>
       </div>
       <div class="p-col-4" style="text-align: right;">
         <label for="phone">เบอร์โทรศัพท์</label>
       </div>
-      <div class="p-col-8">
+      <div class="p-col-4">
         <input type="text" pInputText formControlName="tel" id ="tel"/>
       </div>
+      <div class="p-col-4" style="text-align: left;">
+        <div *ngIf="formError.tel" class="text-danger text-invalid">{{formError.tel }}</div>
+      </div>
+      <div class="p-col-12" style="text-align: center;">
+        <button
+      type="button"
+      pButton
+      icon="pi pi-check"
+      label="บันทึก"
+      (click)="submitFormEmployee()"
+    ></button>
+      </div>
+  </div>
+</p-dialog>
+
+<p-dialog
+  header="เพิ่มเจ้าของร้าน"
+  [(visible)]="displayEdit"
+  [modal]="true"
+  [style]="{ width: '50vw' }"
+  [maximizable]="true"
+  [baseZIndex]="10000"
+  [draggable]="false"
+  [resizable]="false"
+>
+  <div class="p-grid" [formGroup]="formEditEmployee">
+      <div class="p-col-4" style="text-align: right;">
+        <label for="editfname">ชื่อ</label>
+      </div>
+      <div class="p-col-8">
+        <input type="text" pInputText formControlName="editfname" id="editfname"/>
+      </div>
+      <div class="p-col-4" style="text-align: right;">
+        <label for="editlname">นามสกุล</label>
+      </div>
+      <div class="p-col-8">
+        <input type="text" pInputText formControlName="editlname" id="editlname"/>
+      </div>
+      <div class="p-col-4" style="text-align: right;">
+        <label for="editTel">เบอร์โทรศัพท์</label>
+      </div>
+      <div class="p-col-8">
+        <input type="text" pInputText formControlName="editTel" id ="editTel"/>
+      </div>
+      <input type="hidden" formControlName="id"/>
       <div class="p-col-12" style="text-align: center;">
         <button
       type="button"
@@ -140,8 +190,15 @@
       icon="pi pi-check"
       (click)="display = false"
       label="บันทึก"
-      (click)="submitFormEmployee()"
+      (click)="updateEmployee()"
     ></button>
       </div>
   </div>
 </p-dialog>
+
+<p-confirmDialog #cd header="ลบข้อมูล" icon="pi pi-exclamation-triangle">
+  <p-footer>
+    <button type="button" pButton icon="pi pi-check" label="คกลง" (click)="cd.accept()"></button>
+      <button type="button" pButton icon="pi pi-times" label="ยกเลิก" (click)="cd.reject()"></button>
+  </p-footer>
+</p-confirmDialog>
