@@ -55,7 +55,8 @@ export class MenubarComponent implements OnInit {
         break;
       case 3:
         this.menuSideBar = [
-        { label: 'จัดการการจองคิว', icon: 'pi pi-fw pi-users', routerLink: '/content/manageBooking' },
+        { label: 'จัดการสมาชิก', icon: 'pi pi-fw pi-users', routerLink: '/content/manageMember' },
+        { label: 'จัดการการจองคิว', icon: 'pi pi-fw pi-users', routerLink: '/content/manageBooking' }
         ];
         break;
       case 4:
