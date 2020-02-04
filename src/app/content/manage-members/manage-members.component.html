@@ -1,0 +1,218 @@
+<div class="p-grid">
+  <div class="p-col-12">
+    <div style="text-align:center">
+      <h1>จัดการสมาชิก</h1>
+    </div>
+    <hr />
+    <p-messages [(value)]="msgs"></p-messages>
+    <p-table [paginator]="true" [rows]="10" [responsive]="true" [value]="members">
+      <ng-template pTemplate="caption">
+        <div style="text-align:left">
+          <!-- <button pButton type="button" id="btn-Increase" label="เพิ่ม" class="ui-button-temple"
+                style="width: 20%"></button> -->
+          <button
+            pButton
+            type="button"
+            label="เพิ่ม"
+            class="ui-button-rounded ui-button-success"
+            style="font-size: 15px; width: 10%;"
+            (click)="addMember()"
+          ></button>
+        </div>
+      </ng-template>
+      <ng-template pTemplate="header" let-columns>
+        <tr>
+          <th pSortableColumn="name">
+            ชื่อ-นามสุกล
+            <p-sortIcon
+              field="nameAbbr"
+              ariaLabel="Activate to sort"
+              ariaLabelDesc="Activate to sort in descending order"
+              ariaLabelAsc="Activate to sort in ascending order"
+            >
+            </p-sortIcon>
+          </th>
+          <th pSortableColumn="tel">
+            ที่อยู่
+            <p-sortIcon
+              field="name"
+              ariaLabel="Activate to sort"
+              ariaLabelDesc="Activate to sort in descending order"
+              ariaLabelAsc="Activate to sort in ascending order"
+            >
+            </p-sortIcon>
+          </th>
+          <th pSortableColumn="date">
+            เบอร์โทรศัพท์
+            <p-sortIcon
+              field="name"
+              ariaLabel="Activate to sort"
+              ariaLabelDesc="Activate to sort in descending order"
+              ariaLabelAsc="Activate to sort in ascending order"
+            >
+            </p-sortIcon>
+          </th>
+          <th>ดำเนินการ</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-rowData let-columns="columns">
+        <tr>
+          <td>{{ rowData.members_fname }} {{ rowData.members_lname }}</td>
+          <td>{{ rowData.members_address }}</td>
+          <td>{{ rowData.members_tel }}</td>
+          <td>
+            <div style="text-align:center">
+              <button
+                pButton
+                type="button"
+                label="แก้ไข"
+                class="ui-button-warning"
+                style="width: 40%;"
+                (click)="editMember(rowData)"
+              ></button>
+              <button
+                pButton
+                type="button"
+                label="ลบ"
+                class="ui-button-danger"
+                style="width: 40%;margin-left: 5mm"
+                (click)="deleteMember(rowData.members_id)"
+              ></button>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+</div>
+<p-dialog
+  header="เพิ่มสมาชิก"
+  [(visible)]="display"
+  [modal]="true"
+  [style]="{ width: '50vw' }"
+  [maximizable]="true"
+  [baseZIndex]="10000"
+  [draggable]="false"
+  [resizable]="false"
+>
+  <div class="p-grid" [formGroup]="formMember">
+    <div class="p-col-4" style="text-align: right;">
+      <label for="username">UserName</label>
+    </div>
+    <div class="p-col-4">
+      <input type="text" pInputText formControlName="username" id ="username"/>
+    </div>
+    <div class="p-col-4" style="text-align: left;">
+      <div *ngIf="formError.username" class="text-danger text-invalid">{{formError.username }}</div>
+    </div>
+    <div class="p-col-4" style="text-align: right;">
+      <label for="password">Password</label>
+    </div>
+    <div class="p-col-4">
+      <input type="password" pInputText formControlName="password" id ="password"/>
+    </div>
+    <div class="p-col-4" style="text-align: left;">
+      <div *ngIf="formError.password" class="text-danger text-invalid">{{formError.password }}</div>
+    </div>
+      <div class="p-col-4" style="text-align: right;">
+        <label for="fname">ชื่อ</label>
+      </div>
+      <div class="p-col-4">
+        <input type="text" pInputText formControlName="fname" id="fname"/>
+      </div>
+      <div class="p-col-4" style="text-align: left;">
+        <div *ngIf="formError.fname" class="text-danger text-invalid">{{formError.fname }}</div>
+      </div>
+      <div class="p-col-4" style="text-align: right;">
+        <label for="lname">นามสกุล</label>
+      </div>
+      <div class="p-col-4">
+        <input type="text" pInputText formControlName="lname" id="lname"/>
+      </div>
+      <div class="p-col-4" style="text-align: left;">
+        <div *ngIf="formError.lname" class="text-danger text-invalid">{{formError.lname }}</div>
+      </div>
+      <div class="p-col-4" style="text-align: right;">
+        <label for="address">ที่อยู่</label>
+      </div>
+      <div class="p-col-4">
+        <input type="text" pInputText formControlName="address" id ="address"/>
+      </div>
+      <div class="p-col-4" style="text-align: left;">
+        <div *ngIf="formError.address" class="text-danger text-invalid">{{formError.address }}</div>
+      </div>
+      <div class="p-col-4" style="text-align: right;">
+        <label for="phone">เบอร์โทรศัพท์</label>
+      </div>
+      <div class="p-col-4">
+        <input type="text" pInputText formControlName="tel" id ="tel"/>
+      </div>
+      <div class="p-col-4" style="text-align: left;">
+        <div *ngIf="formError.tel" class="text-danger text-invalid">{{formError.tel }}</div>
+      </div>
+      <input type = "hidden" formControlName="cashier_id"/>
+      <div class="p-col-12" style="text-align: center;">
+        <button
+      type="button"
+      pButton
+      icon="pi pi-check"
+      label="บันทึก"
+      (click)="submitFormMember()"
+    ></button>
+      </div>
+  </div>
+</p-dialog>
+<p-dialog
+  header="แก้ไขข้อมูลสมาชิก"
+  [(visible)]="displayEdit"
+  [modal]="true"
+  [style]="{ width: '50vw' }"
+  [maximizable]="true"
+  [baseZIndex]="10000"
+  [draggable]="false"
+  [resizable]="false"
+>
+  <div class="p-grid" [formGroup]="formEditMember">
+      <div class="p-col-4" style="text-align: right;">
+        <label for="editfname">ชื่อ</label>
+      </div>
+      <div class="p-col-8">
+        <input type="text" pInputText formControlName="editfname" id="editfname"/>
+      </div>
+      <div class="p-col-4" style="text-align: right;">
+        <label for="editlname">นามสกุล</label>
+      </div>
+      <div class="p-col-8">
+        <input type="text" pInputText formControlName="editlname" id="editlname"/>
+      </div>
+      <div class="p-col-4" style="text-align: right;">
+        <label for="editaddress">ที่อยู่</label>
+      </div>
+      <div class="p-col-8">
+        <input type="text" pInputText formControlName="editaddress" id ="editaddress"/>
+      </div>
+      <div class="p-col-4" style="text-align: right;">
+        <label for="editTel">เบอร์โทรศัพท์</label>
+      </div>
+      <div class="p-col-8">
+        <input type="text" pInputText formControlName="editTel" id ="editTel"/>
+      </div>
+      <input type="hidden" formControlName="editId"/>
+      <div class="p-col-12" style="text-align: center;">
+        <button
+      type="button"
+      pButton
+      icon="pi pi-check"
+      label="บันทึก"
+      (click)="updateMember()"
+    ></button>
+      </div>
+  </div>
+</p-dialog>
+<p-confirmDialog #cd header="ลบข้อมูลสมาชิก" icon="pi pi-exclamation-triangle">
+    <p-footer>
+      <button type="button" pButton icon="pi pi-check" label="คกลง" (click)="cd.accept()"></button>
+        <button type="button" pButton icon="pi pi-times" label="ยกเลิก" (click)="cd.reject()"></button>
+    </p-footer>
+  </p-confirmDialog>
+

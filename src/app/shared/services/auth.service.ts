@@ -34,7 +34,7 @@ export class AuthService {
     const body = {
       username, password
     };
-    return this.http.post('/employee/login', body);
+    return this.http.post('/app/login', body);
   }
 
   isLoggedIn(): BehaviorSubject<boolean> {

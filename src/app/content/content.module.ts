@@ -46,6 +46,8 @@ import { ManageChannelComponent } from './manage-channel/manage-channel.componen
 import { TooltipModule } from 'primeng/tooltip';
 import { KeyFilterModule } from 'primeng/keyfilter';
 import { ManageUserService } from '../shared/services/manage-user.service';
+import { ManageMembersComponent } from './manage-members/manage-members.component';
+import { MemberService } from '../shared/services/member.service';
 
 @NgModule({
   declarations: [
@@ -66,7 +68,8 @@ import { ManageUserService } from '../shared/services/manage-user.service';
     BookingFormComponent,
     WithdrawReturnComponent,
     ManageWithdrawReturnComponent,
-    ManageChannelComponent
+    ManageChannelComponent,
+    ManageMembersComponent
   ],
   imports: [
     CommonModule,
@@ -95,7 +98,7 @@ import { ManageUserService } from '../shared/services/manage-user.service';
     TooltipModule,
     KeyFilterModule
   ],
-  providers: [AuthService , ManageUserService ,  AuthGuard, HttpClientService, ConfirmationService],
+  providers: [AuthService , ManageUserService ,  AuthGuard, HttpClientService, ConfirmationService , MemberService],
   exports : [ContentComponent]
 })
 export class ContentModule { }

@@ -34,7 +34,7 @@ export class ManageUserService {
   }
   getProfile(id) {
     console.log(id);
-    return this.http.get(ApiConstants.baseURl + `/manageEmployee/editprofile/${id}`, {
+    return this.http.get(`/editprofile/${id}`, {
       headers: {
         Authorization: `${localStorage.getItem('access-token')}`
       }
@@ -59,7 +59,7 @@ export class ManageUserService {
       status : 1,
       position : 2
     }
-    return this.http.post('/employee/create',
+    return this.http.post('/app/insertEmployee',
     payload, {
       headers: {
         Authorization: `${localStorage.getItem('access-token')}`
@@ -80,7 +80,7 @@ export class ManageUserService {
       tel : data.editTel,
       id : data.id
     }
-    return this.http.patch(`/employee/edit`, payload, {
+    return this.http.patch(`/app/updateEmployeeSef_el_etWeid`, payload, {
       headers: {
         Authorization: `${localStorage.getItem('access-token')}`
       }
@@ -95,19 +95,18 @@ export class ManageUserService {
 
   }
   getAllUsers() {
-    return this.http.get('/employee', {
+    return this.http.get('/app/getAllEmployee', {
       headers: {
         Authorization: `${localStorage.getItem('access-token')}`
       }
     }).pipe(
       map(res => {
-        console.log(res);
         return res['data']
       })
     );
   }
   deleteEmployee(id) {
-    return this.http.delete(`/employee/${id}`, {
+    return this.http.delete(`/app/deleteEmployeeWeid/${id}`, {
       headers: {
         Authorization: `${localStorage.getItem('access-token')}`
       }

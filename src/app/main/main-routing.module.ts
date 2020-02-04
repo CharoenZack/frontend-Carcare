@@ -19,6 +19,7 @@ import { WithdrawReturnComponent } from '../content/withdraw-return/withdraw-ret
 import { ManageWithdrawReturnComponent } from '../content/manage-withdraw-return/manage-withdraw-return.component';
 import { ScheduleComponent } from '../content/schedule/schedule.component';
 import { ManageChannelComponent } from '../content/manage-channel/manage-channel.component';
+import { ManageMembersComponent } from '../content/manage-members/manage-members.component';
 
 const routes: Routes = [
   {
@@ -116,6 +117,10 @@ const routes: Routes = [
       {
         path: 'manageChannel',
         component: ManageChannelComponent
+      },
+      {
+        path: 'manageMember',
+        component : ManageMembersComponent
       }
     ]
   },
