@@ -1,9 +1,13 @@
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { ManageCarcareService } from './../../shared/services/manage-carcare.service';
 import { Component, OnInit } from '@angular/core';
 import { Message, ConfirmationService, SelectItem } from 'primeng/api';
 import { TypeCar } from 'src/app/shared/interfaces/type-car';
 import { Car } from 'src/app/shared/interfaces/car';
+import { TypecarService } from 'src/app/shared/services/typecar.service';
+import { debounceTime, distinctUntilChanged, switchMap, map } from 'rxjs/operators';
+import { CarService } from 'src/app/shared/services/car.service';
+import { ModelService } from 'src/app/shared/services/model.service';
 
 @Component({
   selector: 'app-manage-typecar',
@@ -11,229 +15,228 @@ import { Car } from 'src/app/shared/interfaces/car';
   styleUrls: ['./manage-typecar.component.css']
 })
 export class ManageTypecarComponent implements OnInit {
-  public cols: any[];
-  public car: any[];
-  public msgs: Message[] = [];
-  newtypeCar: boolean;
-  typecar: Car;
-  typecars: Car[];
-  public form: FormGroup;
-  public displayDialog: boolean;
-  public size: TypeCar;
-  public brand: Car;
-  public model: string;
-  Cartype: SelectItem[];
-  public type: any[];
-  public getbrand: any[];
-  typeId: TypeCar;
-  public filteredTypeCar: any[];
-  public filteredBrand: any[];
+  display = false;
+  displayEdit = false;
+  formTypeCar: FormGroup;
+  formEditTypeCar: FormGroup;
+  carDetail: any[];
+  carList = [];
+  typeCarList = [];
+  modelList = [];
+  msgs: Message[] = [];
+  public formError = {
+    model: '',
+    car: '',
+    typeCar: ''
+  };
+  public validationMassages = {
+    model: {
+      required: '*โปรดกรอกยี่ห้อรถ'
+    },
+    car: {
+      required: '*โปรดเลือกรุ่นรถ'
+    },
+    typeCar: {
+      required: '*โปรดเลือกประเภทรถ'
+    }
+  };
   constructor(
-    private manageCar: ManageCarcareService,
-    private formBuilder: FormBuilder,
-    private confirmationService: ConfirmationService
-  ) { }
+    private typeCarService: TypecarService,
+    private confirmationService: ConfirmationService,
+    private carService : CarService,
+    private modelService : ModelService
+  ) {}
 
   ngOnInit() {
-    this.cols = [
-      { field: 'size', header: 'ขนาดรถ' },
-      { field: 'brand', header: 'ยี่ห้อรถ' },
-      { field: 'model', header: 'รุ่นรถ' },
-    ];
-    this.getAllCar();
-    this.createForm();
-    this.getBrand();
-    this.manageCar.showTypeCar().subscribe(
-      res => {
+    this.loadData();
+    this.initForm();
+    this.getCar();
+    this.getTypeCar();
+    this.getModel();
+    this.formEditTypeCar = new FormGroup({
+      editModel: new FormControl(null, Validators.required),
+      editCar: new FormControl(null, Validators.required),
+      editTypeCar: new FormControl(null, Validators.required),
+      id: new FormControl(null)
+    });
+  }
+
+  addTypeCar() {
+    this.display = true;
+  }
+
+  initForm() {
+    this.formTypeCar = new FormGroup({
+      model: new FormControl(null, Validators.required),
+      car: new FormControl(null, Validators.required),
+      typeCar: new FormControl(null, Validators.required),
+    });
+    this.formTypeCar.valueChanges
+      .pipe(debounceTime(500), distinctUntilChanged())
+      .subscribe(() => this.onValueChange());
+  }
+
+submitFormTypeCar() {
+    if (this.formTypeCar.valid) {
+      this.msgs = [];
+      this.typeCarService
+        .insertTypeCar(this.formTypeCar.getRawValue())
+        .pipe(
+          switchMap(rs => {
+            this.display = false;
+            this.msgs.push({
+              severity: 'info',
+              summary: 'Insert Employee',
+              detail: 'Insert Success'
+            });
+            return this.typeCarService.getAllTypeCar().pipe(
+              map(rs => {
+                return this.carDetail = rs;
+              })
+            );
+          })
+        )
+        .subscribe();
+    } else {
+      this.onValueChange();
+    }
+  }
+
+  private onValueChange() {
+    if (!this.formTypeCar) {
+      return;
+    }
+    for (const field of Object.keys(this.formError)) {
+      this.formError[field] = '';
+      const control = this.formTypeCar.get(field);
+      if (control && !control.valid) {
+        const messages = this.validationMassages[field];
+        for (const key of Object.keys(control.errors)) {
+          this.formError[field] += messages[key] + ' ';
+        }
+      }
+    }
+  }
+
+  editTypeCar(event) {
+    this.displayEdit = true;
+    this.carService.getAllCar().pipe(switchMap(rs=>{
+      rs.map(res=>{
+        if(res.car_id === event.car_id){
+          const car = {label : res.brand , value : res.car_id }
+          this.formEditTypeCar.get('editCar').patchValue(car);
+          return res;
+        }
+      })
+      return this.typeCarService.getAllTypeCar().pipe(switchMap(rs=>{
+        rs.map(res=>{
+          if(res.type_car_id === event.type_car_id){
+            const typeCar = { label : res.size , value : res.type_car_id }
+            this.formEditTypeCar.get('editTypeCar').patchValue(typeCar);
+            return typeCar;
+          }
+        })
+        return this.modelService.getAllModel().pipe(map(rs=>{
+          rs.map(res=>{
+            if(res.model_id === event.model_id){
+              const modelDropdown = { label : res.model_name , value : res.model_id }
+              this.formEditTypeCar.get('editModel').patchValue(modelDropdown);
+              return modelDropdown;
+            }
+          })
+        }))
+      }))
+    })).subscribe()
+    this.formEditTypeCar.patchValue({
+      id: event.car_detail_id
+    });
+  }
+
+  updateTypeCar() {
+    this.msgs = [];
+    this.typeCarService
+      .updateTypeCar(this.formEditTypeCar.getRawValue())
+      .pipe(
+        switchMap(rs => {
+          this.displayEdit = false;
+          this.msgs.push({
+            severity: 'info',
+            summary: 'Update Employee',
+            detail: 'Update Success'
+          });
+          return this.typeCarService.getAllCarDetail().pipe(
+            map(rs => {
+              return (this.carDetail = rs);
+            })
+          );
+        })
+      )
+      .subscribe();
+  }
+
+  confirm(id) {
+    this.msgs = [];
+    this.confirmationService.confirm({
+      message: 'คุณต้องการลบข้อมูลผู้จัดการร้านคนนี้ใช่หรือไม่',
+      accept: () => {
+        this.typeCarService
+          .deleteCarDetail(id)
+          .pipe(
+            switchMap(rs => {
+              this.msgs.push({
+                severity: 'info',
+                summary: 'Delete Success',
+                detail: 'Delete Success'
+              });
+              return this.typeCarService.getAllCarDetail().pipe(
+                map(rs => {
+                  return (this.carDetail = rs);
+                })
+              );
+            })
+          )
+          .subscribe();
+      }
+    });
+  }
+
+  loadData() {
+    this.typeCarService.getAllCarDetail().subscribe(rs => {
+      this.carDetail = rs;
+    });
+  }
+
+  getCar() {
+    this.carService.getAllCar().subscribe(rs => {
+      rs.map(res => {
         console.log(res);
-        if (res.status === 'Success') {
-          this.type = res.data;
-        }
-      },
-      err => {
-        console.log(err['error']['message']);
-      }
-    )
-  }
-  getAllCar() {
-    this.manageCar.getCar().subscribe(res => {
-      if (res['status'] === 'Success') {
-        this.car = res['data'];
-        console.log(res.data);
-      }
-    },
-      (e) => console.log(e['error']['message'])
-    );
-  }
-  getBrand() {
-    this.manageCar.getBrand().subscribe(res => {
-      if (res['status'] === 'Success') {
-        this.getbrand = res['data'];
-        console.log(res.data);
-      }
-    },
-      (e) => console.log(e['error']['message'])
-    );
-  }
-  createForm() {
-    this.form = this.formBuilder.group(
-      {
-        size: ['', Validators.required],
-        brand: ['', Validators.required],
-        model: ['', Validators.required],
-      }
-    );
-  }
-  showDialogToAdd() {
-    this.newtypeCar = true;
-    this.typecar = {};
-    this.displayDialog = true;
-  }
-  showEdit(id) {
-    console.log(id);
-    this.newtypeCar = false;
-    this.typecar = this.car.filter(e => e.car_detail_id === id)[0];
-    console.log(this.typecar)
-    this.brand = {
-      car_id: +this.typecar['car_id'],
-      brand: this.typecar['brand']
-    }
-    this.model = this.typecar['model'];
-    this.size = {
-      type_car_id: +this.typecar['type_car_id'],
-      size: this.typecar['size']
-    };
-    console.log(this.size);
-
-    this.displayDialog = true;
-  }
-
-  save() {
-    this.msgs = [];
-    const data = {
-      car_id: this.brand['car_id'],
-      brand: this.brand['brand'],
-      model: this.model,
-      type_car_id: this.size['type_car_id'],
-    };
-    console.log(data);
-    this.manageCar.createCar(data)
-      .toPromise().then(res => {
-        if (res['status'] === 'Success') {
-          this.msgs = [{ severity: 'success', summary: 'เพิ่มสำเร็จ', detail: 'การดำเนินการสำเร็จ' }];
-          this.car = [
-            ...this.car,
-            res['data'][0]
-          ];
-        } else {
-          this.msgs = [{ severity: 'error', summary: 'ข้อความจากระบบ', detail: 'เพิ่มตู้สัมภาระไม่สำเร็จ' }];
-        }
-      }).catch((e) => console.log(e['error']['message']));
-    this.clear();
-  }
-
-  update() {
-    this.msgs = [];
-    this.confirmationService.confirm({
-      message: 'ยืนยันการแก้ไข',
-      header: 'ข้อความจากระบบ',
-      accept: () => {
-        const data = {
-          car_detail_id: this.typecar['car_detail_id'],
-          car_id: this.brand['car_id'],
-          brand: this.brand['brand'],
-          model: this.model,
-          type_car_id: this.size['type_car_id'],
-        };
-        console.log(data);
-
-        this.manageCar.updateCar(data)
-          .subscribe(res => {
-            if (res['status'] === 'Success') {
-              this.msgs.push({ severity: 'success', summary: 'ข้อความจากระบบ', detail: 'การดำเนินการสำเร็จ' });
-              const index = this.car.findIndex(e => e.car_detail_id === res['data']['car_detail_id']);
-              // this.car[index].brand = res['data']['brand'];
-            }
-          },
-            (e) => {
-              console.log(e['error']['message']);
-              this.msgs.push({ severity: 'error', summary: 'ข้อความจากระบบ', detail: 'การดำเนินการไม่สำเร็จ' });
-            }
-          );
-        this.clear();
-      },
-      reject: () => {
-
-      }
+        this.carList = [
+          ...this.carList,
+          { label: res.brand, value: res.car_id }
+        ];
+      });
     });
   }
 
-  delete(id) {
-    this.msgs = [];
-    this.confirmationService.confirm({
-      message: 'ยืนยันการลบ',
-      header: 'ข้อความจากระบบ',
-      accept: () => {
-        const index = this.car.findIndex(e => e.car_detail_id === id);
-        console.log(index);
-        console.log(id);
-
-        this.manageCar.deleteCar(id)
-          .subscribe(res => {
-            if (res['status'] === 'Success') {
-              this.msgs.push({ severity: 'success', summary: 'ข้อความจากระบบ', detail: 'การดำเนินการลบสำเร็จ' });
-              this.car = [
-                ...this.car.slice(0, index),
-                ...this.car.slice(index + 1)
-              ];
-            }
-          },
-            (e) => {
-              console.log(e['error']['message']);
-              this.msgs.push({ severity: 'error', summary: 'ข้อความจากระบบ', detail: 'การดำเนินการลบไม่สำเร็จ' });
-            }
-          );
-      },
-      reject: () => {
-
-      }
+  getTypeCar() {
+    this.typeCarService.getAllTypeCar().subscribe(rs => {
+      rs.map(res => {
+        this.typeCarList = [
+          ...this.typeCarList,
+          { label: res.size, value: res.type_car_id }
+        ];
+      });
     });
   }
-  clear() {
-    this.typecar = {};
-    this.brand = {};
-    this.model = '';
-    // this.size = '';
-    this.displayDialog = false;
-    this.form.reset();
-  }
 
-  filterTypecarMultiple(event) {
-    const query = event.query;
-    this.filteredTypeCar = this.filterTypecar(query, this.type);
-  }
-  filterTypecar(query, type: any[]): any[] {
-    const filtered: any[] = [];
-    for (let i = 0; i < type.length; i++) {
-      const types = type[i];
-      if ((types.size).indexOf(query) === 0) {
-        filtered.push(types);
-      }
-    }
-    return filtered;
-  }
-  filterBrandMultiple(event) {
-    const query = event.query;
-    this.filteredBrand = this.filterBrand(query, this.getbrand);
-  }
-  filterBrand(query, type: any[]): any[] {
-    const filtered: any[] = [];
-    for (let i = 0; i < type.length; i++) {
-      const types = type[i];
-      if ((types.brand).indexOf(query) === 0) {
-        filtered.push(types);
-      }
-    }
-    return filtered;
+  getModel(){
+    this.modelService.getAllModel().subscribe(rs=>{
+      rs.map(res=>{
+        this.modelList = [
+          ...this.modelList,
+          { label: res.model_name, value: res.model_id }
+        ];
+      })
+    })
   }
 }

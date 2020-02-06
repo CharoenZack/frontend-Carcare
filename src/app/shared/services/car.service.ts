@@ -1,30 +1,15 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { map } from 'rxjs/operators';
+import { map } from 'rxjs/internal/operators/map';
 
 @Injectable({
   providedIn: 'root'
 })
-export class MemberService {
+export class CarService {
   constructor(private http: HttpClient) {}
-
-  insertMember(data) {
+  getAllCar() {
     return this.http
-      .post('/app/insertMember', data, {
-        headers: {
-          Authorization: `${localStorage.getItem('access-token')}`
-        }
-      })
-      .pipe(
-        map((rs: any) => {
-          return rs.result;
-        })
-      );
-  }
-
-  getMemberByCashierId(id) {
-    return this.http
-      .get(`/app/getMemberWcid/${id}`, {
+      .get('/app/getAllCar', {
         headers: {
           Authorization: `${localStorage.getItem('access-token')}`
         }
@@ -36,16 +21,9 @@ export class MemberService {
       );
   }
 
-  updateMember(data) {
-    const payload = {
-      fname: data.editfname,
-      lname: data.editlname,
-      address: data.editaddress,
-      tel: data.editTel,
-      id: data.editId
-    };
+  createCar(data) {
     return this.http
-      .patch('/app/updateMemberSef_el_etWeid', payload, {
+      .post('/app/insertCar', data, {
         headers: {
           Authorization: `${localStorage.getItem('access-token')}`
         }
@@ -57,9 +35,9 @@ export class MemberService {
       );
   }
 
-  deleteMember(id) {
+  updateCar(data) {
     return this.http
-      .delete(`/app/deleteMemberWeid/${id}`, {
+      .patch('/app/updateCar', data, {
         headers: {
           Authorization: `${localStorage.getItem('access-token')}`
         }
@@ -71,13 +49,17 @@ export class MemberService {
       );
   }
 
-  getAllmembers(data){
-    return this.http.get(`/app/getAllMemberWmfL/${data}` , {
-      headers: {
-        Authorization: `${localStorage.getItem('access-token')}`
-      }
-    }).pipe(map((rs:any)=>{
-      return rs.data;
-    }))
+  deleteCar(id) {
+    return this.http
+      .delete(`/app/deleteCar/${id}`, {
+        headers: {
+          Authorization: `${localStorage.getItem('access-token')}`
+        }
+      })
+      .pipe(
+        map((rs: any) => {
+          return rs.data;
+        })
+      );
   }
 }

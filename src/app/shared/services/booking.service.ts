@@ -46,13 +46,14 @@ export class BookingService {
       ));
   }
   booking(data) {
-    return this.http.post(ApiConstants.baseURl + '/booking', data)
+    return this.http.post('/app/insertReservations', data , {
+      headers: {
+        Authorization: `${localStorage.getItem('access-token')}`
+      }
+    })
       .pipe(
-        map(res => {
-          return {
-            status: res['result'],
-            data: res['data'][0]
-          };
+        map((res :any) => {
+          return res.data
         })
       );
   }

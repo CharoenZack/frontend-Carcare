@@ -5,7 +5,6 @@ import { ContentRoutingModule } from './content-routing.module';
 import { HomeComponent } from './home/home.component';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { ManageManagerComponent } from './manage-manager/manage-manager.component';
-import { ManageEmployeeComponent } from './manage-employee/manage-employee.component';
 import { ManageTypecarComponent } from './manage-typecar/manage-typecar.component';
 import { ManageCarserviceComponent } from './manage-carservice/manage-carservice.component';
 import { ManagePromotionComponent } from './manage-promotion/manage-promotion.component';
@@ -48,13 +47,21 @@ import { KeyFilterModule } from 'primeng/keyfilter';
 import { ManageUserService } from '../shared/services/manage-user.service';
 import { ManageMembersComponent } from './manage-members/manage-members.component';
 import { MemberService } from '../shared/services/member.service';
+import { TypecarService } from '../shared/services/typecar.service';
+import { CleanService } from '../shared/services/clean.service';
+import { CarWashService } from '../shared/services/car-wash.service';
+import { ManagestaffComponent } from './managestaff/managestaff.component';
+import { PositionService } from '../shared/services/position.service';
+import { WashtoolService } from '../shared/services/washtool.service';
+import { CarService } from '../shared/services/car.service';
+import { ModelService } from '../shared/services/model.service';
+import {FileUploadModule} from 'primeng/fileupload';
 
 @NgModule({
   declarations: [
     ContentComponent,
     HomeComponent,
     ManageManagerComponent,
-    ManageEmployeeComponent,
     ManageTypecarComponent,
     ManageCarserviceComponent,
     ManagePromotionComponent,
@@ -69,7 +76,8 @@ import { MemberService } from '../shared/services/member.service';
     WithdrawReturnComponent,
     ManageWithdrawReturnComponent,
     ManageChannelComponent,
-    ManageMembersComponent
+    ManageMembersComponent,
+    ManagestaffComponent
   ],
   imports: [
     CommonModule,
@@ -96,9 +104,24 @@ import { MemberService } from '../shared/services/member.service';
     OrderListModule,
     ListboxModule,
     TooltipModule,
-    KeyFilterModule
+    KeyFilterModule,
+    FileUploadModule
   ],
-  providers: [AuthService , ManageUserService ,  AuthGuard, HttpClientService, ConfirmationService , MemberService],
-  exports : [ContentComponent]
+  providers: [
+    AuthService,
+    ManageUserService,
+    AuthGuard,
+    HttpClientService,
+    ConfirmationService,
+    MemberService,
+    TypecarService,
+    CleanService,
+    CarWashService,
+    PositionService,
+    WashtoolService,
+    CarService,
+    ModelService
+  ],
+  exports: [ContentComponent]
 })
-export class ContentModule { }
+export class ContentModule {}

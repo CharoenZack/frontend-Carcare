@@ -108,3 +108,7 @@ body .ui-menu .ui-menuitem-link:hover {
   background-color: #357794 !important;
   color: #1a1919 !important;
 }
+.text-invalid {
+  color: red;
+  width: 500px;
+}

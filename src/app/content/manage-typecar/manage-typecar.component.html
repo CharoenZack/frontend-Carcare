@@ -1,161 +1,186 @@
-<div class="ui-g">
-  <div class="ui-g-12 ui-lg-12">
+<div class="p-grid">
+  <div class="container">
     <div style="text-align:center">
       <h1>จัดการประเภทรถ</h1>
     </div>
-    <div class="container">
-      <div class="line"></div>
-      <br>
-      <div class="row">
-        <div class="ui-g">
-          <div class="ui-g-12 ui-lg-12 ui-md-12 ui-sm-12">
-            <p-messages [(value)]="msgs"></p-messages>
-          </div>
-          <div class="ui-g-12 ui-lg-12">
-            <p-table [paginator]="true" [value]='car' [rows]="10" [responsive]="true">
+      <hr />
+      <p-messages [(value)]="msgs"></p-messages>
+            <p-table [paginator]="true" [rows]="10" [responsive]="true" [value]="carDetail">
               <ng-template pTemplate="caption">
                 <div style="text-align:left">
                   <!-- <button pButton type="button" id="btn-Increase" label="เพิ่ม" class="ui-button-temple"
                     style="width: 20%"></button> -->
-                  <button pButton type="button" label="เพิ่ม" class="ui-button-rounded ui-button-success"
-                    style="font-size: 15px; width: 10%;" (click)="showDialogToAdd()"></button>
+                  <button
+                    pButton
+                    type="button"
+                    label="เพิ่ม"
+                    class="ui-button-rounded ui-button-success"
+                    style="font-size: 15px; width: 10%;"
+                    (click)="addTypeCar()"
+                  ></button>
                 </div>
-
               </ng-template>
               <ng-template pTemplate="header" let-columns>
                 <tr>
-                  <th pSortableColumn="brand">
-                    ยี่ห้อรถ
-                    <p-sortIcon field="brand" ariaLabel="Activate to sort"
+                  <th pSortableColumn="name">
+                    ยี่ห้อของรถ
+                    <p-sortIcon
+                      field="nameAbbr"
+                      ariaLabel="Activate to sort"
                       ariaLabelDesc="Activate to sort in descending order"
-                      ariaLabelAsc="Activate to sort in ascending order">
+                      ariaLabelAsc="Activate to sort in ascending order"
+                    >
                     </p-sortIcon>
                   </th>
-                  <th pSortableColumn="model">
-                    รุ่นรถ
-                    <p-sortIcon field="model" ariaLabel="Activate to sort"
+                  <th pSortableColumn="tel">
+                    รุ่นของรถ
+                    <p-sortIcon
+                      field="name"
+                      ariaLabel="Activate to sort"
                       ariaLabelDesc="Activate to sort in descending order"
-                      ariaLabelAsc="Activate to sort in ascending order">
+                      ariaLabelAsc="Activate to sort in ascending order"
+                    >
                     </p-sortIcon>
                   </th>
-                  <th pSortableColumn="size">
-                    ขนาดรถ
-                    <p-sortIcon field="size" ariaLabel="Activate to sort"
+                  <th pSortableColumn="date">
+                    ประเภทของรถ
+                    <p-sortIcon
+                      field="name"
+                      ariaLabel="Activate to sort"
                       ariaLabelDesc="Activate to sort in descending order"
-                      ariaLabelAsc="Activate to sort in ascending order">
+                      ariaLabelAsc="Activate to sort in ascending order"
+                    >
                     </p-sortIcon>
                   </th>
-                  <th>
-
-                  </th>
+                  <th></th>
                 </tr>
               </ng-template>
               <ng-template pTemplate="body" let-rowData let-columns="columns">
-                <tr [pSelectableRow]="rowData">
-                  <td [pSelectableRow]="rowData" style="text-align: center">
-                    {{rowData["brand"]}}
-                  </td>
-                  <td [pSelectableRow]="rowData" style="text-align: center">
-                    {{rowData["model"]}}
-                  </td>
-                  <td [pSelectableRow]="rowData" style="text-align: center">
-                    {{rowData["size"]}}
-                  </td>
-
-                  <td *ngFor="let col of columns;">
-                    <div *ngIf="rowData[col.field] != rowData['status']">
-                      <span class="ui-column-title">{{col.header}}</span>
-                      <div *ngIf="rowData[col.field] == rowData['brand'] ">
-                        {{rowData["brand"]}}
-                      </div>
-                      <div *ngIf="rowData[col.field] == rowData['model'] ">
-                        {{rowData["model"]}}
-                      </div>
-                      <div *ngIf="rowData[col.field] == rowData['size']">
-                        {{rowData["size"]}}
-                      </div>
-                    </div>
-                  </td>
+                <tr>
+                <td>{{ rowData.model_name }}</td>
+                <td> {{ rowData.brand }}</td>
+                <td>{{ rowData.size }}</td>
                   <td>
                     <div style="text-align:center">
-                      <button pButton type="button" label="แก้ไข" class="ui-button-warning"
-                        (click)="showEdit(rowData['car_detail_id'])" style="width: 40%;"></button>
-                      <button pButton type="button" label="ลบ" (click)="delete(rowData['car_detail_id'])"
-                        class="ui-button-danger" style="width: 40%;margin-left: 5mm"></button>
+                      <button
+                        pButton
+                        type="button"
+                        label="แก้ไข"
+                        class="ui-button-warning"
+                        style="width: 40%;"
+                        (click) = "editTypeCar(rowData)"
+                      ></button>
+                      <button
+                        pButton
+                        type="button"
+                        label="ลบ"
+                        class="ui-button-danger"
+                        style="width: 40%;margin-left: 5mm"
+                        (click)="confirm(rowData.car_detail_id)"
+                      ></button>
                     </div>
-
                   </td>
                 </tr>
               </ng-template>
             </p-table>
           </div>
         </div>
-      </div>
+<p-dialog
+  header="เพิ่มประเภทของรถ"
+  [(visible)]="display"
+  [modal]="true"
+  [style]="{ width: '50vw' }"
+  [maximizable]="true"
+  [baseZIndex]="10000"
+  [draggable]="false"
+  [resizable]="false"
+>
+  <div class="p-grid" [formGroup]="formTypeCar">
+    <div class="p-col-4" style="text-align: right;">
+      <label for="model">รุ่นของรถ</label>
     </div>
+    <div class="p-col-4">
+      <p-dropdown [options]="modelList" formControlName = "model" optionLabel="label"></p-dropdown>
+    </div>
+    <div class="p-col-4" style="text-align: left;">
+      <div *ngIf="formError.model" class="text-danger text-invalid">{{formError.model }}</div>
+    </div>
+    <div class="p-col-4" style="text-align: right;">
+      <label for="car">ยี่ห้อรถ</label>
+    </div>
+    <div class="p-col-4">
+      <p-dropdown [options]="carList" formControlName = "car" optionLabel="label"></p-dropdown>
+    </div>
+    <div class="p-col-4" style="text-align: left;">
+      <div *ngIf="formError.car" class="text-danger text-invalid">{{formError.car }}</div>
+    </div>
+      <div class="p-col-4" style="text-align: right;">
+        <label for="typeCar">ประเภทรถ</label>
+      </div>
+      <div class="p-col-4">
+        <p-dropdown [options]="typeCarList" formControlName = "typeCar" optionLabel="label"></p-dropdown>
+      </div>
+      <div class="p-col-4" style="text-align: left;">
+        <div *ngIf="formError.typeCar" class="text-danger text-invalid">{{formError.typeCar }}</div>
+      </div>
+      <div class="p-col-12" style="text-align: center;">
+        <button
+      type="button"
+      pButton
+      icon="pi pi-check"
+      label="บันทึก"
+      (click)="submitFormTypeCar()"
+    ></button>
+      </div>
   </div>
-</div>
-<form [formGroup]="form" novalidate>
-  <p-dialog header="รายละเอียดรถ" [(visible)]="displayDialog" [responsive]="true" showEffect="fade" [modal]="true"
-    [style]="{width: '500px'}" (onHide)="form.reset()">
-    <div class="ui-g ui-fluid" *ngIf="typecar">
-      <div class="ui-g-12">
-        <div class="form-group">
-          <div class="ui-g-4">
-            <label for="size">ขนาดรถ</label>
-          </div>
-          <div class="ui-g-8">
-            <p-autoComplete [(ngModel)]="size" [suggestions]="filteredTypeCar" value="type_car_id" appendTo="body"
-              (completeMethod)="filterTypecarMultiple($event)" placeholder="เลือกขนาดรถ" field="size" [dropdown]="true"
-              formControlName="size" readonly="true">
-              <div
-                *ngIf="form.controls['size'].invalid && (form.controls['size'].dirty || form.controls['size'].touched)"
-                class="alert alert-danger">
-                <div class="text-danger text-invalid" *ngIf="form.controls['size'].errors.required">
-                  กรุณากรอกขนาดรถ</div>
-              </div>
-            </p-autoComplete>
-          </div>
-          <div class="ui-g-4">
-            <label for="brand">ยี่ห้อรถ</label>
-          </div>
-          <div class="ui-g-8">
-            <!-- <input pInputText id="brand" [(ngModel)]="brand" formControlName="brand" /> -->
-            <p-autoComplete [(ngModel)]="brand" [suggestions]="filteredBrand" value="car_id" appendTo="body"
-              (completeMethod)="filterBrandMultiple($event)" placeholder="เลือกยี่ห้อรถ" field="brand" [dropdown]="true"
-              formControlName="brand">
-            <div
-              *ngIf="form.controls['brand'].invalid && (form.controls['brand'].dirty || form.controls['brand'].touched)"
-              class="alert alert-danger">
-              <div class="text-danger text-invalid" *ngIf="form.controls['brand'].errors.required">
-                กรุณากรอกยี่ห้อรถ</div>
-            </div>
-          </p-autoComplete>
-          </div>
-          <div class="ui-g-4">
-            <label for="model">รุ่นรถ</label>
-          </div>
-          <div class="ui-g-8">
-            <input pInputText id="model" [(ngModel)]="model" formControlName="model" />
-            <div
-              *ngIf="form.controls['model'].invalid && (form.controls['model'].dirty || form.controls['model'].touched)"
-              class="alert alert-danger">
-              <div class="text-danger text-invalid" *ngIf="form.controls['model'].errors.required">
-                กรุณากรอกรุ่นรถ</div>
-            </div>
-          </div>
+</p-dialog>
 
-        </div>
+<p-dialog
+  header="เพิ่มเจ้าของร้าน"
+  [(visible)]="displayEdit"
+  [modal]="true"
+  [style]="{ width: '50vw' }"
+  [maximizable]="true"
+  [baseZIndex]="10000"
+  [draggable]="false"
+  [resizable]="false"
+>
+  <div class="p-grid" [formGroup]="formEditTypeCar">
+      <div class="p-col-4" style="text-align: right;">
+        <label for="editModel">รุ่นของรถ</label>
       </div>
-    </div>
-    <p-footer>
-      <div class="ui-dialog-buttonpane ui-helper-clearfix">
-        <button type="button" id="btn-Clear" pButton (click)="clear()" label="ยกเลิก"></button>
-        <button *ngIf="newtypeCar" id="btn-Save" type="submit" pButton (click)="save()" label="บันทึก"
-          [disabled]="form.pristine || form.invalid"></button>
-        <button *ngIf="!newtypeCar" id="btn-Update" type="button" pButton label="แก้ไข" (click)="update()"
-          [disabled]="form.invalid"></button>
+      <div class="p-col-8">
+        <p-dropdown [options]="modelList" formControlName = "editModel" optionLabel="label"></p-dropdown>
       </div>
-    </p-footer>
-  </p-dialog>
-</form>
-<p-confirmDialog [style]="{width: '50vw'}"></p-confirmDialog>
+      <div class="p-col-4" style="text-align: right;">
+        <label for="editCar">ยี่ห้อของรถ</label>
+      </div>
+      <div class="p-col-8">
+        <p-dropdown [options]="carList" formControlName = "editCar" optionLabel="label"></p-dropdown>
+      </div>
+      <div class="p-col-4" style="text-align: right;">
+        <label for="editTypeCar">ประเภทของรถ</label>
+      </div>
+      <div class="p-col-8">
+        <p-dropdown [options]="typeCarList" formControlName = "editTypeCar" optionLabel="label"></p-dropdown>
+      </div>
+      <input type="hidden" formControlName="id"/>
+      <div class="p-col-12" style="text-align: center;">
+        <button
+      type="button"
+      pButton
+      icon="pi pi-check"
+      (click)="display = false"
+      label="บันทึก"
+      (click)="updateTypeCar()"
+    ></button>
+      </div>
+  </div>
+</p-dialog>
+
+<p-confirmDialog #cd header="ลบข้อมูล" icon="pi pi-exclamation-triangle">
+  <p-footer>
+    <button type="button" pButton icon="pi pi-check" label="คกลง" (click)="cd.accept()"></button>
+      <button type="button" pButton icon="pi pi-times" label="ยกเลิก" (click)="cd.reject()"></button>
+  </p-footer>
+</p-confirmDialog>

@@ -2,163 +2,159 @@ import { ManageCarcareService } from 'src/app/shared/services/manage-carcare.ser
 import { Promotion } from './../../shared/interfaces/promotion';
 import { PromotionService } from './../../shared/services/promotion.service';
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { MenuItem, Message, ConfirmationService } from 'primeng/api';
+import { debounceTime, switchMap, map, distinctUntilChanged } from 'rxjs/operators';
+import * as moment from 'moment';
 @Component({
   selector: 'app-manage-promotion',
   templateUrl: './manage-promotion.component.html',
   styleUrls: ['./manage-promotion.component.css']
 })
 export class ManagePromotionComponent implements OnInit {
-  public cols: any[];
-  public pro: any[];
-  public form: FormGroup;
-  newPromotion: boolean;
-  promotion: Promotion;
-  promotions: Promotion[];
-  public detail: string;
-  public dateStart: Date;
-  public dateEnd: Date;
-  public discount: number;
-  public msgs: Message[] = [];
-  public displayDialog: boolean;
-  constructor(
-    private managePromotion: PromotionService,
-    private formBuilder: FormBuilder,
-    private confirmationService: ConfirmationService,
-  ) { }
+  display = false;
+  displayEdit = false;
+  formPromo : FormGroup;
+  formEditPromo : FormGroup;
+  promotion: any[];
+  msgs: Message[] = [];
+  public formError = {
+    promoDetail: '',
+    startDate: '',
+    endDate: '',
+    discount: '',
+  };
+  public validationMassages = {
+    promoDetail: {
+      required: '*กรุณากรอกรายละเอียดโปรโมชั่น'
+    },
+    startDate: {
+      required: '*กรุณากรอกวันที่เริ่มใช้'
+    },
+    endDate: {
+      required: '*กรูณากรอกวันที่สิ้นสุดโปรโมชั่น'
+    },
+    discount: {
+      required: '*กรุณากรอกเปอร์เซ็นต์ลด'
+    }
+  };
+  constructor(private promotionService : PromotionService,private confirmationService : ConfirmationService) {}
 
   ngOnInit() {
-    this.cols = [
-      { field: 'detail', header: 'รายละเอียดโปรโมชั่น' },
-      { field: 'date_start', header: 'วันที่เริ่มใช้' },
-      { field: 'date_end', header: 'วันที่สิ้นสุดโปรโมชั่น' },
-      { field: 'discount_percent', header: 'เปอร์เซนต์ลด' },
-    ];
-    this.getAllPromotion();
-    this.createForm();
-  }
-
-  createForm() {
-    this.form = this.formBuilder.group(
-      {
-        detail: ['', Validators.required],
-        date_start: ['', Validators.required],
-        date_end: ['', Validators.required],
-        discount_percent: ['', Validators.required],
-      }
-    );
-  }
-  getAllPromotion() {
-    this.managePromotion.getPromotion().subscribe(res => {
-      if (res['status'] === 'Success') {
-        this.pro = res.data;
-      }
-    },
-      (e) => console.log(e['error']['message'])
-    );
-  }
-  showDialogToAdd() {
-    this.newPromotion = true;
-    this.promotion = {};
-    this.displayDialog = true;
-  }
-  save() {
-    this.msgs = [];
-    this.promotion.detail = this.detail;
-    this.promotion.date_start = this.dateStart;
-    this.promotion.date_end = this.dateEnd;
-    this.promotion.discount_percent = this.discount;
-    this.managePromotion.createPromotion(this.promotion)
-      .subscribe(res => {
-        if (res['status'] === 'Success') {
-          this.msgs.push({ severity: 'success', summary: 'ข้อความจากระบบ', detail: 'การดำเนินการสำเร็จ' });
-          this.promotions = [
-            ...this.promotions,
-            res['data']
-          ];
-        }
-      },
-        (e) => {
-          this.msgs.push({ severity: 'error', summary: 'ข้อความจากระบบ', detail: 'การดำเนินการไม่สำเร็จ' });
-        }
-      );
-    this.clear();
-  }
-  showEdit(id) {
-    this.newPromotion = false;
-    this.promotion = this.pro.filter(e => e.promotion_id === id)[0];
-    this.detail = this.promotion['detail'];
-    this.dateStart = this.promotion['date_start'];
-    this.dateEnd = this.promotion['date_end'];
-    this.discount = this.promotion['discount_percent'];
-    this.displayDialog = true;
-  }
-  update() {
-    this.msgs = [];
-    this.confirmationService.confirm({
-      message: 'ยืนยันการแก้ไข',
-      header: 'ข้อความจากระบบ',
-      accept: () => {
-        this.promotion.detail = this.detail;
-        this.promotion.date_start = this.dateStart;
-        this.promotion.date_end = this.dateEnd;
-        this.promotion.discount_percent = this.discount;
-        this.managePromotion.updatePromotion(this.pro)
-          .subscribe(res => {
-            if (res['status'] === 'Success') {
-              this.msgs.push({ severity: 'success', summary: 'ข้อความจากระบบ', detail: 'การดำเนินการสำเร็จ' });
-              const index = this.pro.findIndex(e => e.promotion_id === res['data']['promotion_id']);
-              this.pro[index] = res['data'];
-            }
-          },
-            (e) => {
-              console.log(e['error']['message']);
-              this.msgs.push({ severity: 'error', summary: 'ข้อความจากระบบ', detail: 'การดำเนินการไม่สำเร็จ' });
-            }
-          );
-        this.clear();
-      },
-      reject: () => {
-
-      }
+    this.loadData();
+    this.initForm();
+    //this.getPosition();
+    this.formEditPromo = new FormGroup({
+      editPromoDetail: new FormControl(null),
+      editStartDate: new FormControl(null),
+      editEndDate: new FormControl(null),
+      editDiscount: new FormControl(null),
+      id : new FormControl(null)
     });
   }
-  delete(id) {
-    this.msgs = [];
-    this.confirmationService.confirm({
-      message: 'ยืนยันการลบ',
-      header: 'ข้อความจากระบบ',
-      accept: () => {
-        const index = this.pro.findIndex(e => e.promotion_id === id);
-        this.managePromotion.deletePromotion(id)
-          .subscribe(res => {
-            if (res['status'] === 'Success') {
-              this.msgs.push({ severity: 'success', summary: 'ข้อความจากระบบ', detail: 'การดำเนินการลบสำเร็จ' });
-              this.pro = [
-                ...this.pro.slice(0, index),
-                ...this.pro.slice(index + 1)
-              ];
-            }
-          },
-            (e) => {
-              console.log(e['error']['message']);
-              this.msgs.push({ severity: 'error', summary: 'ข้อความจากระบบ', detail: 'การดำเนินการลบไม่สำเร็จ' });
-            }
-          );
-      },
-      reject: () => {
 
+  addPromotion() {
+    this.display = true;
+  }
+
+  initForm() {
+    this.formPromo = new FormGroup({
+      promoDetail: new FormControl(null , Validators.required),
+      startDate: new FormControl(null , Validators.required),
+      endDate: new FormControl(null ,  Validators.required),
+      discount: new FormControl(null ,  Validators.required)
+    });
+    this.formPromo
+    .valueChanges
+    .pipe(
+      debounceTime(500),
+      distinctUntilChanged()
+    )
+    .subscribe(() => this.onValueChange());
+  }
+
+  submitFormPromo() {
+    if(this.formPromo.valid){
+    this.msgs = [];
+    this.promotionService
+      .createPromotion(this.formPromo.getRawValue())
+      .pipe(
+        switchMap(rs => {
+          this.display = false;
+          this.msgs.push({severity:'info', summary:'Insert Promotion', detail:'Insert Success'});
+          return this.promotionService.getAllPromotion().pipe(map(rs=>{
+            return this.promotion = rs;
+          }))
+        })
+      )
+      .subscribe();
+      }else{
+        this.onValueChange()
       }
+  }
+
+  private onValueChange() {
+    if (!this.formPromo) {
+      return;
+    }
+    for (const field of Object.keys(this.formError)) {
+      this.formError[field] = '';
+      const control = this.formPromo.get(field);
+      if (control && !control.valid) {
+        const messages = this.validationMassages[field];
+        for (const key of Object.keys(control.errors)) {
+          this.formError[field] += messages[key] + ' ';
+        }
+      }
+    }
+  }
+
+  editPromotion(event) {
+    this.displayEdit = true;
+    console.log(event);
+    this.formEditPromo.patchValue({
+      editPromoDetail: event.detail,
+      editDiscount: event.discount_percent,
+      editStartDate : moment(event).format('YYYY-MM-DD'),
+      editEndDate : moment(event).format('YYYY-MM-DD'),
+      id: event.promotion_id
     });
   }
-  clear() {
-    this.promotion = {};
-    this.detail = '';
-    this.dateStart = null;
-    this.dateEnd = null;
-    this.discount = null;
-    this.displayDialog = false;
-    this.form.reset();
+
+  updatePromotion() {
+      this.msgs = [];
+      this.promotionService
+        .updatePromotion(this.formEditPromo.getRawValue())
+        .pipe(
+          switchMap(rs => {
+            this.displayEdit = false;
+            this.msgs.push({severity:'info', summary:'Update Promotion', detail:'Update Success'});
+            return this.promotionService.getAllPromotion().pipe(map(rs=>{
+              return this.promotion = rs;
+            }))
+          })
+        )
+        .subscribe();
+  }
+
+  confirm(id) {
+    this.msgs = [];
+    this.confirmationService.confirm({
+        message: 'คุณต้องการลบข้อมูลผู้จัดการร้านคนนี้ใช่หรือไม่',
+        accept: () => {
+          this.promotionService.deletePormotion(id).pipe(switchMap(rs=>{
+            this.msgs.push({severity:'info', summary:'Delete Success', detail:'Delete Success'});
+            return this.promotionService.getAllPromotion().pipe(map(rs=>{
+              return this.promotion = rs;
+            }))
+          })).subscribe()
+        }
+    });
+  }
+
+  loadData() {
+    this.promotionService.getAllPromotion().subscribe(rs => {
+      this.promotion = rs;
+    });
   }
 }
