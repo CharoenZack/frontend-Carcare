@@ -118,8 +118,13 @@ export class ProfileComponent implements OnInit {
 
   uploadImage(event){
     let formData = new FormData();
-    formData.append('file' , event.files);
-    console.log(formData);
+    if (event.files.length > 0) {
+      const file = event.files;
+      this.formEditProfile.get('editImage').setValue(file);
+      console.log(file);
+      formData.append('file' , file);
+    }
+    //console.log(formData);
   }
 
   clear() {
