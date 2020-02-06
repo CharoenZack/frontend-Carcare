@@ -112,13 +112,14 @@ export class ManagePromotionComponent implements OnInit {
   editPromotion(event) {
     this.displayEdit = true;
     console.log(event);
-    this.formEditPromo.patchValue({
+    const patchPromo = {
       editPromoDetail: event.detail,
       editDiscount: event.discount_percent,
-      editStartDate : moment(event).format('YYYY-MM-DD'),
-      editEndDate : moment(event).format('YYYY-MM-DD'),
+      editStartDate : new Date(event.date_start),
+      editEndDate : new Date(event.date_end),
       id: event.promotion_id
-    });
+    }
+    this.formEditPromo.patchValue(patchPromo);
   }
 
   updatePromotion() {
