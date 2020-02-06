@@ -7,7 +7,6 @@ import { HomeComponent } from '../content/home/home.component';
 import { ManageTypecarComponent } from '../content/manage-typecar/manage-typecar.component';
 import { ManageCarserviceComponent } from '../content/manage-carservice/manage-carservice.component';
 import { ManageToolsComponent } from '../content/manage-tools/manage-tools.component';
-import { ManageEmployeeComponent } from '../content/manage-employee/manage-employee.component';
 import { EditFormComponent } from '../content/edit-form/edit-form.component';
 import { EditDataEmployeeComponent } from '../content/edit-data-employee/edit-data-employee.component';
 import { ProfileComponent } from '../content/profile/profile.component';
@@ -20,6 +19,7 @@ import { ManageWithdrawReturnComponent } from '../content/manage-withdraw-return
 import { ScheduleComponent } from '../content/schedule/schedule.component';
 import { ManageChannelComponent } from '../content/manage-channel/manage-channel.component';
 import { ManageMembersComponent } from '../content/manage-members/manage-members.component';
+import { ManagestaffComponent } from '../content/managestaff/managestaff.component';
 
 const routes: Routes = [
   {
@@ -54,7 +54,7 @@ const routes: Routes = [
         children: [
           {
             path: '',
-            component: ManageEmployeeComponent,
+            component: ManagestaffComponent
           },
           {
             path: 'create',

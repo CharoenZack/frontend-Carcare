@@ -1,8 +1,8 @@
-import { WashTools } from './../../shared/interfaces/wash-tools';
-import { ManageCarcareService } from './../../shared/services/manage-carcare.service';
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { MenuItem, Message, ConfirmationService } from 'primeng/api';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { ConfirmationService, Message } from 'primeng/api';
+import { debounceTime, distinctUntilChanged, map, switchMap } from 'rxjs/operators';
+import { WashtoolService } from 'src/app/shared/services/washtool.service';
 
 @Component({
   selector: 'app-manage-tools',
@@ -10,144 +10,138 @@ import { MenuItem, Message, ConfirmationService } from 'primeng/api';
   styleUrls: ['./manage-tools.component.css']
 })
 export class ManageToolsComponent implements OnInit {
-  public cols: any[];
-  public tool: any[];
-  public form: FormGroup;
-  public toolname: string;
-  public amount: number;
-  washtool: WashTools;
-  washtools: WashTools[];
-  public displayDialog: boolean;
-  newwashtool: boolean;
-  public msgs: Message[] = [];
-  constructor(
-    private formBuilder: FormBuilder,
-    private manageCar: ManageCarcareService,
-    private confirmationService: ConfirmationService
-  ) { }
+  display = false;
+  displayEdit = false;
+  formTool : FormGroup;
+  formEditTool : FormGroup;
+  tool: any[];
+  msgs: Message[] = [];
+  public formError = {
+    tool: '',
+    amount: ''
+  };
+  public validationMassages = {
+    username: {
+      required: '*กรูณากรอกอุปกรณ์'
+    },
+    password: {
+      required: '*กรุณากรอกจำนวน'
+    }
+  };
+  constructor(private washToolService: WashtoolService,private confirmationService : ConfirmationService) {}
 
   ngOnInit() {
-    this.cols = [
-      { field: 'tool_name', header: 'ชื่ออุปกรณ์' },
-      { field: 'amount', header: 'จำนวน' },
-    ];
-    this.getAllTool();
-    this.createForm();
-  }
-
-  createForm() {
-    this.form = this.formBuilder.group(
-      {
-        tool_name: ['', Validators.required],
-        amount: ['', Validators.required],
-      }
-    );
-  }
-
-  getAllTool() {
-    this.manageCar.getTools().subscribe(res => {
-      if (res['status'] === 'Success') {
-        this.tool = res.data;
-      }
-    },
-      (e) => console.log(e['error']['message'])
-    );
-  }
-  showDialogToAdd() {
-    this.newwashtool = true;
-    this.washtool = {};
-    this.displayDialog = true;
-  }
-  showEdit(id) {
-    console.log(id);
-    console.log(this.washtool)
-    this.newwashtool = false;
-    this.washtool = this.tool.filter(e => e.wash_tool_id === id)[0];
-    this.toolname = this.washtool['tool_name'];
-    this.amount = this.washtool['amount'];
-    this.displayDialog = true;
-  }
-  save() {
-    this.msgs = [];
-    this.washtool.tool_name = this.toolname;
-    this.washtool.amount = this.amount;
-    this.manageCar.createTool(this.washtool)
-      .subscribe(res => {
-        if (res['status'] === 'Success') {
-          this.msgs.push({ severity: 'success', summary: 'ข้อความจากระบบ', detail: 'การดำเนินการสำเร็จ' });
-          this.washtools = [
-            ...this.washtools,
-            res['data']
-          ];
-        }
-      },
-        (e) => {
-          this.msgs.push({ severity: 'error', summary: 'ข้อความจากระบบ', detail: 'การดำเนินการไม่สำเร็จ' });
-        }
-      );
-    this.clear();
-  }
-
-  update() {
-    this.msgs = [];
-    this.confirmationService.confirm({
-      message: 'ยืนยันการแก้ไข',
-      header: 'ข้อความจากระบบ',
-      accept: () => {
-        this.washtool.tool_name = this.toolname;
-        this.washtool.amount = this.amount;
-        this.manageCar.updateTool(this.washtool)
-          .subscribe(res => {
-            if (res['status'] === 'Success') {
-              this.msgs.push({ severity: 'success', summary: 'ข้อความจากระบบ', detail: 'การดำเนินการสำเร็จ' });
-              const index = this.tool.findIndex(e => e.wash_tool_id === res['data']['wash_tool_id']);
-              this.tool[index] = res['data'];
-            }
-          },
-            (e) => {
-              console.log(e['error']['message']);
-              this.msgs.push({ severity: 'error', summary: 'ข้อความจากระบบ', detail: 'การดำเนินการไม่สำเร็จ' });
-            }
-          );
-        this.clear();
-      },
-      reject: () => {
-
-      }
+    this.loadData();
+    this.initForm();
+    //this.getPosition();
+    this.formEditTool = new FormGroup({
+      editTool: new FormControl(null , Validators.required),
+      editAmount: new FormControl(null , Validators.required),
+      editStatus: new FormControl(null , Validators.required),
+      id: new FormControl(null)
     });
   }
-  delete(id) {
-    this.msgs = [];
-    this.confirmationService.confirm({
-      message: 'ยืนยันการลบ',
-      header: 'ข้อความจากระบบ',
-      accept: () => {
-        const index = this.tool.findIndex(e => e.wash_tool_id === id);
-        this.manageCar.deleteTool(id)
-          .subscribe(res => {
-            if (res['status'] === 'Success') {
-              this.msgs.push({ severity: 'success', summary: 'ข้อความจากระบบ', detail: 'การดำเนินการลบสำเร็จ' });
-              this.tool = [
-                ...this.tool.slice(0, index),
-                ...this.tool.slice(index + 1)
-              ];
-            }
-          },
-            (e) => {
-              console.log(e['error']['message']);
-              this.msgs.push({ severity: 'error', summary: 'ข้อความจากระบบ', detail: 'การดำเนินการลบไม่สำเร็จ' });
-            }
-          );
-      },
-      reject: () => {
 
+  addTool() {
+    this.display = true;
+  }
+
+  initForm() {
+    this.formTool = new FormGroup({
+      tool: new FormControl(null , Validators.required),
+      amount: new FormControl(null , Validators.required),
+      status: new FormControl(null),
+      employeeId: new FormControl(localStorage.getItem('userId')),
+    });
+    this.formTool
+    .valueChanges
+    .pipe(
+      debounceTime(500),
+      distinctUntilChanged()
+    )
+    .subscribe(() => this.onValueChange());
+  }
+
+  submitFormTool() {
+    if(this.formTool.valid){
+    this.msgs = [];
+    this.washToolService
+      .createWashTool(this.formTool.getRawValue())
+      .pipe(
+        switchMap(rs => {
+          this.display = false;
+          this.msgs.push({severity:'info', summary:'Insert Tool', detail:'Insert Success'});
+          return this.washToolService.getAllWashTool().pipe(map(rs=>{
+            return this.tool = rs;
+          }))
+        })
+      )
+      .subscribe();
+      }else{
+        this.onValueChange()
       }
+  }
+
+  private onValueChange() {
+    if (!this.formTool) {
+      return;
+    }
+    for (const field of Object.keys(this.formError)) {
+      this.formError[field] = '';
+      const control = this.formTool.get(field);
+      if (control && !control.valid) {
+        const messages = this.validationMassages[field];
+        for (const key of Object.keys(control.errors)) {
+          this.formError[field] += messages[key] + ' ';
+        }
+      }
+    }
+  }
+
+  editTool(event) {
+    this.displayEdit = true;
+    this.formEditTool.patchValue({
+      editTool: event.tool_name,
+      editAmount: event.amount,
+      editStatus: event.tool_status,
+      id: event.wash_tool_id
     });
   }
-  clear() {
-    this.washtool = {};
-    this.toolname = '';
-    this.displayDialog = false;
-    this.form.reset();
+
+  updateTool() {
+      this.msgs = [];
+      this.washToolService
+        .updateWashTool(this.formEditTool.getRawValue())
+        .pipe(
+          switchMap(rs => {
+            this.displayEdit = false;
+            this.msgs.push({severity:'info', summary:'Update Tool', detail:'Update Success'});
+            return this.washToolService.getAllWashTool().pipe(map(rs=>{
+              return this.tool = rs;
+            }))
+          })
+        )
+        .subscribe();
+  }
+
+  confirm(id) {
+    this.msgs = [];
+    this.confirmationService.confirm({
+        message: 'คุณต้องการลบข้อมูลผู้จัดการร้านคนนี้ใช่หรือไม่',
+        accept: () => {
+          this.washToolService.deleteWashTool(id).pipe(switchMap(rs=>{
+            this.msgs.push({severity:'info', summary:'Delete Success', detail:'Delete Success'});
+            return this.washToolService.getAllWashTool().pipe(map(rs=>{
+              return this.tool = rs;
+            }))
+          })).subscribe()
+        }
+    });
+  }
+
+  loadData() {
+    this.washToolService.getAllWashTool().subscribe(rs => {
+      this.tool = rs;
+    });
   }
 }

@@ -17,12 +17,6 @@
             <div class="p-col-6">
               <div class="p-grid">
                 <div class="p-col-6 text-info" style = "text-align:left;">
-                  <span>Username : </span>
-                </div>
-                <div class="p-col-6 " style="text-align:right;">
-                  <span>{{(userData) ? userData['employee_username']: ''}} </span>
-                </div>
-                <div class="p-col-6 text-info" style = "text-align:left;">
                   <span>FirstName : </span>
                 </div>
                 <div class="p-col-6 " style="text-align:right;">
@@ -40,12 +34,6 @@
                 <div class="p-col-6 " style="text-align:right;">
                   <span>{{(userData) ? userData['employee_tel']: ''}} </span>
                 </div>
-                <div class="p-col-6 text-info" style = "text-align:left;">
-                  <span>Position : </span>
-                </div>
-                <div class="p-col-6 " style="text-align:right;">
-                  <span>{{(userData) ? userData['position_role']: ''}} </span>
-                </div>
                 <div class="p-col-12" style="text-align:center;">
                   <button pButton type="button" label="แก้ไข" class="ui-button-raised ui-button-raised"
                   (click)="showEdit(userData['employee_id'])"></button>
@@ -57,58 +45,41 @@
     </div>
   </div>
 </div>
-<form [formGroup]="form" novalidate>
-  <p-dialog header="รายละเอียดรถ" [(visible)]="displayDialog" [responsive]="true" showEffect="fade" [modal]="true"
-    [style]="{width: '500px'}" (onHide)="form.reset()">
-    <div class="ui-g ui-fluid" *ngIf="employee">
-      <div class="ui-g-12">
-        <div class="form-group">
-
-          <div class="ui-g-4">
-            <label for="fname">ชื่อ</label>
-          </div>
-          <div class="ui-g-8">
-            <input pInputText id="fname" [(ngModel)]="fname" formControlName="fname" />
-            <div
-              *ngIf="form.controls['fname'].invalid && (form.controls['fname'].dirty || form.controls['fname'].touched)"
-              class="alert alert-danger">
-              <div class="text-danger text-invalid" *ngIf="form.controls['fname'].errors.required">
-                กรุณากรอกชื่อ</div>
-            </div>
-          </div>
-          <div class="ui-g-4">
-            <label for="lname">นามสกุล</label>
-          </div>
-          <div class="ui-g-8">
-            <input pInputText id="lname" [(ngModel)]="lname" formControlName="lname" />
-            <div
-              *ngIf="form.controls['lname'].invalid && (form.controls['lname'].dirty || form.controls['lname'].touched)"
-              class="alert alert-danger">
-              <div class="text-danger text-invalid" *ngIf="form.controls['lname'].errors.required">
-                กรุณากรอกนามสกุล</div>
-            </div>
-          </div>
-          <div class="ui-g-4">
-            <label for="tel">เบอร์โทร</label>
-          </div>
-          <div class="ui-g-8">
-            <input pInputText id="tel" [(ngModel)]="tel" formControlName="tel" />
-            <div *ngIf="form.controls['tel'].invalid && (form.controls['tel'].dirty || form.controls['tel'].touched)"
-              class="alert alert-danger">
-              <div class="text-danger text-invalid" *ngIf="form.controls['tel'].errors.required">
-                กรุณากรอกเบอร์โทร</div>
-            </div>
-          </div>
-        </div>
+  <p-dialog header="แก้ไขโปรไฟล์" [(visible)]="displayDialog" [responsive]="true" showEffect="fade" [modal]="true"
+    [style]="{width: '500px'}" >
+    <div class="p-grid" [formGroup]="formEditProfile">
+      <div class="p-col-12">
+        <p-fileUpload name="myfile[]" customUpload="true" (uploadHandler)="uploadImage($event)"></p-fileUpload>
+      </div>
+      <div class="p-col-4">
+        <label for="fname">ชื่อ</label>
+      </div>
+      <div class="p-col-8">
+        <input type="text" pInputText formControlName = "editFname"/>
+      </div>
+      <div class="p-col-4">
+        <label for="name">นามสกุล</label>
+      </div>
+      <div class="p-col-8">
+        <input type="text" pInputText formControlName = "editLname"/>
+      </div>
+      <div class="p-col-4">
+        <label for="name">เบอร์โทรศัพท์</label>
+      </div>
+      <div class="p-col-8">
+        <input type="text" pInputText formControlName = "editTel"/>
       </div>
     </div>
     <p-footer>
-      <div class="ui-dialog-buttonpane ui-helper-clearfix">
-        <button type="button" id="btn-Clear" pButton (click)="clear()" label="ยกเลิก"></button>
-        <button id="btn-Update" type="button" pButton label="แก้ไข" (click)="update()"
-          [disabled]="form.invalid"></button>
+      <div class="p-col-12" style="text-align: center;">
+        <button
+      type="button"
+      pButton
+      icon="pi pi-check"
+      label="บันทึก"
+      (click)="update()"
+    ></button>
       </div>
     </p-footer>
   </p-dialog>
-</form>
 <p-confirmDialog [style]="{width: '50vw'}"></p-confirmDialog>

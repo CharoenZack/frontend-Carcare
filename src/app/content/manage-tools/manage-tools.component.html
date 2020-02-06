@@ -1,124 +1,182 @@
-<div class="ui-g">
-  <div class="ui-g-12 ui-lg-12">
+<div class="p-grid">
+  <div class="p-col-12">
     <div style="text-align:center">
       <h1>จัดการอุปกรณ์ล้างรถ</h1>
     </div>
-    <div class="container">
-      <div class="line"></div>
-      <br>
-      <div class="row">
-        <div class="ui-g">
-          <div class="ui-g-12 ui-lg-12">
-            <p-table [paginator]="true" [value]='tool' [rows]="5" [responsive]="true">
+      <hr />
+      <p-messages [(value)]="msgs"></p-messages>
+            <p-table [paginator]="true" [rows]="10" [responsive]="true" [value]="tool">
               <ng-template pTemplate="caption">
                 <div style="text-align:left">
-                  <button pButton type="button" label="เพิ่ม" class="ui-button-rounded ui-button-success"
-                    style="font-size: 15px; width: 10%;" (click)="showDialogToAdd()"></button>
+                  <!-- <button pButton type="button" id="btn-Increase" label="เพิ่ม" class="ui-button-temple"
+                    style="width: 20%"></button> -->
+                  <button
+                    pButton
+                    type="button"
+                    label="เพิ่ม"
+                    class="ui-button-rounded ui-button-success"
+                    style="font-size: 15px; width: 10%;"
+                    (click)="addTool()"
+                  ></button>
                 </div>
-
               </ng-template>
               <ng-template pTemplate="header" let-columns>
                 <tr>
-                  <th pSortableColumn="nameAbbr">
+                  <th pSortableColumn="name">
                     ชื่ออุปกรณ์
-                    <p-sortIcon field="nameAbbr" ariaLabel="Activate to sort"
+                    <p-sortIcon
+                      field="nameAbbr"
+                      ariaLabel="Activate to sort"
                       ariaLabelDesc="Activate to sort in descending order"
-                      ariaLabelAsc="Activate to sort in ascending order">
+                      ariaLabelAsc="Activate to sort in ascending order"
+                    >
                     </p-sortIcon>
                   </th>
-                  <th pSortableColumn="amount">
+                  <th pSortableColumn="tel">
                     จำนวน
-                    <p-sortIcon field="name" ariaLabel="Activate to sort"
+                    <p-sortIcon
+                      field="name"
+                      ariaLabel="Activate to sort"
                       ariaLabelDesc="Activate to sort in descending order"
-                      ariaLabelAsc="Activate to sort in ascending order">
+                      ariaLabelAsc="Activate to sort in ascending order"
+                    >
                     </p-sortIcon>
                   </th>
-                  <th>
-
+                  <th pSortableColumn="date">
+                    คงเหลือ
+                    <p-sortIcon
+                      field="name"
+                      ariaLabel="Activate to sort"
+                      ariaLabelDesc="Activate to sort in descending order"
+                      ariaLabelAsc="Activate to sort in ascending order"
+                    >
+                    </p-sortIcon>
                   </th>
+                  <th>ดำเนินการ</th>
                 </tr>
               </ng-template>
               <ng-template pTemplate="body" let-rowData let-columns="columns">
-                <tr [pSelectableRow]="rowData">
-                  <td [pSelectableRow]="rowData" style="text-align: center">
-                    {{rowData.tool_name}}
-                  </td>
-                  <td [pSelectableRow]="rowData" style="text-align: center">
-                    {{rowData.amount}}
-                  </td>
-                  <td *ngFor="let col of columns;">
-                    <div *ngIf="rowData[col.field] != rowData['status']">
-                      <span class="ui-column-title">{{col.header}}</span>
-                      <div *ngIf="rowData[col.field] == rowData['tool_name']">
-                        {{rowData.tool_name}}
-                      </div>
-                      <div *ngIf="rowData[col.field] == rowData['amount'] ">
-                        {{rowData.amount}}
-                      </div>
-                    </div>
-
-                  </td>
+                <tr>
+                <td>{{ rowData.tool_name }}</td>
+                <td>{{ rowData.amount }}</td>
+                <td>{{ rowData.tool_status }}</td>
                   <td>
                     <div style="text-align:center">
-                      <button pButton type="button" label="แก้ไข" class="ui-button-warning"
-                        (click)="showEdit(rowData['wash_tool_id'])" style="width: 40%;"></button>
-                      <button pButton type="button" label="ลบ" class="ui-button-danger"
-                        (click)="delete(rowData['wash_tool_id'])" style="width: 40%;margin-left: 5mm"></button>
+                      <button
+                        pButton
+                        type="button"
+                        label="แก้ไข"
+                        class="ui-button-warning"
+                        style="width: 40%;"
+                        (click) = "editTool(rowData)"
+                      ></button>
+                      <button
+                        pButton
+                        type="button"
+                        label="ลบ"
+                        class="ui-button-danger"
+                        style="width: 40%;margin-left: 5mm"
+                        (click)="confirm(rowData.employee_id)"
+                      ></button>
                     </div>
-
                   </td>
                 </tr>
               </ng-template>
             </p-table>
           </div>
         </div>
-      </div>
+<p-dialog
+  header="เพิ่มอุปกรณ์ในการล้างรถ"
+  [(visible)]="display"
+  [modal]="true"
+  [style]="{ width: '50vw' }"
+  [maximizable]="true"
+  [baseZIndex]="10000"
+  [draggable]="false"
+  [resizable]="false"
+>
+  <div class="p-grid" [formGroup]="formTool">
+    <div class="p-col-4" style="text-align: right;">
+      <label for="tool">อุปกรณ์</label>
     </div>
+    <div class="p-col-4">
+      <input type="text" pInputText formControlName="tool" id ="tool"/>
+    </div>
+    <div class="p-col-4" style="text-align: left;">
+      <div *ngIf="formError.tool" class="text-danger text-invalid">{{formError.tool }}</div>
+    </div>
+    <div class="p-col-4" style="text-align: right;">
+      <label for="amount">จำนวน</label>
+    </div>
+    <div class="p-col-4">
+      <input type="number" pInputText formControlName="amount" id ="amount"/>
+    </div>
+    <div class="p-col-4" style="text-align: left;">
+      <div *ngIf="formError.amount" class="text-danger text-invalid">{{formError.amount }}</div>
+    </div>
+      <div class="p-col-4" style="text-align: right;">
+        <label for="status">สถานะ</label>
+      </div>
+      <div class="p-col-4">
+        <input type="text" pInputText formControlName="status" id="status"/>
+      </div>
+      <div class="p-col-12" style="text-align: center;">
+        <button
+      type="button"
+      pButton
+      icon="pi pi-check"
+      label="บันทึก"
+      (click)="submitFormTool()"
+    ></button>
+      </div>
   </div>
-</div>
-<form [formGroup]="form" novalidate>
-  <p-dialog header="รายละเอียดรถ" [(visible)]="displayDialog" [responsive]="true" showEffect="fade" [modal]="true"
-    [style]="{width: '300px'}" (onHide)="form.reset()">
-    <div class="ui-g ui-fluid" *ngIf="washtool">
-      <div class="ui-g-12">
-        <div class="form-group">
+</p-dialog>
 
-          <div class="ui-g-4">
-            <label for="tool_name">ชื่ออุปกรณ์</label>
-          </div>
-          <div class="ui-g-8">
-            <input pInputText id="tool_name" [(ngModel)]="toolname" formControlName="tool_name" />
-            <div
-              *ngIf="form.controls['tool_name'].invalid && (form.controls['tool_name'].dirty || form.controls['tool_name'].touched)"
-              class="alert alert-danger">
-              <div class="text-danger text-invalid" *ngIf="form.controls['tool_name'].errors.required">
-                กรุณากรอกชื่ออุปกรณ์</div>
-            </div>
-          </div>
-          <div class="ui-g-4">
-            <label for="amount">จำนวน</label>
-          </div>
-          <div class="ui-g-8">
-            <input pInputText id="amount" [(ngModel)]="amount" formControlName="amount" />
-            <div
-              *ngIf="form.controls['amount'].invalid && (form.controls['amount'].dirty || form.controls['amount'].touched)"
-              class="alert alert-danger">
-              <div class="text-danger text-invalid" *ngIf="form.controls['amount'].errors.required">
-                กรุณากรอกจำนวน</div>
-            </div>
-          </div>
-        </div>
+<p-dialog
+  header="แก้ไขข้อมูลอุปกรณ์ล้างรถ"
+  [(visible)]="displayEdit"
+  [modal]="true"
+  [style]="{ width: '50vw' }"
+  [maximizable]="true"
+  [baseZIndex]="10000"
+  [draggable]="false"
+  [resizable]="false"
+>
+  <div class="p-grid" [formGroup]="formEditTool">
+      <div class="p-col-4" style="text-align: right;">
+        <label for="editTool">อุปกรณ์</label>
       </div>
-    </div>
-    <p-footer>
-      <div class="ui-dialog-buttonpane ui-helper-clearfix">
-        <button type="button" id="btn-Clear" pButton (click)="clear()" label="ยกเลิก"></button>
-        <button *ngIf="newwashtool" id="btn-Save" type="button" pButton (click)="save()" label="บันทึก"
-          [disabled]="form.pristine || form.invalid"></button>
-        <button *ngIf="!newwashtool" id="btn-Update" type="button" pButton label="แก้ไข" (click)="update()"
-          [disabled]="form.invalid"></button>
+      <div class="p-col-8">
+        <input type="text" pInputText formControlName="editTool" id="editTool"/>
       </div>
-    </p-footer>
-  </p-dialog>
-</form>
-<p-confirmDialog [style]="{width: '50vw'}"></p-confirmDialog>
+      <div class="p-col-4" style="text-align: right;">
+        <label for="editAmount">จำนวน</label>
+      </div>
+      <div class="p-col-8">
+        <input type="number" pInputText formControlName="editAmount" id="editAmount"/>
+      </div>
+      <div class="p-col-4" style="text-align: right;">
+        <label for="editStatus">สถานะ</label>
+      </div>
+      <div class="p-col-8">
+        <input type="text" pInputText formControlName="editStatus" id ="editStatus"/>
+      </div>
+      <input type="hidden" formControlName="id"/>
+      <div class="p-col-12" style="text-align: center;">
+        <button
+      type="button"
+      pButton
+      icon="pi pi-check"
+      label="บันทึก"
+      (click)="updateTool()"
+    ></button>
+      </div>
+  </div>
+</p-dialog>
+
+<p-confirmDialog #cd header="ลบข้อมูล" icon="pi pi-exclamation-triangle">
+  <p-footer>
+    <button type="button" pButton icon="pi pi-check" label="คกลง" (click)="cd.accept()"></button>
+      <button type="button" pButton icon="pi pi-times" label="ยกเลิก" (click)="cd.reject()"></button>
+  </p-footer>
+</p-confirmDialog>

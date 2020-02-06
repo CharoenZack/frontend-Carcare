@@ -4,7 +4,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { map } from 'rxjs/operators';
 import { ManageUserService } from 'src/app/shared/services/manage-user.service';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { MenuItem, Message, ConfirmationService } from 'primeng/api';
 
 @Component({
@@ -15,8 +15,8 @@ import { MenuItem, Message, ConfirmationService } from 'primeng/api';
 export class ProfileComponent implements OnInit {
   public userData: any[];
   public userId: string;
-  public form: FormGroup;
-  public displayDialog: boolean;
+  public formEditProfile: FormGroup;
+  public displayDialog = false;
   public employee: Employee;
   public msgs: Message[] = [];
   // NGModel
@@ -38,40 +38,49 @@ export class ProfileComponent implements OnInit {
     this.createForm();
   }
   createForm() {
-    this.form = this.formBuilder.group(
-      {
-        fname: ['', Validators.required],
-        lname: ['', Validators.required],
-        tel: ['', Validators.compose([Validators.required, Validators.minLength(5)])],
-        role: ['', Validators.required],
-      }
-    );
+    this.formEditProfile = new FormGroup({
+      editImage : new FormControl(null , Validators.required),
+      editFname : new FormControl(null , Validators.required),
+      editLname : new FormControl(null , Validators.required),
+      editTel : new FormControl(null , Validators.required)
+    })
   }
   getData() {
     this.route.params.pipe(map(res => res.id)).subscribe(id => {
       this.manageUser.getProfile(id).subscribe(
-        res => {
-          if (res['status'] === 'Success') {
-            this.userData = res['data'][0];
-            console.log(res['data'][0]);
-          }
-        },
-        (err) => {
-          console.log(err['error']['message']);
+        res=>{
+          res.map(rs=>{
+            this.userData = rs;
+          })
         }
       );
     });
   }
   showEdit(id) {
-    console.log(id);
-
-    this.employee = this.userData.filter(e => e.employee_id === id)[0];
-    this.fname = this.employee['employee_fname'];
-    this.lname = this.employee['employee_lname'];
-    this.tel = this.employee['employee_tel']
     this.displayDialog = true;
+    this.route.params.pipe(map(res => res.id)).subscribe(id => {
+      this.manageUser.getProfile(id).subscribe(
+        res=>{
+          res.map(rs=>{
+            const formEdit = {
+              editFname : rs.employee_fname,
+              editLname : rs.employee_lname,
+              editTel : rs.employee_tel
+            }
+            this.formEditProfile.patchValue(formEdit);
+          })
+        }
+      );
+    });
+    // this.employee = this.userData.filter(e => e.employee_id === id)[0];
+    // this.fname = this.employee['employee_fname'];
+    // this.lname = this.employee['employee_lname'];
+    // this.tel = this.employee['employee_tel']
   }
   update() {
+    this.manageUser.updateProfile(this.formEditProfile.getRawValue()).subscribe(rs=>{
+      console.log(rs);
+    })
     // this.msgs = [];
     // this.confirmationService.confirm({
     //   message: 'ยืนยันการแก้ไข',
@@ -107,9 +116,15 @@ export class ProfileComponent implements OnInit {
     // });
   }
 
+  uploadImage(event){
+    let formData = new FormData();
+    formData.append('file' , event.files);
+    console.log(formData);
+  }
+
   clear() {
     this.employee = {};
     this.displayDialog = false;
-    this.form.reset();
+    this.formEditProfile.reset();
   }
 }

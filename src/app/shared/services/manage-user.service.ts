@@ -9,113 +9,196 @@ import { map } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class ManageUserService {
-
   constructor(
     private http: HttpClient,
     private authService: AuthService,
     private httpService: HttpClientService
-  ) { }
+  ) {}
 
   getUser(id) {
-    return this.http.get(ApiConstants.baseURl + `/manageEmployee/edit/${id}`, {
-      headers: {
-        Authorization: `${localStorage.getItem('access-token')}`
-      }
-    }).pipe(
-      map((res) => {
-        console.log(res['data'][0]);
-        return {
-          status: res['result'],
-          data: res['data'][0]
-        };
-
+    return this.http
+      .get(ApiConstants.baseURl + `/manageEmployee/edit/${id}`, {
+        headers: {
+          Authorization: `${localStorage.getItem('access-token')}`
+        }
       })
-    );
+      .pipe(
+        map(res => {
+          console.log(res['data'][0]);
+          return {
+            status: res['result'],
+            data: res['data'][0]
+          };
+        })
+      );
   }
   getProfile(id) {
-    console.log(id);
-    return this.http.get(`/editprofile/${id}`, {
-      headers: {
-        Authorization: `${localStorage.getItem('access-token')}`
-      }
-    }).pipe(
-
-      map((res) => {
-        console.log(res['data']);
-        return {
-          status: res['result'],
-          data: res['data']
-        };
+    return this.http
+      .get(`/app/getEmployeeWeid/${id}`, {
+        headers: {
+          Authorization: `${localStorage.getItem('access-token')}`
+        }
       })
-    );
+      .pipe(
+        map((res : any) => {
+          return res.data;
+        })
+      );
   }
   createEmployee(data) {
     const payload = {
-      username : data.username,
-      password : data.password,
-      fname : data.fname,
-      lname : data.lname,
-      tel : data.tel,
-      status : 1,
-      position : 2
-    }
-    return this.http.post('/app/insertEmployee',
-    payload, {
-      headers: {
-        Authorization: `${localStorage.getItem('access-token')}`
-      }
-    }).pipe(
-      map(res => {
-        return {
-          status: res['result'],
-        };
-      }
-      )
-    );
+      username: data.username,
+      password: data.password,
+      fname: data.fname,
+      lname: data.lname,
+      tel: data.tel,
+      status: 1,
+      position: 2
+    };
+    return this.http
+      .post('/app/insertEmployee', payload, {
+        headers: {
+          Authorization: `${localStorage.getItem('access-token')}`
+        }
+      })
+      .pipe(
+        map(res => {
+          return {
+            status: res['result']
+          };
+        })
+      );
   }
   updateEmployee(data) {
     const payload = {
-      fname : data.editfname,
-      lname : data.editlname,
-      tel : data.editTel,
-      id : data.id
-    }
-    return this.http.patch(`/app/updateEmployeeSef_el_etWeid`, payload, {
-      headers: {
-        Authorization: `${localStorage.getItem('access-token')}`
-      }
-    }).pipe(
-      map(res => {
-        return {
-          status: res['result'],
-        };
-      }
-      )
-    );
-
+      fname: data.editfname,
+      lname: data.editlname,
+      tel: data.editTel,
+      id: data.id
+    };
+    return this.http
+      .patch(`/app/updateEmployeeSef_el_etWeid`, payload, {
+        headers: {
+          Authorization: `${localStorage.getItem('access-token')}`
+        }
+      })
+      .pipe(
+        map(res => {
+          return {
+            status: res['result']
+          };
+        })
+      );
   }
   getAllUsers() {
-    return this.http.get('/app/getAllEmployee', {
-      headers: {
-        Authorization: `${localStorage.getItem('access-token')}`
-      }
-    }).pipe(
-      map(res => {
-        return res['data']
+    return this.http
+      .get('/app/getAllEmployee', {
+        headers: {
+          Authorization: `${localStorage.getItem('access-token')}`
+        }
       })
-    );
+      .pipe(
+        map(res => {
+          return res['data'];
+        })
+      );
   }
   deleteEmployee(id) {
-    return this.http.delete(`/app/deleteEmployeeWeid/${id}`, {
+    return this.http
+      .delete(`/app/deleteEmployeeWeid/${id}`, {
+        headers: {
+          Authorization: `${localStorage.getItem('access-token')}`
+        }
+      })
+      .pipe(
+        map(res => {
+          return {
+            status: res['result']
+          };
+        })
+      );
+  }
+
+  getAllStaff() {
+    return this.http.get('/app/getEmployeeWpidN12/' , {
       headers: {
         Authorization: `${localStorage.getItem('access-token')}`
       }
     }).pipe(
-      map(res => {
-        return {
-          status: res['result']
-        };
+      map((rs: any) => {
+        return rs.data;
       })
     );
   }
+
+  crateStaff(data) {
+    const payload = {
+      username: data.username,
+      password: data.password,
+      fname: data.fname,
+      lname: data.lname,
+      tel: data.tel,
+      status: 1,
+      position: data.position.value
+    };
+    return this.http
+      .post('/app/insertEmployee', payload, {
+        headers: {
+          Authorization: `${localStorage.getItem('access-token')}`
+        }
+      })
+      .pipe(
+        map(res => {
+          return {
+            status: res['result']
+          };
+        })
+      );
+  }
+  updateStaff(data) {
+    const payload = {
+      fname: data.editfname,
+      lname: data.editlname,
+      tel: data.editTel,
+      id: data.id
+    };
+    return this.http
+      .patch(`/app/updateEmployeeSef_el_etWeid`, payload, {
+        headers: {
+          Authorization: `${localStorage.getItem('access-token')}`
+        }
+      })
+      .pipe(
+        map((res : any) => {
+          return res.data
+        })
+      );
+  }
+
+  deleteStaff(id) {
+    return this.http
+      .delete(`/app/deleteEmployeeWeid/${id}`, {
+        headers: {
+          Authorization: `${localStorage.getItem('access-token')}`
+        }
+      })
+      .pipe(
+        map(res => {
+          return {
+            status: res['result']
+          };
+        })
+      );
+  }
+
+  updateProfile(data){
+    return this.http.post('/app/updateProfile' , data ,{
+      headers: {
+        Authorization: `${localStorage.getItem('access-token')}`
+      }
+    }).pipe(map((rs : any)=>{
+      return rs.data;
+    }))
+  }
+
 }

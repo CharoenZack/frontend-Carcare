@@ -14,7 +14,7 @@
               <ng-template pTemplate="caption">
                 <div style="text-align:left">
                   <button pButton type="button" label="จองคิว" class="ui-button-rounded ui-button-success"
-                    style="font-size: 15px; width: 10%;" [routerLink]="[ '/manageBooking/create']"></button>
+                    style="font-size: 15px; width: 10%;" (click)="bookingCarWash()"></button>
                 </div>
 
               </ng-template>
@@ -123,3 +123,88 @@
     </div>
   </div>
 </div>
+<p-dialog
+  header="จองคิวล้างรถ"
+  [(visible)]="display"
+  [modal]="true"
+  [style]="{ width: '50vw' , overflowY: 'scroll'}"
+  [maximizable]="true"
+  [baseZIndex]="10000"
+  [draggable]="false"
+  [resizable]="false"
+  [blockScroll]="true"
+>
+  <div class="p-grid" [formGroup]="formBooking">
+    <div class="p-col-4" style="text-align: right;">
+      <label for="member">สมาชิก</label>
+    </div>
+    <div class="p-col-4">
+      <p-autoComplete formControlName = "member" id = "member" [suggestions]="results" (completeMethod)="search($event)" field="name"></p-autoComplete>
+    </div>
+    <div class="p-col-4" style="text-align: left;">
+      <div *ngIf="formError.member" class="text-danger text-invalid">{{formError.member }}</div>
+    </div>
+    <div class="p-col-4" style="text-align: right;">
+      <label for="typeCar">ประเภทรถ</label>
+    </div>
+    <div class="p-col-4">
+      <p-dropdown [options]="typeCar" formControlName = "typeCar" optionLabel="label"></p-dropdown>
+    </div>
+    <div class="p-col-4" style="text-align: left;">
+      <div *ngIf="formError.typeCar" class="text-danger text-invalid">{{formError.typeCar }}</div>
+    </div>
+      <div class="p-col-4" style="text-align: right;">
+        <label for="cleanService">บริการ</label>
+      </div>
+      <div class="p-col-4">
+        <div class="p-col-12">
+          <div *ngFor="let serviceForm of cleanList;let i=index;">
+            <p-checkbox [value]="serviceForm.value" [label]="serviceForm.label" [formControl]="formBooking.get('cleanServiceForm')"></p-checkbox>
+          </div>
+        </div>
+      </div>
+      <div class="p-col-4" style="text-align: left;">
+        <div *ngIf="formError.cleanService" class="text-danger text-invalid">{{formError.cleanService }}</div>
+      </div>
+      <div class="p-col-4" style="text-align: right;">
+        <label for="license">เลขทะเบียน</label>
+      </div>
+      <div class="p-col-4">
+        <input type="text" pInputText formControlName="license" id="license"/>
+      </div>
+      <div class="p-col-4" style="text-align: left;">
+        <div *ngIf="formError.license" class="text-danger text-invalid">{{formError.license }}</div>
+      </div>
+      <div class="p-col-4" style="text-align: right;">
+        <label for="phone">ช่องล้างรถ</label>
+      </div>
+      <div class="p-col-4">
+        <div>
+          <p-dropdown [options]="carWashList" formControlName = "carWash" optionLabel="label"></p-dropdown>
+        </div>
+      </div>
+      <div class="p-col-4" style="text-align: left;">
+        <div *ngIf="formError.carWash" class="text-danger text-invalid">{{formError.carWash }}</div>
+      </div>
+      <div class="p-col-4" style="text-align: right;">
+        <label for="reserveTime">เวลาจอง</label>
+      </div>
+      <div class="p-col-4">
+        <p-calendar formControlName="reserveDateTime" [showTime]="true"></p-calendar>
+      </div>
+      <div class="p-col-4" style="text-align: left;">
+        <div *ngIf="formError.reserveDateTime" class="text-danger text-invalid">{{formError.reserveDateTime }}</div>
+      </div>
+      <input type="hidden" formControlName="cashierId"/>
+      <div class="p-col-12" style="text-align: center;">
+        <button
+      type="button"
+      pButton
+      icon="pi pi-check"
+      label="บันทึก"
+      (click)="submitFormBooking()"
+    ></button>
+      </div>
+  </div>
+</p-dialog>
+
