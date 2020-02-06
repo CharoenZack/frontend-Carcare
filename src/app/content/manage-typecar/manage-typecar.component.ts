@@ -89,7 +89,7 @@ submitFormTypeCar() {
               summary: 'Insert Employee',
               detail: 'Insert Success'
             });
-            return this.typeCarService.getAllTypeCar().pipe(
+            return this.typeCarService.getAllCarDetail().pipe(
               map(rs => {
                 return this.carDetail = rs;
               })
