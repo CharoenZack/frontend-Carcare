@@ -1,66 +1,58 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ContentComponent } from './content.component';
-import { ContentRoutingModule } from './content-routing.module';
-import { HomeComponent } from './home/home.component';
-import { NgxSpinnerModule } from 'ngx-spinner';
-import { ManageManagerComponent } from './manage-manager/manage-manager.component';
-import { ManageTypecarComponent } from './manage-typecar/manage-typecar.component';
-import { ManageCarserviceComponent } from './manage-carservice/manage-carservice.component';
-import { ManagePromotionComponent } from './manage-promotion/manage-promotion.component';
-import { ManageToolsComponent } from './manage-tools/manage-tools.component';
-import { TableModule } from 'primeng/table';
-import { ButtonModule } from 'primeng/button';
-import { BookingComponent } from './booking/booking.component';
-import { ProfileComponent } from './profile/profile.component';
-import { CardModule } from 'primeng/card';
-import { CalendarModule } from 'primeng/calendar';
-import { InputTextModule } from 'primeng/inputtext';
-import { BookingDetailComponent } from './booking-detail/booking-detail.component';
-import { ScheduleComponent } from './schedule/schedule.component';
-import { FullCalendarModule } from 'primeng/fullcalendar';
-import { AuthService } from '../shared/services/auth.service';
-import { AuthGuard } from '../shared/guard/auth.guard';
-import { HttpClientService } from '../shared/services/http-client.service';
+import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { DialogModule } from 'primeng/dialog';
-import { InputMaskModule } from 'primeng/inputmask';
-import { DropdownModule } from 'primeng/dropdown';
-import { EditFormComponent } from './edit-form/edit-form.component';
+import { NgxSpinnerModule } from 'ngx-spinner';
 import { ConfirmationService } from 'primeng/api';
-import { MessagesModule } from 'primeng/messages';
-import { MessageModule } from 'primeng/message';
-import { ConfirmDialogModule } from 'primeng/confirmdialog';
-import { ToastModule } from 'primeng/toast';
-import { EditDataEmployeeComponent } from './edit-data-employee/edit-data-employee.component';
 import { AutoCompleteModule } from 'primeng/autocomplete';
+import { ButtonModule } from 'primeng/button';
+import { CalendarModule } from 'primeng/calendar';
+import { CardModule } from 'primeng/card';
 import { CheckboxModule } from 'primeng/checkbox';
-import { MultiSelectModule } from 'primeng/multiselect';
-import { BookingFormComponent } from './booking-form/booking-form.component';
-import { WithdrawReturnComponent } from './withdraw-return/withdraw-return.component';
-import { ManageWithdrawReturnComponent } from './manage-withdraw-return/manage-withdraw-return.component';
-import { OrderListModule } from 'primeng/orderlist';
-import { ListboxModule } from 'primeng/listbox';
-import { ManageChannelComponent } from './manage-channel/manage-channel.component';
-import { TooltipModule } from 'primeng/tooltip';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { DialogModule } from 'primeng/dialog';
+import { DropdownModule } from 'primeng/dropdown';
+import { FileUploadModule } from 'primeng/fileupload';
+import { FullCalendarModule } from 'primeng/fullcalendar';
+import { InputMaskModule } from 'primeng/inputmask';
+import { InputTextModule } from 'primeng/inputtext';
 import { KeyFilterModule } from 'primeng/keyfilter';
-import { ManageUserService } from '../shared/services/manage-user.service';
-import { ManageMembersComponent } from './manage-members/manage-members.component';
-import { MemberService } from '../shared/services/member.service';
-import { TypecarService } from '../shared/services/typecar.service';
-import { CleanService } from '../shared/services/clean.service';
+import { ListboxModule } from 'primeng/listbox';
+import { MessageModule } from 'primeng/message';
+import { MessagesModule } from 'primeng/messages';
+import { MultiSelectModule } from 'primeng/multiselect';
+import { OrderListModule } from 'primeng/orderlist';
+import { TableModule } from 'primeng/table';
+import { ToastModule } from 'primeng/toast';
+import { TooltipModule } from 'primeng/tooltip';
+import { AuthGuard } from '../shared/guard/auth.guard';
+import { AuthService } from '../shared/services/auth.service';
 import { CarWashService } from '../shared/services/car-wash.service';
-import { ManagestaffComponent } from './managestaff/managestaff.component';
-import { PositionService } from '../shared/services/position.service';
-import { WashtoolService } from '../shared/services/washtool.service';
 import { CarService } from '../shared/services/car.service';
+import { CleanService } from '../shared/services/clean.service';
+import { HttpClientService } from '../shared/services/http-client.service';
+import { ManageUserService } from '../shared/services/manage-user.service';
+import { MemberService } from '../shared/services/member.service';
 import { ModelService } from '../shared/services/model.service';
-import {FileUploadModule} from 'primeng/fileupload';
-
+import { PositionService } from '../shared/services/position.service';
+import { TypecarService } from '../shared/services/typecar.service';
+import { WashtoolService } from '../shared/services/washtool.service';
+import { ManageManagerComponent } from './admin/manage-manager/manage-manager.component';
+import { BookingComponent } from './cashier/booking/booking.component';
+import { ManageMembersComponent } from './cashier/manage-members/manage-members.component';
+import { ContentRoutingModule } from './content-routing.module';
+import { ContentComponent } from './content.component';
+import { ManageCarserviceComponent } from './manager/manage-carservice/manage-carservice.component';
+import { ManagePromotionComponent } from './manager/manage-promotion/manage-promotion.component';
+import { ManageToolsComponent } from './manager/manage-tools/manage-tools.component';
+import { ManageTypecarComponent } from './manager/manage-typecar/manage-typecar.component';
+import { ManageWithdrawReturnComponent } from './manager/manage-withdraw-return/manage-withdraw-return.component';
+import { ManagestaffComponent } from './manager/managestaff/managestaff.component';
+import { ProfileComponent } from './manager/profile/profile.component';
+import { WithdrawReturnComponent } from './staff/withdraw-return/withdraw-return.component';
+import { CheckPromotionComponent } from './cashier/check-promotion/check-promotion.component';
 @NgModule({
   declarations: [
     ContentComponent,
-    HomeComponent,
     ManageManagerComponent,
     ManageTypecarComponent,
     ManageCarserviceComponent,
@@ -68,16 +60,11 @@ import {FileUploadModule} from 'primeng/fileupload';
     ManageToolsComponent,
     BookingComponent,
     ProfileComponent,
-    BookingDetailComponent,
-    ScheduleComponent,
-    EditFormComponent,
-    EditDataEmployeeComponent,
-    BookingFormComponent,
     WithdrawReturnComponent,
     ManageWithdrawReturnComponent,
-    ManageChannelComponent,
     ManageMembersComponent,
-    ManagestaffComponent
+    ManagestaffComponent,
+    CheckPromotionComponent
   ],
   imports: [
     CommonModule,

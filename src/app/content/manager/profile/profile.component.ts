@@ -1,10 +1,15 @@
 import { Position } from 'src/app/shared/interfaces/position';
-import { Employee } from './../../shared/interfaces/employee';
+import { Employee } from '../../../shared/interfaces/employee';
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { map } from 'rxjs/operators';
 import { ManageUserService } from 'src/app/shared/services/manage-user.service';
-import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  Validators,
+  FormControl
+} from '@angular/forms';
 import { MenuItem, Message, ConfirmationService } from 'primeng/api';
 
 @Component({
@@ -30,7 +35,7 @@ export class ProfileComponent implements OnInit {
     private manageUser: ManageUserService,
     private formBuilder: FormBuilder,
     private confirmationService: ConfirmationService
-  ) { }
+  ) {}
 
   ngOnInit() {
     this.getData();
@@ -39,38 +44,35 @@ export class ProfileComponent implements OnInit {
   }
   createForm() {
     this.formEditProfile = new FormGroup({
-      editImage : new FormControl(null , Validators.required),
-      editFname : new FormControl(null , Validators.required),
-      editLname : new FormControl(null , Validators.required),
-      editTel : new FormControl(null , Validators.required)
-    })
+      editImage: new FormControl(null, Validators.required),
+      editFname: new FormControl(null, Validators.required),
+      editLname: new FormControl(null, Validators.required),
+      editTel: new FormControl(null, Validators.required),
+      id : new FormControl(localStorage.getItem('userId'))
+    });
   }
   getData() {
     this.route.params.pipe(map(res => res.id)).subscribe(id => {
-      this.manageUser.getProfile(id).subscribe(
-        res=>{
-          res.map(rs=>{
-            this.userData = rs;
-          })
-        }
-      );
+      this.manageUser.getProfile(id).subscribe(res => {
+        res.map(rs => {
+          this.userData = rs;
+        });
+      });
     });
   }
   showEdit(id) {
     this.displayDialog = true;
     this.route.params.pipe(map(res => res.id)).subscribe(id => {
-      this.manageUser.getProfile(id).subscribe(
-        res=>{
-          res.map(rs=>{
-            const formEdit = {
-              editFname : rs.employee_fname,
-              editLname : rs.employee_lname,
-              editTel : rs.employee_tel
-            }
-            this.formEditProfile.patchValue(formEdit);
-          })
-        }
-      );
+      this.manageUser.getProfile(id).subscribe(res => {
+        res.map(rs => {
+          const formEdit = {
+            editFname: rs.employee_fname,
+            editLname: rs.employee_lname,
+            editTel: rs.employee_tel
+          };
+          this.formEditProfile.patchValue(formEdit);
+        });
+      });
     });
     // this.employee = this.userData.filter(e => e.employee_id === id)[0];
     // this.fname = this.employee['employee_fname'];
@@ -78,9 +80,11 @@ export class ProfileComponent implements OnInit {
     // this.tel = this.employee['employee_tel']
   }
   update() {
-    this.manageUser.updateProfile(this.formEditProfile.getRawValue()).subscribe(rs=>{
-      console.log(rs);
-    })
+    this.manageUser
+      .updateProfile(this.formEditProfile.getRawValue())
+      .subscribe(rs => {
+        console.log(rs);
+      });
     // this.msgs = [];
     // this.confirmationService.confirm({
     //   message: 'ยืนยันการแก้ไข',
@@ -116,13 +120,19 @@ export class ProfileComponent implements OnInit {
     // });
   }
 
-  uploadImage(event){
+  uploadImage(event) {
     let formData = new FormData();
     if (event.files.length > 0) {
-      const file = event.files;
-      this.formEditProfile.get('editImage').setValue(file);
+      const file = event.files[0];
+      const reader = new FileReader();
       console.log(file);
-      formData.append('file' , file);
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        this.formEditProfile.get('editImage').setValue(reader.result);
+      };
+      // 
+      // console.log(file);
+      // formData.append('file' , file);
     }
     //console.log(formData);
   }

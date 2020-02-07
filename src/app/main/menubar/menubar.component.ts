@@ -96,7 +96,7 @@ export class MenubarComponent implements OnInit {
             icon: 'pi pi-fw pi-users',
             routerLink: '/content/manageBooking'
           },
-          { label: 'ตรวจสอบโปรโมชั่น', icon: 'pi pi-fw pi-users' },
+          { label: 'ตรวจสอบโปรโมชั่น', icon: 'pi pi-fw pi-users' , routerLink: '/content/checkPromotion'},
           { label: 'ตรวจสอบคิวล้างรถ', icon: 'pi pi-fw pi-users' },
           { label: 'จัดการใบรับรถ', icon: 'pi pi-fw pi-users' },
           { label: 'ชำระเงิน', icon: 'pi pi-fw pi-users' }
