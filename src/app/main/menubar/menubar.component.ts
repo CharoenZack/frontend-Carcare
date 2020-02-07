@@ -36,7 +36,7 @@ export class MenubarComponent implements OnInit {
           {
             label: 'จัดการเจ้าของร้าน',
             icon: 'pi pi-fw pi-users',
-            routerLink: '/content/manageManager'
+            routerLink: '/content/admin/manageManager'
           }
         ];
         break;
@@ -45,42 +45,41 @@ export class MenubarComponent implements OnInit {
           {
             label: 'ข้อมูลส่วนตัว',
             icon: 'pi pi-fw pi-users',
-            routerLink: ['/content/manageEmployee', this.userId]
+            routerLink: ['/content/manager/manageEmployee', this.userId]
           },
           {
             label: 'จัดการพนักงาน',
             icon: 'pi pi-fw pi-user-plus',
-            routerLink: '/content/manageEmployee'
+            routerLink: '/content/manager/manageEmployee'
           },
           {
             label: 'จัดการประเภทรถ',
             icon: 'pi pi-fw pi-mobile',
-            routerLink: '/content/car'
+            routerLink: '/content/manager/car'
           },
           {
             label: 'จัดการบริการรถ',
             icon: 'pi pi-fw pi-mobile',
-            routerLink: '/content/manageCarservice'
+            routerLink: '/content/manager/manageCarservice'
           },
           {
             label: 'จัดการอุปการณ์ล้างรถ',
             icon: 'pi pi-fw pi-shopping-cart',
-            routerLink: '/content/manageTool'
+            routerLink: '/content/manager/manageTool'
           },
           {
             label: 'จัดการโปรโมชั่น',
             icon: 'pi pi-fw pi-shopping-cart',
-            routerLink: '/content/managePromotion'
+            routerLink: '/content/manager/managePromotion'
           },
           {
             label: 'จัดการการเบิกอุปกรณ์',
-            icon: 'pi pi-fw pi-users',
-            routerLink: '/content/withdraw'
+            icon: 'pi pi-fw pi-users'
           },
           {
             label: 'จัดการการคินอุปกรณ์',
             icon: 'pi pi-fw pi-users',
-            routerLink: '/content/manageWithdraw'
+            routerLink: '/content/manager/manageWithdraw'
           }
         ];
         break;
@@ -89,14 +88,14 @@ export class MenubarComponent implements OnInit {
           {
             label: 'จัดการสมาชิก',
             icon: 'pi pi-fw pi-users',
-            routerLink: '/content/manageMember'
+            routerLink: ['/content/cashier/', this.userId]
           },
           {
             label: 'จัดการการจองคิว',
             icon: 'pi pi-fw pi-users',
-            routerLink: '/content/manageBooking'
+            routerLink: '/content/cashier/manageBooking'
           },
-          { label: 'ตรวจสอบโปรโมชั่น', icon: 'pi pi-fw pi-users' , routerLink: '/content/checkPromotion'},
+          { label: 'ตรวจสอบโปรโมชั่น', icon: 'pi pi-fw pi-users' , routerLink: '/content/cashier/checkPromotion'},
           { label: 'ตรวจสอบคิวล้างรถ', icon: 'pi pi-fw pi-users' },
           { label: 'จัดการใบรับรถ', icon: 'pi pi-fw pi-users' },
           { label: 'ชำระเงิน', icon: 'pi pi-fw pi-users' }
@@ -107,12 +106,11 @@ export class MenubarComponent implements OnInit {
           {
             label: 'จัดการสมาชิก',
             icon: 'pi pi-fw pi-users',
-            routerLink: '/content/manageMember'
+            routerLink: ['/content/staff/', this.userId]
           },
           {
             label: 'ตรวจสอบคิดล้างรถ',
-            icon: 'pi pi-fw pi-users',
-            routerLink: '/content/manageBooking'
+            icon: 'pi pi-fw pi-users'
           },
           { label: 'สถานะการล้างรถ', icon: 'pi pi-fw pi-users' },
           { label: 'อุปกรณ์', icon: 'pi pi-fw pi-users' },
