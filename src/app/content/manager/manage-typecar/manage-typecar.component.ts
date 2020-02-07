@@ -1,13 +1,10 @@
-import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
-import { ManageCarcareService } from './../../shared/services/manage-carcare.service';
 import { Component, OnInit } from '@angular/core';
-import { Message, ConfirmationService, SelectItem } from 'primeng/api';
-import { TypeCar } from 'src/app/shared/interfaces/type-car';
-import { Car } from 'src/app/shared/interfaces/car';
-import { TypecarService } from 'src/app/shared/services/typecar.service';
-import { debounceTime, distinctUntilChanged, switchMap, map } from 'rxjs/operators';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { ConfirmationService, Message } from 'primeng/api';
+import { debounceTime, distinctUntilChanged, map, switchMap } from 'rxjs/operators';
 import { CarService } from 'src/app/shared/services/car.service';
 import { ModelService } from 'src/app/shared/services/model.service';
+import { TypecarService } from 'src/app/shared/services/typecar.service';
 
 @Component({
   selector: 'app-manage-typecar',
