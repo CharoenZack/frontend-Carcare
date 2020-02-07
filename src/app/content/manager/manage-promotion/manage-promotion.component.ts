@@ -1,6 +1,6 @@
 import { ManageCarcareService } from 'src/app/shared/services/manage-carcare.service';
-import { Promotion } from './../../shared/interfaces/promotion';
-import { PromotionService } from './../../shared/services/promotion.service';
+import { Promotion } from '../../../shared/interfaces/promotion';
+import { PromotionService } from '../../../shared/services/promotion.service';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { MenuItem, Message, ConfirmationService } from 'primeng/api';
