@@ -11,7 +11,6 @@ import {
   FormControl
 } from '@angular/forms';
 import { MenuItem, Message, ConfirmationService } from 'primeng/api';
-import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-profile',
@@ -25,7 +24,6 @@ export class ProfileComponent implements OnInit {
   public displayDialog = false;
   public employee: Employee;
   public msgs: Message[] = [];
-  public imageUrls;
   // NGModel
   public fname: string;
   public lname: string;
@@ -36,13 +34,11 @@ export class ProfileComponent implements OnInit {
     private route: ActivatedRoute,
     private manageUser: ManageUserService,
     private formBuilder: FormBuilder,
-    private confirmationService: ConfirmationService,
-    private sanitization: DomSanitizer
+    private confirmationService: ConfirmationService
   ) {}
 
   ngOnInit() {
-    var preview = document.querySelector('img');
-    this.getData(preview);
+    this.getData();
     this.userId = localStorage.getItem('userId');
     this.createForm();
   }
@@ -52,11 +48,10 @@ export class ProfileComponent implements OnInit {
       editFname: new FormControl(null, Validators.required),
       editLname: new FormControl(null, Validators.required),
       editTel: new FormControl(null, Validators.required),
-      id: new FormControl(localStorage.getItem('userId'))
+      id : new FormControl(localStorage.getItem('userId'))
     });
   }
-  getData(preview) {
-    let link = document.querySelector('img');
+  getData() {
     this.route.params.pipe(map(res => res.id)).subscribe(id => {
       this.manageUser.getProfile(id).subscribe(res => {
         res.map(rs => {
@@ -135,7 +130,7 @@ export class ProfileComponent implements OnInit {
       reader.onload = () => {
         this.formEditProfile.get('editImage').setValue(reader.result);
       };
-      //
+      // 
       // console.log(file);
       // formData.append('file' , file);
     }

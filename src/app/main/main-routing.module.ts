@@ -21,64 +21,90 @@ const routes: Routes = [
     component : MainComponent,
     children : [
       {
-        path: 'manageManager',
-        component: ManageManagerComponent,
-      },
-
-      {
-        path: 'car',
-        component: ManageTypecarComponent,
-      },
-      {
-        path: 'manageCarservice',
-        component: ManageCarserviceComponent,
-      },
-
-      {
-        path: 'manageTool',
-        component: ManageToolsComponent,
-      },
-      {
-        path: 'manageEmployee',
-        children: [
+        path : 'admin',
+        children : [
           {
-            path: '',
-            component: ManagestaffComponent
+              path: 'manageManager',
+              component: ManageManagerComponent,
+          }
+        ]
+      },
+      {
+        path : 'manager',
+        children : [
+          {
+            path: 'car',
+            component: ManageTypecarComponent,
           },
           {
-            path: ':id',
-            component: ProfileComponent
-          }
-        ]
-      },
-      {
-        path: 'managePromotion',
-        component: ManagePromotionComponent
-      },
-      {
-        path: 'manageBooking',
-        children: [
+            path: 'manageCarservice',
+            component: ManageCarserviceComponent,
+          },
           {
-            path: '',
-            component: BookingComponent
+            path: 'manageTool',
+            component: ManageToolsComponent,
+          },
+          {
+            path: 'manageEmployee',
+            children: [
+              {
+                path: '',
+                component: ManagestaffComponent
+              },
+              {
+                path: ':id',
+                component: ProfileComponent
+              }
+            ]
+          },
+          {
+            path: 'managePromotion',
+            component: ManagePromotionComponent
+          },
+          {
+            path: 'manageWithdraw',
+            component: ManageWithdrawReturnComponent,
+          },
+        ]
+      },
+      {
+        path : 'cashier',
+        children : [
+          {
+            path: 'manageBooking',
+            children: [
+              {
+                path: '',
+                component: BookingComponent
+              }
+            ]
+          },
+          {
+            path : 'checkPromotion',
+            component : CheckPromotionComponent
+          },
+          {
+            path: 'manageMember',
+            component : ManageMembersComponent
+          },
+          {
+            path : ':id',
+            component : ProfileComponent
           }
         ]
       },
       {
-        path : 'checkPromotion',
-        component : CheckPromotionComponent
-      },
-      {
-        path: 'withdraw',
-        component: WithdrawReturnComponent,
-      },
-      {
-        path: 'manageWithdraw',
-        component: ManageWithdrawReturnComponent,
-      },
-      {
-        path: 'manageMember',
-        component : ManageMembersComponent
+        path : 'staff',
+        children : [
+          {
+            path: 'withdraw',
+            component: WithdrawReturnComponent,
+          },
+          {
+            path : ':id',
+            component : ProfileComponent
+          }
+        ]
       }
     ]
   },
