@@ -1,6 +1,5 @@
-<div class="ui-g">
-  <div class="ui-g-12 ui-lg-12">
-
+<div class="p-grid">
+  <div class="p-col-12">
     <div class="container" style="width: 80%;">
       <div style="text-align:center">
         <h1>ข้อมูลส่วนตัว</h1>
@@ -49,7 +48,7 @@
     [style]="{width: '500px'}" >
     <div class="p-grid" [formGroup]="formEditProfile">
       <div class="p-col-12">
-        <p-fileUpload name="myfile[]" customUpload="true" (uploadHandler)="uploadImage($event)"></p-fileUpload>
+        <p-fileUpload name="myfile[]" customUpload="true" (uploadHandler)="uploadImage($event)" accept="image/*"></p-fileUpload>
       </div>
       <div class="p-col-4">
         <label for="fname">ชื่อ</label>

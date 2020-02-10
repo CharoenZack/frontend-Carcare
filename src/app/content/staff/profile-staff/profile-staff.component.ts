@@ -1,24 +1,19 @@
-import { Position } from 'src/app/shared/interfaces/position';
-import { Employee } from '../../../shared/interfaces/employee';
 import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
-import { map, switchMap } from 'rxjs/operators';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { Employee } from 'src/app/shared/interfaces/employee';
+import { Message } from '@angular/compiler/src/i18n/i18n_ast';
+import { ActivatedRoute } from '@angular/router';
 import { ManageUserService } from 'src/app/shared/services/manage-user.service';
-import {
-  FormBuilder,
-  FormGroup,
-  Validators,
-  FormControl
-} from '@angular/forms';
-import { MenuItem, Message, ConfirmationService } from 'primeng/api';
-import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+import { DomSanitizer } from '@angular/platform-browser';
+import { map, switchMap } from 'rxjs/operators';
 
 @Component({
-  selector: 'app-profile',
-  templateUrl: './profile.component.html',
-  styleUrls: ['./profile.component.css']
+  selector: 'app-profile-staff',
+  templateUrl: './profile-staff.component.html',
+  styleUrls: ['./profile-staff.component.css']
 })
-export class ProfileComponent implements OnInit {
+export class ProfileStaffComponent implements OnInit {
+
   public userData: any[];
   public userId: string;
   public formEditProfile: FormGroup;
@@ -54,27 +49,29 @@ export class ProfileComponent implements OnInit {
   getData() {
     this.route.params.pipe(map(res => res.id)).subscribe(id => {
       this.manageUser.getProfile(id).subscribe(rs => {
-        rs.map(res => {
+        rs.map(res=>{
           this.userData = res;
           this.imageUrls = this.sanitization.bypassSecurityTrustUrl(
             '' + res.employee_image
           );
-        });
+        })
       });
     });
   }
   showEdit(id) {
     this.displayDialog = true;
-    this.manageUser.getProfile(id).subscribe(rs => {
-      rs.map(res=>{
-        const formEdit = {
-          editFname: res.employee_fname,
-          editLname: res.employee_lname,
-          editTel: res.employee_tel,
-          editImage : res.employee_image
-        };
-        this.formEditProfile.patchValue(formEdit);
-      })
+    this.route.params.pipe(map(res => res.id)).subscribe(id => {
+      this.manageUser.getProfile(id).subscribe(rs => {
+        rs.map(res=>{
+          const formEdit = {
+            editFname: res.employee_fname,
+            editLname: res.employee_lname,
+            editTel: res.employee_tel,
+            editImage : res.employee_image
+          };
+          this.formEditProfile.patchValue(formEdit);
+        });
+      });
     });
   }
   update() {
@@ -86,12 +83,12 @@ export class ProfileComponent implements OnInit {
           this.displayDialog = false;
           return this.manageUser.getProfile(id).pipe(
             map((rs: any) => {
-              rs.map(res => {
+              rs.map(res=>{
                 this.userData = res;
                 this.imageUrls = this.sanitization.bypassSecurityTrustUrl(
                   '' + res.employee_image
                 );
-              });
+              })
               return rs;
             })
           );
@@ -120,4 +117,5 @@ export class ProfileComponent implements OnInit {
     this.displayDialog = false;
     this.formEditProfile.reset();
   }
+
 }

@@ -1,0 +1,100 @@
+<p-messages [(value)]="msgs"></p-messages>
+        <p-table
+          [paginator]="true"
+          [rows]="10"
+          [responsive]="true"
+          [value]="returnData"
+        >
+          <ng-template pTemplate="header" let-columns>
+            <tr>
+              <th pSortableColumn="name">
+                ชื่ออุปกรณ์
+                <p-sortIcon
+                  field="nameAbbr"
+                  ariaLabel="Activate to sort"
+                  ariaLabelDesc="Activate to sort in descending order"
+                  ariaLabelAsc="Activate to sort in ascending order"
+                >
+                </p-sortIcon>
+              </th>
+              <th pSortableColumn="tel">
+                จำนวน
+                <p-sortIcon
+                  field="name"
+                  ariaLabel="Activate to sort"
+                  ariaLabelDesc="Activate to sort in descending order"
+                  ariaLabelAsc="Activate to sort in ascending order"
+                >
+                </p-sortIcon>
+              </th>
+              <th pSortableColumn="date">
+                เวลาที่คืน
+                <p-sortIcon
+                  field="name"
+                  ariaLabel="Activate to sort"
+                  ariaLabelDesc="Activate to sort in descending order"
+                  ariaLabelAsc="Activate to sort in ascending order"
+                >
+                </p-sortIcon>
+              </th>
+              <th>สถานะ</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-rowData let-columns="columns">
+            <tr>
+              <td>{{ rowData.tool_name }}</td>
+              <td>{{ rowData.withdraw_amount }}</td>
+                <td>{{ rowData.date_start }}</td>
+              <td>{{ rowData.approve_status }}</td>
+            </tr>
+          </ng-template>
+        </p-table>
+        <p-dialog
+header="คืนอุปกรณ์"
+[(visible)]="display"
+[modal]="true"
+[style]="{ width: '60vw' }"
+[maximizable]="true"
+[baseZIndex]="10000"
+[draggable]="false"
+[resizable]="false"
+>
+<div class="p-grid" [formGroup]="formReturn">
+  <div class="p-col-4" style="text-align: right;">
+    <label for="washTool">ชื่ออุปกรณ์</label>
+  </div>
+  <div class="p-col-4">
+    <p-dropdown [options]="washTool" formControlName = "washTool" optionLabel="label"></p-dropdown>
+  </div>
+  <div class="p-col-4" style="text-align: left;">
+    <div *ngIf="formError.washTool" class="text-danger text-invalid">{{formError.washTool }}</div>
+  </div>
+    <div class="p-col-4" style="text-align: right;">
+      <label for="amount">จำนวน</label>
+    </div>
+    <div class="p-col-4">
+      <input type="number" pInputText formControlName="amount" id="amount"/>
+    </div>
+    <div class="p-col-4" style="text-align: left;">
+      <div *ngIf="formError.amount" class="text-danger text-invalid">{{formError.amount }}</div>
+    </div>
+    <div class="p-col-4" style="text-align: right;">
+      <label for="dateStart">วันที่คืน</label>
+    </div>
+    <div class="p-col-4">
+        <p-calendar formControlName="dateEnd" [showIcon]="true"></p-calendar>
+    </div>
+    <div class="p-col-4" style="text-align: left;">
+      <div *ngIf="formError.dateEnd" class="text-danger text-invalid">{{formError.dateEnd }}</div>
+    </div>
+    <div class="p-col-12" style="text-align: center;">
+      <button
+    type="button"
+    pButton
+    icon="pi pi-check"
+    label="ยืนยัน"
+    (click)="submitReturn()"
+  ></button>
+    </div>
+</div>
+</p-dialog>

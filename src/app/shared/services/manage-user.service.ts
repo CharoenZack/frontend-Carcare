@@ -40,7 +40,7 @@ export class ManageUserService {
         }
       })
       .pipe(
-        map((res : any) => {
+        map((res: any) => {
           return res.data;
         })
       );
@@ -120,15 +120,17 @@ export class ManageUserService {
   }
 
   getAllStaff() {
-    return this.http.get('/app/getEmployeeWpidN12/' , {
-      headers: {
-        Authorization: `${localStorage.getItem('access-token')}`
-      }
-    }).pipe(
-      map((rs: any) => {
-        return rs.data;
+    return this.http
+      .get('/app/getEmployeeWpidN12/', {
+        headers: {
+          Authorization: `${localStorage.getItem('access-token')}`
+        }
       })
-    );
+      .pipe(
+        map((rs: any) => {
+          return rs.data;
+        })
+      );
   }
 
   crateStaff(data) {
@@ -169,8 +171,8 @@ export class ManageUserService {
         }
       })
       .pipe(
-        map((res : any) => {
-          return res.data
+        map((res: any) => {
+          return res.data;
         })
       );
   }
@@ -191,14 +193,23 @@ export class ManageUserService {
       );
   }
 
-  updateProfile(data){
-    return this.http.post('/app/updateProfile' , data ,{
-      headers: {
-        Authorization: `${localStorage.getItem('access-token')}`
-      }
-    }).pipe(map((rs : any)=>{
-      return rs.data;
-    }))
+  updateProfile(data) {
+    let formData = new FormData();
+    formData.append('editFname', data.editFname);
+    formData.append('editLname', data.editLname);
+    formData.append('editTel', data.editTel);
+    formData.append('editImage', data.editImage);
+    formData.append('id', data.id);
+    return this.http
+      .post('/app/updateProfile', formData, {
+        headers: {
+          Authorization: `${localStorage.getItem('access-token')}`
+        }
+      })
+      .pipe(
+        map((rs: any) => {
+          return rs.data;
+        })
+      );
   }
-
 }
