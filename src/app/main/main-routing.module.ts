@@ -2,17 +2,26 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { ManageManagerComponent } from '../content/admin/manage-manager/manage-manager.component';
 import { BookingComponent } from '../content/cashier/booking/booking.component';
+import { CheckPromotionComponent } from '../content/cashier/check-promotion/check-promotion.component';
 import { ManageMembersComponent } from '../content/cashier/manage-members/manage-members.component';
+import { ManageReceiptComponent } from '../content/cashier/manage-receipt/manage-receipt.component';
+import { PaymentComponent } from '../content/cashier/payment/payment.component';
 import { ManageCarserviceComponent } from '../content/manager/manage-carservice/manage-carservice.component';
 import { ManagePromotionComponent } from '../content/manager/manage-promotion/manage-promotion.component';
 import { ManageToolsComponent } from '../content/manager/manage-tools/manage-tools.component';
 import { ManageTypecarComponent } from '../content/manager/manage-typecar/manage-typecar.component';
-import { ManageWithdrawReturnComponent } from '../content/manager/manage-withdraw-return/manage-withdraw-return.component';
 import { ManagestaffComponent } from '../content/manager/managestaff/managestaff.component';
-import { ProfileComponent } from '../content/manager/profile/profile.component';
-import { WithdrawReturnComponent } from '../content/staff/withdraw-return/withdraw-return.component';
 import { MainComponent } from './main.component';
-import { CheckPromotionComponent } from '../content/cashier/check-promotion/check-promotion.component';
+import { ProfileComponent } from '../content/manager/profile/profile.component';
+import { ManageQueueComponent } from '../content/cashier/manage-queue/manage-queue.component';
+import { CheckQueueComponent } from '../content/staff/check-queue/check-queue.component';
+import { WashStatusComponent } from '../content/staff/wash-status/wash-status.component';
+import { ToolComponent } from '../content/staff/tool/tool.component';
+import { WithdrawReturnComponent } from '../content/staff/withdraw-return/withdraw-return.component';
+import { ManageWithdrawComponent } from '../content/manager/manage-withdraw/manage-withdraw.component';
+import { ManageReturnComponent } from '../content/manager/manage-return/manage-return.component';
+import { ProfileStaffComponent } from '../content/staff/profile-staff/profile-staff.component';
+import { ProfileCashierComponent } from '../content/cashier/profile-cashier/profile-cashier.component';
 
 const routes: Routes = [
   {
@@ -63,7 +72,11 @@ const routes: Routes = [
           },
           {
             path: 'manageWithdraw',
-            component: ManageWithdrawReturnComponent,
+            component: ManageWithdrawComponent,
+          },
+          {
+            path: 'manageReturn',
+            component: ManageReturnComponent,
           },
         ]
       },
@@ -88,21 +101,45 @@ const routes: Routes = [
             component : ManageMembersComponent
           },
           {
+            path : 'manageQueue',
+            component : ManageQueueComponent
+          },
+          {
+            path : 'manageReceipt',
+            component : ManageReceiptComponent
+          },
+          {
+            path : 'payment',
+            component : PaymentComponent
+          },
+          {
             path : ':id',
-            component : ProfileComponent
-          }
+            component : ProfileCashierComponent
+          },
         ]
       },
       {
         path : 'staff',
         children : [
           {
+            path : 'checkqueue',
+            component : CheckQueueComponent
+          },
+          {
+            path : 'washStatus',
+            component : WashStatusComponent
+          },
+          {
+            path : 'tool',
+            component : ToolComponent
+          },
+          {
             path: 'withdraw',
-            component: WithdrawReturnComponent,
+            component: WithdrawReturnComponent
           },
           {
             path : ':id',
-            component : ProfileComponent
+            component : ProfileStaffComponent
           }
         ]
       }

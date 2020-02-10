@@ -1,0 +1,63 @@
+<div class="p-grid">
+  <div class="p-col-12">
+    <div style="text-align:center">
+      <h1>จัดการการเบิกอุปกรณ์</h1>
+    </div>
+    <hr />
+    <p-messages [(value)]="msgs"></p-messages>
+    <p-table
+      [paginator]="true"
+      [rows]="10"
+      [responsive]="true"
+      [value]="withdraw"
+    >
+      <ng-template pTemplate="header" let-columns>
+        <tr>
+          <th pSortableColumn="name">
+            ชื่ออุปกรณ์
+            <p-sortIcon
+              field="nameAbbr"
+              ariaLabel="Activate to sort"
+              ariaLabelDesc="Activate to sort in descending order"
+              ariaLabelAsc="Activate to sort in ascending order"
+            >
+            </p-sortIcon>
+          </th>
+          <th pSortableColumn="tel">
+            จำนวน
+            <p-sortIcon
+              field="name"
+              ariaLabel="Activate to sort"
+              ariaLabelDesc="Activate to sort in descending order"
+              ariaLabelAsc="Activate to sort in ascending order"
+            >
+            </p-sortIcon>
+          </th>
+          <th pSortableColumn="date">
+            เวลาที่ยืม
+            <p-sortIcon
+              field="name"
+              ariaLabel="Activate to sort"
+              ariaLabelDesc="Activate to sort in descending order"
+              ariaLabelAsc="Activate to sort in ascending order"
+            >
+            </p-sortIcon>
+          </th>
+          <th>ดำเนินการ</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-rowData let-columns="columns">
+        <tr>
+          <td>{{ rowData.tool_name }}</td>
+          <td>{{ rowData.withdraw_amount }}</td>
+          <td>{{ rowData.date_start }}</td>
+          <td style="text-align: center;">
+            <button label="อนุมัติ" pButton (click)="allowWithDraw(rowData , 2)"></button>
+            &nbsp;
+            <button label="ไม่อนุมัติ" pButton (click)="allowWithDraw(rowData , 0)"></button>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+</div>

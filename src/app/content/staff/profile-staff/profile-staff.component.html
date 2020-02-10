@@ -1,0 +1,85 @@
+<div class="ui-g">
+    <div class="ui-g-12 ui-lg-12">
+      <div class="container" style="width: 80%;">
+        <div style="text-align:center">
+          <h1>ข้อมูลส่วนตัว</h1>
+        </div>
+        <hr>
+        <br>
+        <p-card>
+          <div class="p-grid">
+              <div class="p-col-6">
+                <div style=" text-align: center;">
+                <img accept="image/*" [src] = "imageUrls" class="img-info">
+                </div>
+              </div>
+              <div class="p-col-6">
+                <div class="p-grid">
+                  <div class="p-col-6 text-info" style = "text-align:left;">
+                    <span>FirstName : </span>
+                  </div>
+                  <div class="p-col-6 " style="text-align:right;">
+                    <span>{{(userData) ? userData['employee_fname']: ''}} </span>
+                  </div>
+                  <div class="p-col-6 text-info" style = "text-align:left;">
+                    <span>LastName : </span>
+                  </div>
+                  <div class="p-col-6 " style="text-align:right;">
+                    <span>{{(userData) ? userData['employee_lname']: ''}} </span>
+                  </div>
+                  <div class="p-col-6 text-info" style = "text-align:left;">
+                    <span>Telephone Number : </span>
+                  </div>
+                  <div class="p-col-6 " style="text-align:right;">
+                    <span>{{(userData) ? userData['employee_tel']: ''}} </span>
+                  </div>
+                  <div class="p-col-12" style="text-align:center;">
+                    <button pButton type="button" label="แก้ไข" class="ui-button-raised ui-button-raised"
+                    (click)="showEdit(userData['employee_id'])"></button>
+                  </div>
+                </div>
+              </div>
+            </div>
+        </p-card>
+      </div>
+    </div>
+  </div>
+    <p-dialog header="แก้ไขโปรไฟล์" [(visible)]="displayDialog" [responsive]="true" showEffect="fade" [modal]="true"
+      [style]="{width: '500px'}" >
+      <div class="p-grid" [formGroup]="formEditProfile">
+        <div class="p-col-12">
+          <p-fileUpload name="myfile[]" customUpload="true" (uploadHandler)="uploadImage($event)"></p-fileUpload>
+        </div>
+        <div class="p-col-4">
+          <label for="fname">ชื่อ</label>
+        </div>
+        <div class="p-col-8">
+          <input type="text" pInputText formControlName = "editFname"/>
+        </div>
+        <div class="p-col-4">
+          <label for="name">นามสกุล</label>
+        </div>
+        <div class="p-col-8">
+          <input type="text" pInputText formControlName = "editLname"/>
+        </div>
+        <div class="p-col-4">
+          <label for="name">เบอร์โทรศัพท์</label>
+        </div>
+        <div class="p-col-8">
+          <input type="text" pInputText formControlName = "editTel"/>
+        </div>
+      </div>
+      <p-footer>
+        <div class="p-col-12" style="text-align: center;">
+          <button
+        type="button"
+        pButton
+        icon="pi pi-check"
+        label="บันทึก"
+        (click)="update()"
+      ></button>
+        </div>
+      </p-footer>
+    </p-dialog>
+  <p-confirmDialog [style]="{width: '50vw'}"></p-confirmDialog>
+  

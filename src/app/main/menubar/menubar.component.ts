@@ -74,19 +74,20 @@ export class MenubarComponent implements OnInit {
           },
           {
             label: 'จัดการการเบิกอุปกรณ์',
-            icon: 'pi pi-fw pi-users'
+            icon: 'pi pi-fw pi-users',
+            routerLink: '/content/manager/manageWithdraw'
           },
           {
             label: 'จัดการการคินอุปกรณ์',
             icon: 'pi pi-fw pi-users',
-            routerLink: '/content/manager/manageWithdraw'
+            routerLink: '/content/manager/manageReturn'
           }
         ];
         break;
       case 3:
         this.menuSideBar = [
           {
-            label: 'จัดการสมาชิก',
+            label: 'จัดารโปรไฟล์',
             icon: 'pi pi-fw pi-users',
             routerLink: ['/content/cashier/', this.userId]
           },
@@ -96,25 +97,26 @@ export class MenubarComponent implements OnInit {
             routerLink: '/content/cashier/manageBooking'
           },
           { label: 'ตรวจสอบโปรโมชั่น', icon: 'pi pi-fw pi-users' , routerLink: '/content/cashier/checkPromotion'},
-          { label: 'ตรวจสอบคิวล้างรถ', icon: 'pi pi-fw pi-users' },
-          { label: 'จัดการใบรับรถ', icon: 'pi pi-fw pi-users' },
-          { label: 'ชำระเงิน', icon: 'pi pi-fw pi-users' }
+          { label: 'ตรวจสอบคิวล้างรถ', icon: 'pi pi-fw pi-users' , routerLink: '/content/cashier/manageQueue' },
+          { label: 'จัดการใบรับรถ', icon: 'pi pi-fw pi-users' , routerLink: '/content/cashier/manageReceipt' },
+          { label: 'ชำระเงิน', icon: 'pi pi-fw pi-users' , routerLink: '/content/cashier/payment' }
         ];
         break;
       default:
         this.menuSideBar = [
           {
-            label: 'จัดการสมาชิก',
+            label: 'จัดการโปรไฟล์',
             icon: 'pi pi-fw pi-users',
             routerLink: ['/content/staff/', this.userId]
           },
           {
-            label: 'ตรวจสอบคิดล้างรถ',
-            icon: 'pi pi-fw pi-users'
+            label: 'ตรวจสอบคิวล้างรถ',
+            icon: 'pi pi-fw pi-users',
+            routerLink: '/content/staff/checkqueue'
           },
-          { label: 'สถานะการล้างรถ', icon: 'pi pi-fw pi-users' },
-          { label: 'อุปกรณ์', icon: 'pi pi-fw pi-users' },
-          { label: 'เบิกอุปกรณ์ล้างรถ', icon: 'pi pi-fw pi-users' }
+          { label: 'สถานะการล้างรถ', icon: 'pi pi-fw pi-users' , routerLink: '/content/staff/washStatus'},
+          { label: 'อุปกรณ์', icon: 'pi pi-fw pi-users' , routerLink: '/content/staff/tool'},
+          { label: 'เบิกอุปกรณ์ล้างรถ', icon: 'pi pi-fw pi-users' , routerLink: '/content/staff/withdraw' }
         ];
         break;
     }
