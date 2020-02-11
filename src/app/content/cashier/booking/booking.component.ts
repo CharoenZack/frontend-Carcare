@@ -2,12 +2,19 @@ import { FormGroup, FormControl, Validators, FormArray } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
 import { BookingService } from 'src/app/shared/services/booking.service';
 import { Router } from '@angular/router';
-import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import {
+  debounceTime,
+  distinctUntilChanged,
+  switchMap,
+  map
+} from 'rxjs/operators';
 import { MemberService } from 'src/app/shared/services/member.service';
 import { TypecarService } from 'src/app/shared/services/typecar.service';
-import { ThirdPartyDraggable } from '@fullcalendar/interaction';
 import { CleanService } from 'src/app/shared/services/clean.service';
 import { CarWashService } from 'src/app/shared/services/car-wash.service';
+import * as moment from 'moment';
+import { ReservationService } from 'src/app/shared/services/reservation.service';
+import { Message } from 'primeng/api';
 
 interface City {
   name: string;
@@ -24,7 +31,9 @@ export class BookingComponent implements OnInit {
   results = [];
   typeCar = [];
   cleanList = [];
-  carWashList = [];
+  carWashList = [{ label: 'โปรดเลือกช่องล้างรถ', value: 0 }];
+  reservation = [];
+  msgs: Message[] = [];
   public cols: any[];
   public book: any[];
   cleanServiceFromControl;
@@ -38,7 +47,7 @@ export class BookingComponent implements OnInit {
     cleanService: '',
     license: '',
     carWash: '',
-    reserveDateTime: '',
+    reserveDateTime: ''
   };
   public validationMassages = {
     member: {
@@ -66,19 +75,12 @@ export class BookingComponent implements OnInit {
     private typeCarService: TypecarService,
     private cleanService: CleanService,
     private carWashService: CarWashService,
-    private bookingService : BookingService
+    private bookingService: BookingService,
+    private reservationService: ReservationService
   ) {}
 
   ngOnInit() {
-    this.cols = [
-      { field: 'name', header: 'ชื่อผู้จอง' },
-      { field: 'reserv_date', header: 'วันที่จอง' },
-      { field: 'dateTime', header: 'เวลาที่จอง' },
-      { field: 'car', header: 'ข้อมูลรถ' },
-      { field: 'service', header: 'บริการ' },
-      { field: 'price', header: 'ค่าบริการ' },
-      { field: 'duration', header: 'ระยะเวลาบริการ' }
-    ];
+    this.getAllReservation();
     this.initFormBooking();
     this.getAllTypeCar();
     this.getAllCleanService();
@@ -87,6 +89,51 @@ export class BookingComponent implements OnInit {
 
   bookingCarWash() {
     this.display = true;
+  }
+
+  getAllReservation() {
+    let status = '';
+    this.reservation = [];
+    this.reservationService
+      .getAllReservation(localStorage.getItem('userId'))
+      .subscribe(rs => {
+        this.reservation = [
+          ...this.reservation,
+          ...rs.map(res => {
+            if (res.reserv_status === 0) {
+              status = 'รอการดำเนินการ';
+            } else if (res.reserv_status === 1) {
+              status = 'กำลังดำเนินการ';
+            } else if (res.reserv_status === 2) {
+              status = 'เสร็จสิ้นการดำเนินการ';
+            }
+            return { ...res, ...{ status } };
+          })
+        ];
+      });
+  }
+
+  changeCarWash() {
+    const { carWash } = this.formBooking.getRawValue();
+    const payload = {
+      employee_id: localStorage.getItem('userId'),
+      car_wash_id: carWash.value
+    };
+    this.reservationService
+      .getAllReservationByCarWash(payload)
+      .subscribe((rs: any[]) => {
+        if (typeof rs !== 'undefined' && rs.length > 0) {
+          rs.map(res => {
+            if (res.queue_date === moment(new Date()).format('YYYY-MM-DD')) {
+              this.formBooking.get('reserveTime').setValue(res.end_date);
+            } else {
+              this.formBooking.get('reserveTime').setValue('09:00');
+            }
+          });
+        } else {
+          this.formBooking.get('reserveTime').setValue('09:00');
+        }
+      });
   }
 
   search(event) {
@@ -111,7 +158,8 @@ export class BookingComponent implements OnInit {
       cleanServiceForm: new FormControl(null, Validators.required),
       license: new FormControl(null, Validators.required),
       carWash: new FormControl(null, Validators.required),
-      reserveDateTime: new FormControl(null, Validators.required),
+      reserveDate: new FormControl(moment(new Date()).format('YYYY-MM-DD')),
+      reserveTime: new FormControl(null, Validators.required),
       cashierId: new FormControl(localStorage.getItem('userId'))
     });
     this.formBooking.valueChanges
@@ -120,6 +168,7 @@ export class BookingComponent implements OnInit {
   }
 
   submitFormBooking() {
+    this.reservation = [];
     if (this.formBooking.valid) {
       const {
         member,
@@ -127,22 +176,52 @@ export class BookingComponent implements OnInit {
         cleanServiceForm,
         license,
         carWash,
-        reserveDateTime,
+        reserveDate,
+        reserveTime,
         cashierId
       } = this.formBooking.getRawValue();
-      console.log(cleanServiceForm)
       const payload = {
         members_id: member.value,
         type_car_id: typeCar.value,
-        clean_service : cleanServiceForm,
+        clean_service_detail_id: cleanServiceForm,
         license,
         carwash: carWash.value,
-        reserveDateTime,
-        employee_id : cashierId
+        reserveDate,
+        reserveTime,
+        employee_id: cashierId
       };
-      this.bookingService.booking(payload).subscribe(rs=>{
-        console.log(rs);
-      })
+      this.bookingService
+        .booking(payload)
+        .pipe(
+          switchMap(rs => {
+            this.display = false;
+            this.msgs.push({
+              severity: 'info',
+              summary: 'Booking Complete',
+              detail: 'Booking Complete'
+            });
+            return this.reservationService
+              .getAllReservation(localStorage.getItem('userId'))
+              .pipe(
+                map(rs => {
+                  this.reservation = [
+                    ...this.reservation,
+                    ...rs.map(res => {
+                      if (res.reserv_status === 0) {
+                        status = 'รอการดำเนินการ';
+                      } else if (res.reserv_status === 1) {
+                        status = 'กำลังดำเนินการ';
+                      } else if (res.reserv_status === 2) {
+                        status = 'เสร็จสิ้นการดำเนินการ';
+                      }
+                      return { ...res, ...{ status } };
+                    })
+                  ];
+                })
+              );
+          })
+        )
+        .subscribe();
     } else {
       this.onValueChange();
     }
@@ -187,10 +266,6 @@ export class BookingComponent implements OnInit {
     });
   }
 
-  get cleanServiceForm(): FormArray {
-    return this.formBooking.get('cleanServiceForm') as FormArray;
-  }
-
   getAllcarWash() {
     this.carWashService.getAllcarWash().subscribe(rs => {
       rs.map(res => {
@@ -200,5 +275,42 @@ export class BookingComponent implements OnInit {
         ];
       });
     });
+  }
+
+  updateStatusReserve(data) {
+    let status = '';
+    this.reservation = [];
+    const payload = {
+      reserv_status: data.reserv_status,
+      reserv_id: data.reserv_id
+    };
+    this.reservationService.updateStatusReserve(payload).pipe(
+      switchMap(rs => {
+        this.msgs.push({
+          severity: 'info',
+          summary: 'Update Status Complete',
+          detail: 'Update Status Complete'
+        });
+        return this.reservationService
+          .getAllReservation(localStorage.getItem('userId'))
+          .pipe(
+            map(rs => {
+              this.reservation = [
+                ...this.reservation,
+                ...rs.map(res => {
+                  if (res.reserv_status === 0) {
+                    status = 'รอการดำเนินการ';
+                  } else if (res.reserv_status === 1) {
+                    status = 'กำลังดำเนินการ';
+                  } else if (res.reserv_status === 2) {
+                    status = 'เสร็จสิ้นการดำเนินการ';
+                  }
+                  return { ...res, ...{ status } };
+                })
+              ];
+            })
+          );
+      })
+    ).subscribe()
   }
 }

@@ -1,1 +1,75 @@
-<p>check-queue works!</p>
+<div class="p-grid">
+  <div class="p-col-12">
+    <div style="text-align:center">
+      <h1>ตรวจสอบคิวล้างรถ</h1>
+    </div>
+    <hr />
+      <div *ngFor="let carWash of carWashList" >
+        <div class="p-col-12">
+          <label>{{ carWash.label }}</label>
+        </div>
+        <div class="p-col-12">
+            <div class="p-grid">
+                <div *ngFor="let reservation of reservationList"
+                        class="p-col-4">
+                    <div
+                      *ngIf="reservation.car_wash_id === carWash.value"
+                    >
+                      <div
+                        (click)="getDerailReservation(reservation.queue_id)"
+                      >
+                        <p-card header="{{ reservation.members_fname }}">
+                          <div>เวลาจอง :{{ reservation.start_date }}</div>
+                          <div>เลขทะเบียน :{{ reservation.license }}</div>
+                        </p-card>
+                      </div>
+                    </div>
+                  </div>
+            </div>
+        </div>
+      </div>
+  </div>
+  <p-dialog
+    header="รายละเอียดของการจอง"
+    [(visible)]="display"
+    [modal]="true"
+    [style]="{ width: '50vw' }"
+    [maximizable]="true"
+    [baseZIndex]="10000"
+    [draggable]="false"
+    [resizable]="false"
+  >
+    <div class="p-grid">
+      <div class="p-col-6" style="text-align: right;">
+        <label>เลขทะเบียน</label>
+      </div>
+      <div class="p-col-6">
+        <div>{{ queueDetail.license }}</div>
+      </div>
+      <div class="p-col-6" style="text-align: right;">
+        <label>จำนวนเงินที่ต้องจ่าย</label>
+      </div>
+      <div class="p-col-6">
+        <div>{{ queueDetail.total_price }}</div>
+      </div>
+      <div class="p-col-6" style="text-align: right;">
+        <label>ชื่อผู้จอง</label>
+      </div>
+      <div class="p-col-6">
+        <div>{{ queueDetail.members_name }}</div>
+      </div>
+      <div class="p-col-6" style="text-align: right;">
+        <label>ประเภทของรถที่ล้าง</label>
+      </div>
+      <div class="p-col-6">
+        <div>{{ queueDetail.typeCar }}</div>
+      </div>
+      <div class="p-col-6" style="text-align: right;">
+        <label>บริการที่เลือก</label>
+      </div>
+      <div class="p-col-6">
+        <div>{{ queueDetail.service }}</div>
+      </div>
+    </div>
+  </p-dialog>
+</div>

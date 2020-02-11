@@ -114,7 +114,6 @@ export class MenubarComponent implements OnInit {
             icon: 'pi pi-fw pi-users',
             routerLink: '/content/staff/checkqueue'
           },
-          { label: 'สถานะการล้างรถ', icon: 'pi pi-fw pi-users' , routerLink: '/content/staff/washStatus'},
           { label: 'อุปกรณ์', icon: 'pi pi-fw pi-users' , routerLink: '/content/staff/tool'},
           { label: 'เบิกอุปกรณ์ล้างรถ', icon: 'pi pi-fw pi-users' , routerLink: '/content/staff/withdraw' }
         ];
