@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { WashtoolService } from 'src/app/shared/services/washtool.service';
 
 @Component({
   selector: 'app-tool',
@@ -7,9 +8,17 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ToolComponent implements OnInit {
 
-  constructor() { }
+  washTool = [];
+  constructor(private washToolService : WashtoolService) { }
 
   ngOnInit() {
+    this.getAllWashTool();
+  }
+
+  getAllWashTool(){
+    this.washToolService.getAllWashTool().subscribe(rs=>{
+      this.washTool = rs;
+    })
   }
 
 }

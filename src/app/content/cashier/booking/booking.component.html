@@ -1,5 +1,5 @@
-<div class="ui-g">
-  <div class="ui-g-12 ui-lg-12">
+<div class="p-grid">
+  <div class="p-col-12">
     <div style="text-align:center">
       <h1>จัดการจองคิวล้างรถ</h1>
     </div>
@@ -7,9 +7,10 @@
       <div class="line"></div>
       <br>
       <div class="row">
-        <div class="ui-g">
-          <div class="ui-g-12 ui-lg-12">
-            <p-table #dt [paginator]="true" [value]="book" [rows]="10" [responsive]="true" selectionMode="single"
+        <div class="p-gird">
+          <div class="p-col-12">
+            <p-messages [(value)]="msgs"></p-messages>
+            <p-table #dt [paginator]="true" [value]="reservation" [rows]="10" [responsive]="true" selectionMode="single"
               (onRowSelect)="onRowSelect($event)">
               <ng-template pTemplate="caption">
                 <div style="text-align:left">
@@ -56,62 +57,32 @@
                     </p-sortIcon>
                   </th>
                   <th pSortableColumn="price">
-                    สถานะ
+                    ช่องล้างรถ
                     <p-sortIcon field="price" ariaLabel="Activate to sort"
                       ariaLabelDesc="Activate to sort in descending order"
                       ariaLabelAsc="Activate to sort in ascending order">
                     </p-sortIcon>
                   </th>
                   <th>
+                    สถานะ
+                  </th>
+                  <th>
+                    ดำเนินการ
                   </th>
                 </tr>
               </ng-template>
               <ng-template pTemplate="body" let-rowData let-columns="columns">
-                <tr [pSelectableRow]="rowData">
-                  <td [pSelectableRow]="rowData" style="text-align: center">
-                    {{rowData.customer_name}}
-                  </td>
-                  <td [pSelectableRow]="rowData" style="text-align: center">
-                    {{rowData.reserv_date  | date:'dd/MM/yyyy'}}
-                  </td>
-                  <td [pSelectableRow]="rowData" style="text-align: center">
-                    {{rowData.start_date}} - {{rowData.end_date}}
-                  </td>
-                  <td [pSelectableRow]="rowData" style="text-align: center">
-                    {{rowData.license}}
-                  </td>
-                  <td [pSelectableRow]="rowData" style="text-align: center">
-                    {{rowData.total_price}} บาท
-                  </td>
-                  <td [pSelectableRow]="rowData" style="text-align: center">
-                    {{rowData.reserv_status}}
-                  </td>
-                  <td *ngFor="let col of columns;">
-                    <div *ngIf="rowData[col.field] != rowData['status']">
-                      <span class="ui-column-title">{{col.header}}</span>
-                      <div *ngIf="rowData[col.field] == rowData['customer_name'] ">
-                        {{rowData.customer_name}}
-                      </div>
-                      <div *ngIf="rowData[col.field] == rowData['reserv_date']">
-                        {{rowData.reserv_date}}
-                      </div>
-                      <div *ngIf="rowData[col.field] == rowData['start_date']">
-                        {{rowData.start_date | date:'mediumTime'}} - {{rowData.end_date | date:'mediumTime'}}
-                      </div>
-                      <div *ngIf="rowData[col.field] == rowData['license'] ">
-                        {{rowData.license}}
-                      </div>
-                      <div *ngIf="rowData[col.field] == rowData['total_price']">
-                        {{rowData.total_price }}
-                      </div>
-                      <div *ngIf="rowData[col.field] == rowData['reserv_status']">
-                        {{rowData.reserv_status}}
-                      </div>
-                    </div>
-                  </td>
+                <tr>
+                <td>{{ rowData.members_fname}} {{ rowData.members_lname}}</td>
+                  <td>{{ rowData.reserv_date}}</td>
+                  <td>{{ rowData.start_date}}</td>
+                  <td>{{ rowData.size}}</td>
+                  <td>{{ rowData.service_name }}</td>
+                  <td>{{ rowData.car_wash_name}}</td>
+                  <td>{{ rowData.status}}</td>
                   <td>
-                    <div style="text-align:center">
-                      <button pButton type="button" label="ยืนยันคิว" class="ui-button-info"></button>
+                    <div *ngIf="rowData.reserv_status !== 2">
+                      <button pButton label="อัพเดตสถานะ" (click)="updateStatusReserve(rowData)"></button>
                     </div>
                   </td>
                 </tr>
@@ -180,17 +151,24 @@
       </div>
       <div class="p-col-4">
         <div>
-          <p-dropdown [options]="carWashList" formControlName = "carWash" optionLabel="label"></p-dropdown>
+          <p-dropdown [options]="carWashList" formControlName = "carWash" optionLabel="label" (onChange)="changeCarWash()"></p-dropdown>
         </div>
       </div>
       <div class="p-col-4" style="text-align: left;">
         <div *ngIf="formError.carWash" class="text-danger text-invalid">{{formError.carWash }}</div>
       </div>
       <div class="p-col-4" style="text-align: right;">
+        <label for="reserveDate">วันที่จอง</label>
+      </div>
+      <div class="p-col-4">
+        <input type="text" formControlName="reserveDate" pInputText readonly/>
+      </div>
+      <div class="p-col-4"></div>
+      <div class="p-col-4" style="text-align: right;">
         <label for="reserveTime">เวลาจอง</label>
       </div>
       <div class="p-col-4">
-        <p-calendar formControlName="reserveDateTime" [showTime]="true"></p-calendar>
+        <input type="text" formControlName="reserveTime" pInputText readonly/>
       </div>
       <div class="p-col-4" style="text-align: left;">
         <div *ngIf="formError.reserveDateTime" class="text-danger text-invalid">{{formError.reserveDateTime }}</div>
