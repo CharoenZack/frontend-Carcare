@@ -120,7 +120,7 @@
       <label for="startDate">วันที่เริ่มใช้</label>
     </div>
     <div class="p-col-4">
-      <p-calendar formControlName="startDate" [showIcon]="true"></p-calendar>
+      <p-calendar formControlName="startDate" [showIcon]="true" dateFormat="dd-mm-yy"></p-calendar>
     </div>
     <div class="p-col-4" style="text-align: left;">
       <div *ngIf="formError.startDate" class="text-danger text-invalid">{{formError.startDate }}</div>
@@ -129,7 +129,7 @@
         <label for="endDate">วันที่สิ้นสุดโปรโมชั่น</label>
       </div>
       <div class="p-col-4">
-        <p-calendar formControlName="endDate" [showIcon]="true"></p-calendar>
+        <p-calendar formControlName="endDate" [showIcon]="true" dateFormat="dd-mm-yy"></p-calendar>
       </div>
       <div class="p-col-4" style="text-align: left;">
         <div *ngIf="formError.endDate" class="text-danger text-invalid">{{formError.endDate }}</div>
@@ -176,13 +176,13 @@
         <label for="editStartDate">วันที่เริ่มใช้</label>
       </div>
       <div class="p-col-8">
-        <p-calendar formControlName="editStartDate" [showIcon]="true" ></p-calendar>
+        <p-calendar formControlName="editStartDate" [showIcon]="true" dateFormat="dd-mm-yy"></p-calendar>
       </div>
       <div class="p-col-4" style="text-align: right;">
         <label for="editEndDate">วันที่สิ้นสุดโปรโมชั่น</label>
       </div>
       <div class="p-col-8">
-        <p-calendar formControlName="editEndDate" [showIcon]="true" ></p-calendar>
+        <p-calendar formControlName="editEndDate" [showIcon]="true" dateFormat="dd-mm-yy"></p-calendar>
       </div>
       <div class="p-col-4" style="text-align: right;">
         <label for="editDiscount">เปอร์เซ็นต์ลด</label>

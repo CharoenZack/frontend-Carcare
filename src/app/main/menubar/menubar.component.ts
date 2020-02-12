@@ -92,6 +92,11 @@ export class MenubarComponent implements OnInit {
             routerLink: ['/content/cashier/', this.userId]
           },
           {
+            label: 'จัดการสมาชิก',
+            icon: 'pi pi-fw pi-users',
+            routerLink: '/content/cashier/manageMember'
+          },
+          {
             label: 'จัดการการจองคิว',
             icon: 'pi pi-fw pi-users',
             routerLink: '/content/cashier/manageBooking'

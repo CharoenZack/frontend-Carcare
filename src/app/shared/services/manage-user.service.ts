@@ -90,9 +90,9 @@ export class ManageUserService {
         })
       );
   }
-  getAllUsers() {
+  getAllEmployee() {
     return this.http
-      .get('/app/getAllEmployee', {
+      .get('/app/getEmployeeWpid2', {
         headers: {
           Authorization: `${localStorage.getItem('access-token')}`
         }

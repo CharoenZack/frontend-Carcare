@@ -45,8 +45,15 @@ export class PromotionService {
   }
 
   updatePromotion(data) {
+    const payload = {
+      promoDetail : data.editPromoDetail,
+      startDate : moment(data.editStartDate).format('YYYY-MM-DD'),
+      endDate : moment(data.editEndDate).format('YYYY-MM-DD'),
+      discount : data.editDiscount,
+      promotion_id : data.id
+    };
     return this.http
-      .patch('/app/updatePromotionWpmid', data, {
+      .patch('/app/updatePromotionWpmid', payload, {
         headers: {
           Authorization: `${localStorage.getItem('access-token')}`
         }
