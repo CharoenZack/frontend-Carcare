@@ -90,7 +90,7 @@ export class ManageManagerComponent implements OnInit {
         switchMap(rs => {
           this.display = false;
           this.msgs.push({severity:'info', summary:'Insert Employee', detail:'Insert Success'});
-          return this.manageManagerSerivice.getAllUsers().pipe(map(rs=>{
+          return this.manageManagerSerivice.getAllEmployee().pipe(map(rs=>{
             return this.user = rs;
           }))
         })
@@ -135,7 +135,7 @@ export class ManageManagerComponent implements OnInit {
           switchMap(rs => {
             this.displayEdit = false;
             this.msgs.push({severity:'info', summary:'Update Employee', detail:'Update Success'});
-            return this.manageManagerSerivice.getAllUsers().pipe(map(rs=>{
+            return this.manageManagerSerivice.getAllEmployee().pipe(map(rs=>{
               return this.user = rs;
             }))
           })
@@ -150,7 +150,7 @@ export class ManageManagerComponent implements OnInit {
         accept: () => {
           this.manageManagerSerivice.deleteEmployee(id).pipe(switchMap(rs=>{
             this.msgs.push({severity:'info', summary:'Delete Success', detail:'Delete Success'});
-            return this.manageManagerSerivice.getAllUsers().pipe(map(rs=>{
+            return this.manageManagerSerivice.getAllEmployee().pipe(map(rs=>{
               return this.user = rs;
             }))
           })).subscribe()
@@ -159,7 +159,7 @@ export class ManageManagerComponent implements OnInit {
   }
 
   loadData() {
-    this.manageManagerSerivice.getAllUsers().subscribe(rs => {
+    this.manageManagerSerivice.getAllEmployee().subscribe(rs => {
       this.user = rs;
     });
   }
