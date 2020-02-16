@@ -153,12 +153,12 @@ export class BookingComponent implements OnInit {
   selectMember(event) {
     this.carService.getCarByMember(event.value).subscribe(rs => {
       rs.map(res => {
-        console.log(res);
         this.carList = [
           ...this.carList,
           {
             label: res.model_name + ' ' + res.brand + ' ' + res.size,
-            value: res.car_detail_id
+            value: res.car_detail_id,
+            type_car : res.type_car_id
           }
         ];
       });
@@ -169,7 +169,7 @@ export class BookingComponent implements OnInit {
     this.cleanList = [];
     const { car } = this.formBooking.getRawValue();
     this.formBooking.get('cleanServiceForm').reset();
-    this.cleanService.getCleanServiceByTypeCar(car.value).subscribe(rs => {
+    this.cleanService.getCleanServiceByTypeCar(car.type_car).subscribe(rs => {
       rs.map(res => {
         this.cleanList = [
           ...this.cleanList,
