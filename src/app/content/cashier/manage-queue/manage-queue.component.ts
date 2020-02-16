@@ -59,9 +59,11 @@ export class ManageQueueComponent implements OnInit {
     this.reservationService.getQueurById(id).subscribe(rs=>{
       rs.map(res=>{
         if(service === ''){
-          service += res.service_name;
+          service = res.service_name;
         }else{
-          service += ","+res.service_name;
+          if(service !== res.service_name){
+            service = ","+res.service_name;
+          }
         }
 
         this.queueDetail = {
