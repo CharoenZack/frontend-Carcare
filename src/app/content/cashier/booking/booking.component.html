@@ -10,8 +10,7 @@
         <div class="p-gird">
           <div class="p-col-12">
             <p-messages [(value)]="msgs"></p-messages>
-            <p-table #dt [paginator]="true" [value]="reservation" [rows]="10" [responsive]="true" selectionMode="single"
-              (onRowSelect)="onRowSelect($event)">
+            <p-table #dt [paginator]="true" [value]="reservation" [rows]="10" [responsive]="true" selectionMode="single">
               <ng-template pTemplate="caption">
                 <div style="text-align:left">
                   <button pButton type="button" label="จองคิว" class="ui-button-rounded ui-button-success"
@@ -74,9 +73,9 @@
               <ng-template pTemplate="body" let-rowData let-columns="columns">
                 <tr>
                 <td>{{ rowData.members_fname}} {{ rowData.members_lname}}</td>
-                  <td>{{ rowData.reserv_date}}</td>
+                  <td>{{ rowData.queue_date}}</td>
                   <td>{{ rowData.start_date}}</td>
-                  <td>{{ rowData.size}}</td>
+                  <td>{{ rowData.model_name+' '+rowData.brand+' '+rowData.size}}</td>
                   <td>{{ rowData.service_name }}</td>
                   <td>{{ rowData.car_wash_name}}</td>
                   <td>{{ rowData.status}}</td>
@@ -110,20 +109,18 @@
       <label for="member">สมาชิก</label>
     </div>
     <div class="p-col-4">
-      <p-autoComplete formControlName = "member" id = "member" [suggestions]="results" (completeMethod)="search($event)" field="name"></p-autoComplete>
+      <p-autoComplete formControlName = "member" id = "member" [suggestions]="results" (completeMethod)="search($event)" field="name" (onSelect)="selectMember($event)"></p-autoComplete>
     </div>
     <div class="p-col-4" style="text-align: left;">
       <div *ngIf="formError.member" class="text-danger text-invalid">{{formError.member }}</div>
     </div>
     <div class="p-col-4" style="text-align: right;">
-      <label for="typeCar">ประเภทรถ</label>
+      <label for="car">เลือกรถ</label>
     </div>
     <div class="p-col-4">
-      <p-dropdown [options]="typeCar" formControlName = "typeCar" optionLabel="label"></p-dropdown>
+      <p-dropdown [options]="carList" formControlName = "car" optionLabel="label" (onChange)="changeCar()"></p-dropdown>
     </div>
-    <div class="p-col-4" style="text-align: left;">
-      <div *ngIf="formError.typeCar" class="text-danger text-invalid">{{formError.typeCar }}</div>
-    </div>
+    <div class="p-col-4" style="text-align: left;"></div>
       <div class="p-col-4" style="text-align: right;">
         <label for="cleanService">บริการ</label>
       </div>
@@ -136,15 +133,6 @@
       </div>
       <div class="p-col-4" style="text-align: left;">
         <div *ngIf="formError.cleanService" class="text-danger text-invalid">{{formError.cleanService }}</div>
-      </div>
-      <div class="p-col-4" style="text-align: right;">
-        <label for="license">เลขทะเบียน</label>
-      </div>
-      <div class="p-col-4">
-        <input type="text" pInputText formControlName="license" id="license"/>
-      </div>
-      <div class="p-col-4" style="text-align: left;">
-        <div *ngIf="formError.license" class="text-danger text-invalid">{{formError.license }}</div>
       </div>
       <div class="p-col-4" style="text-align: right;">
         <label for="phone">ช่องล้างรถ</label>

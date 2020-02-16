@@ -86,7 +86,6 @@ export class WithdrawComponent implements OnInit {
         .createWithDraw(this.formWithdraw.getRawValue())
         .pipe(
           switchMap(rs => {
-            console.log(rs.result);
             if (rs.result === 'success') {
               this.msgs.push({
                 severity: 'info',

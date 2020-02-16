@@ -62,4 +62,13 @@ export class CarService {
         })
       );
   }
+  getCarByMember(id){
+    return this.http.get(`/app/getDetailCarByMember/${id}` ,{
+      headers: {
+        Authorization: `${localStorage.getItem('access-token')}`
+      }
+    }).pipe(map((rs:any)=>{
+      return rs.data;
+    }))
+  }
 }

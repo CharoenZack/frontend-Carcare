@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Message } from 'primeng/api';
 import { WithdrawReturnService } from 'src/app/shared/services/withdraw-return.service';
 import { switchMap, map } from 'rxjs/operators';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-manage-return',
@@ -31,10 +32,13 @@ export class ManageReturnComponent implements OnInit {
   allowReturn(data , approve_number){
     const payload = {
       withdraw_return_id: data.withdraw_return_id,
-      approve_status: approve_number
+      approve_status: approve_number,
+      amount : data.withdraw_amount,
+      wash_tool_id : data.wash_tool_id,
+      date_end : moment(new Date()).format('YYYY-MM-DD'),
     };
     this.withDrawReturnService
-      .updateManageWithDrawReturn(payload)
+      .updateManagerReturn(payload)
       .pipe(
         switchMap(rs => {
           this.msgs.push({

@@ -3,101 +3,106 @@
     <div style="text-align:center">
       <h1>จัดการโปรโมชั่น</h1>
     </div>
-      <hr />
-      <p-messages [(value)]="msgs"></p-messages>
-            <p-table [paginator]="true" [rows]="10" [responsive]="true" [value]="promotion">
-              <ng-template pTemplate="caption">
-                <div style="text-align:left">
-                  <!-- <button pButton type="button" id="btn-Increase" label="เพิ่ม" class="ui-button-temple"
+    <hr />
+    <p-messages [(value)]="msgs"></p-messages>
+    <p-table
+      [paginator]="true"
+      [rows]="10"
+      [responsive]="true"
+      [value]="promotion"
+    >
+      <ng-template pTemplate="caption">
+        <div style="text-align:left">
+          <!-- <button pButton type="button" id="btn-Increase" label="เพิ่ม" class="ui-button-temple"
                     style="width: 20%"></button> -->
-                  <button
-                    pButton
-                    type="button"
-                    label="เพิ่ม"
-                    class="ui-button-rounded ui-button-success"
-                    style="font-size: 15px; width: 10%;"
-                    (click)="addPromotion()"
-                  ></button>
-                </div>
-              </ng-template>
-              <ng-template pTemplate="header" let-columns>
-                <tr>
-                  <th pSortableColumn="name">
-                    รายละเอียดโปรโมชั่น
-                    <p-sortIcon
-                      field="nameAbbr"
-                      ariaLabel="Activate to sort"
-                      ariaLabelDesc="Activate to sort in descending order"
-                      ariaLabelAsc="Activate to sort in ascending order"
-                    >
-                    </p-sortIcon>
-                  </th>
-                  <th pSortableColumn="tel">
-                    วันที่เริ่มใช้
-                    <p-sortIcon
-                      field="name"
-                      ariaLabel="Activate to sort"
-                      ariaLabelDesc="Activate to sort in descending order"
-                      ariaLabelAsc="Activate to sort in ascending order"
-                    >
-                    </p-sortIcon>
-                  </th>
-                  <th pSortableColumn="date">
-                    วันที่สิ้นสุดโปรโมชั่น
-                    <p-sortIcon
-                      field="name"
-                      ariaLabel="Activate to sort"
-                      ariaLabelDesc="Activate to sort in descending order"
-                      ariaLabelAsc="Activate to sort in ascending order"
-                    >
-                    </p-sortIcon>
-                  </th>
-                  <th pSortableColumn="date">
-                    เปอร์เซ็นต์ลด
-                    <p-sortIcon
-                      field="name"
-                      ariaLabel="Activate to sort"
-                      ariaLabelDesc="Activate to sort in descending order"
-                      ariaLabelAsc="Activate to sort in ascending order"
-                    >
-                    </p-sortIcon>
-                  </th>
-                  <th>ดำเนินการ</th>
-                </tr>
-              </ng-template>
-              <ng-template pTemplate="body" let-rowData let-columns="columns">
-                <tr>
-                <td>{{ rowData.detail }}</td>
-                <td>{{ rowData.date_start }}</td>
-                <td>{{ rowData.date_end }}</td>
-                <td>{{ rowData.discount_percent }}</td>
-                  <td>
-                    <div style="text-align:center">
-                      <button
-                        pButton
-                        type="button"
-                        label="แก้ไข"
-                        class="ui-button-warning"
-                        style="width: 40%;"
-                        (click) = "editPromotion(rowData)"
-                      ></button>
-                      <button
-                        pButton
-                        type="button"
-                        label="ลบ"
-                        class="ui-button-danger"
-                        style="width: 40%;margin-left: 5mm"
-                        (click)="confirm(rowData.promotion_id)"
-                      ></button>
-                    </div>
-                  </td>
-                </tr>
-              </ng-template>
-            </p-table>
-          </div>
+          <button
+            pButton
+            type="button"
+            label="เพิ่ม"
+            class="ui-button-rounded ui-button-success"
+            style="font-size: 15px; width: 10%;"
+            (click)="addPromotion()"
+          ></button>
         </div>
+      </ng-template>
+      <ng-template pTemplate="header" let-columns>
+        <tr>
+          <th pSortableColumn="name">
+            รายละเอียดโปรโมชั่น
+            <p-sortIcon
+              field="nameAbbr"
+              ariaLabel="Activate to sort"
+              ariaLabelDesc="Activate to sort in descending order"
+              ariaLabelAsc="Activate to sort in ascending order"
+            >
+            </p-sortIcon>
+          </th>
+          <th pSortableColumn="tel">
+            วันที่เริ่มใช้
+            <p-sortIcon
+              field="name"
+              ariaLabel="Activate to sort"
+              ariaLabelDesc="Activate to sort in descending order"
+              ariaLabelAsc="Activate to sort in ascending order"
+            >
+            </p-sortIcon>
+          </th>
+          <th pSortableColumn="date">
+            วันที่สิ้นสุดโปรโมชั่น
+            <p-sortIcon
+              field="name"
+              ariaLabel="Activate to sort"
+              ariaLabelDesc="Activate to sort in descending order"
+              ariaLabelAsc="Activate to sort in ascending order"
+            >
+            </p-sortIcon>
+          </th>
+          <th pSortableColumn="date">
+            เปอร์เซ็นต์ลด
+            <p-sortIcon
+              field="name"
+              ariaLabel="Activate to sort"
+              ariaLabelDesc="Activate to sort in descending order"
+              ariaLabelAsc="Activate to sort in ascending order"
+            >
+            </p-sortIcon>
+          </th>
+          <th>ดำเนินการ</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-rowData let-columns="columns">
+        <tr>
+          <td>{{ rowData.detail }}</td>
+          <td>{{ rowData.date_start }}</td>
+          <td>{{ rowData.date_end }}</td>
+          <td>{{ rowData.discount_percent }}</td>
+          <td>
+            <div style="text-align:center">
+              <button
+                pButton
+                type="button"
+                label="แก้ไข"
+                class="ui-button-warning"
+                style="width: 40%;"
+                (click)="editPromotion(rowData)"
+              ></button>
+              <button
+                pButton
+                type="button"
+                label="ลบ"
+                class="ui-button-danger"
+                style="width: 40%;margin-left: 5mm"
+                (click)="confirm(rowData.promotion_id)"
+              ></button>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+</div>
 <p-dialog
-  header= "เพิ่มโปรโมชั่น"
+  header="เพิ่มโปรโมชั่น"
   [(visible)]="display"
   [modal]="true"
   [style]="{ width: '60vw' }"
@@ -111,47 +116,79 @@
       <label for="promoDetail">รายละเอียดโปรโมชั่น</label>
     </div>
     <div class="p-col-4">
-      <input type="text" pInputText formControlName="promoDetail" id ="promoDetail"/>
+      <input
+        type="text"
+        pInputText
+        formControlName="promoDetail"
+        id="promoDetail"
+      />
     </div>
     <div class="p-col-4" style="text-align: left;">
-      <div *ngIf="formError.promoDetail" class="text-danger text-invalid">{{formError.promoDetail }}</div>
+      <div *ngIf="formError.promoDetail" class="text-danger text-invalid">
+        {{ formError.promoDetail }}
+      </div>
     </div>
     <div class="p-col-4" style="text-align: right;">
       <label for="startDate">วันที่เริ่มใช้</label>
     </div>
     <div class="p-col-4">
-      <p-calendar formControlName="startDate" [showIcon]="true" dateFormat="dd-mm-yy"></p-calendar>
+      <p-calendar
+        formControlName="startDate"
+        [showIcon]="true"
+        dateFormat="dd-mm-yy"
+      ></p-calendar>
     </div>
     <div class="p-col-4" style="text-align: left;">
-      <div *ngIf="formError.startDate" class="text-danger text-invalid">{{formError.startDate }}</div>
+      <div *ngIf="formError.startDate" class="text-danger text-invalid">
+        {{ formError.startDate }}
+      </div>
     </div>
-      <div class="p-col-4" style="text-align: right;">
-        <label for="endDate">วันที่สิ้นสุดโปรโมชั่น</label>
+    <div class="p-col-4" style="text-align: right;">
+      <label for="endDate">วันที่สิ้นสุดโปรโมชั่น</label>
+    </div>
+    <div class="p-col-4">
+      <p-calendar
+        formControlName="endDate"
+        [showIcon]="true"
+        dateFormat="dd-mm-yy"
+      ></p-calendar>
+    </div>
+    <div class="p-col-4" style="text-align: left;">
+      <div *ngIf="formError.endDate" class="text-danger text-invalid">
+        {{ formError.endDate }}
       </div>
-      <div class="p-col-4">
-        <p-calendar formControlName="endDate" [showIcon]="true" dateFormat="dd-mm-yy"></p-calendar>
+    </div>
+    <div class="p-col-4" style="text-align: right;">
+      <label for="discount">เปอร์เซ็นต์ลด</label>
+    </div>
+    <div class="p-col-4">
+      <input type="text" pInputText formControlName="discount" id="discount" />
+    </div>
+    <div class="p-col-4" style="text-align: left;">
+      <div *ngIf="formError.discount" class="text-danger text-invalid">
+        {{ formError.discount }}
       </div>
-      <div class="p-col-4" style="text-align: left;">
-        <div *ngIf="formError.endDate" class="text-danger text-invalid">{{formError.endDate }}</div>
-      </div>
-      <div class="p-col-4" style="text-align: right;">
-        <label for="discount">เปอร์เซ็นต์ลด</label>
-      </div>
-      <div class="p-col-4">
-        <input type="text" pInputText formControlName="discount" id="discount"/>
-      </div>
-      <div class="p-col-4" style="text-align: left;">
-        <div *ngIf="formError.discount" class="text-danger text-invalid">{{formError.discount }}</div>
-      </div>
-      <div class="p-col-12" style="text-align: center;">
-        <button
-      type="button"
-      pButton
-      icon="pi pi-check"
-      label="บันทึก"
-      (click)="submitFormPromo()"
-    ></button>
-      </div>
+    </div>
+    <div class="p-col-4" style="text-align: right;">
+      <label for="editDiscount">รูปภาพโปรโมชั่น</label>
+    </div>
+    <div class="p-col-8">
+      <p-fileUpload
+        name="myfile[]"
+        customUpload="true"
+        (uploadHandler)="uploadImage($event)"
+        accept="image/*"
+      ></p-fileUpload>
+    </div>
+    <div class="p-col-12" style="text-align: center;">
+      <button
+        type="button"
+        pButton
+        icon="pi pi-check"
+        label="บันทึก"
+        (click)="submitFormPromo()"
+      ></button>
+    </div>
   </div>
 </p-dialog>
 
@@ -159,53 +196,104 @@
   header="แก้ไขโปรโมชั่น"
   [(visible)]="displayEdit"
   [modal]="true"
-  [style]="{ width: '60vw' }"
+  [style]="{ width: '50vw', overflow: 'auto', position: 'absolute' }"
   [maximizable]="true"
   [baseZIndex]="10000"
   [draggable]="false"
   [resizable]="false"
 >
   <div class="p-grid" [formGroup]="formEditPromo">
-      <div class="p-col-4" style="text-align: right;">
-        <label for="editPromoDetail">รายละเอียดโปรโมชั่น</label>
-      </div>
-      <div class="p-col-8">
-        <input type="text" pInputText formControlName="editPromoDetail" id="editPromoDetail"/>
-      </div>
-      <div class="p-col-4" style="text-align: right;">
-        <label for="editStartDate">วันที่เริ่มใช้</label>
-      </div>
-      <div class="p-col-8">
-        <p-calendar formControlName="editStartDate" [showIcon]="true" dateFormat="dd-mm-yy"></p-calendar>
-      </div>
-      <div class="p-col-4" style="text-align: right;">
-        <label for="editEndDate">วันที่สิ้นสุดโปรโมชั่น</label>
-      </div>
-      <div class="p-col-8">
-        <p-calendar formControlName="editEndDate" [showIcon]="true" dateFormat="dd-mm-yy"></p-calendar>
-      </div>
-      <div class="p-col-4" style="text-align: right;">
-        <label for="editDiscount">เปอร์เซ็นต์ลด</label>
-      </div>
-      <div class="p-col-8">
-        <input type="text" pInputText formControlName="editDiscount" id ="editDiscount"/>
-      </div>
-      <input type="hidden" formControlName="id"/>
-      <div class="p-col-12" style="text-align: center;">
-        <button
-      type="button"
-      pButton
-      icon="pi pi-check"
-      label="บันทึก"
-      (click)="updatePromotion()"
-    ></button>
-      </div>
+    <div class="p-col-4" style="text-align: right;">
+      <label for="editPromoDetail">รายละเอียดโปรโมชั่น</label>
+    </div>
+    <div class="p-col-8">
+      <input
+        type="text"
+        pInputText
+        formControlName="editPromoDetail"
+        id="editPromoDetail"
+      />
+    </div>
+    <div class="p-col-4" style="text-align: right;">
+      <label for="editStartDate">วันที่เริ่มใช้</label>
+    </div>
+    <div class="p-col-8">
+      <p-calendar
+        formControlName="editStartDate"
+        [showIcon]="true"
+        dateFormat="dd-mm-yy"
+      ></p-calendar>
+    </div>
+    <div class="p-col-4" style="text-align: right;">
+      <label for="editEndDate">วันที่สิ้นสุดโปรโมชั่น</label>
+    </div>
+    <div class="p-col-8">
+      <p-calendar
+        formControlName="editEndDate"
+        [showIcon]="true"
+        dateFormat="dd-mm-yy"
+      ></p-calendar>
+    </div>
+    <div class="p-col-4" style="text-align: right;">
+      <label for="editDiscount">เปอร์เซ็นต์ลด</label>
+    </div>
+    <div class="p-col-8">
+      <input
+        type="text"
+        pInputText
+        formControlName="editDiscount"
+        id="editDiscount"
+      />
+    </div>
+    <div class="p-col-4" style="text-align: right;">
+      <label for="editDiscount">รูปภาพโปรโมชั่น</label>
+    </div>
+    <div class="p-col-8">
+      <p-fileUpload
+        name="demo[]"
+        url="./upload.php"
+        (onUpload)="uploadImage($event)"
+        multiple="multiple"
+        accept="image/*"
+        maxFileSize="1000000"
+      >
+        <ng-template pTemplate="content">
+          <ul *ngIf="uploadedFiles.length">
+            <li *ngFor="let file of uploadedFiles">
+              {{ file.name }} - {{ file.size }} bytes
+            </li>
+          </ul>
+        </ng-template>
+      </p-fileUpload>
+    </div>
+    <input type="hidden" formControlName="id" />
+    <div class="p-col-12" style="text-align: center;">
+      <button
+        type="button"
+        pButton
+        icon="pi pi-check"
+        label="บันทึก"
+        (click)="updatePromotion()"
+      ></button>
+    </div>
   </div>
 </p-dialog>
 
 <p-confirmDialog #cd header="ลบข้อมูล" icon="pi pi-exclamation-triangle">
   <p-footer>
-    <button type="button" pButton icon="pi pi-check" label="คกลง" (click)="cd.accept()"></button>
-      <button type="button" pButton icon="pi pi-times" label="ยกเลิก" (click)="cd.reject()"></button>
+    <button
+      type="button"
+      pButton
+      icon="pi pi-check"
+      label="คกลง"
+      (click)="cd.accept()"
+    ></button>
+    <button
+      type="button"
+      pButton
+      icon="pi pi-times"
+      label="ยกเลิก"
+      (click)="cd.reject()"
+    ></button>
   </p-footer>
 </p-confirmDialog>

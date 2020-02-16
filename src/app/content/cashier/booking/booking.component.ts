@@ -15,6 +15,7 @@ import { CarWashService } from 'src/app/shared/services/car-wash.service';
 import * as moment from 'moment';
 import { ReservationService } from 'src/app/shared/services/reservation.service';
 import { Message } from 'primeng/api';
+import { CarService } from 'src/app/shared/services/car.service';
 
 interface City {
   name: string;
@@ -32,6 +33,7 @@ export class BookingComponent implements OnInit {
   typeCar = [];
   cleanList = [];
   carWashList = [{ label: 'โปรดเลือกช่องล้างรถ', value: 0 }];
+  carList: any[] = [{ label: 'โปรดเลือกรถ', value: 0 }];
   reservation = [];
   msgs: Message[] = [];
   public cols: any[];
@@ -76,14 +78,15 @@ export class BookingComponent implements OnInit {
     private cleanService: CleanService,
     private carWashService: CarWashService,
     private bookingService: BookingService,
-    private reservationService: ReservationService
+    private reservationService: ReservationService,
+    private carService: CarService
   ) {}
 
   ngOnInit() {
     this.getAllReservation();
     this.initFormBooking();
     this.getAllTypeCar();
-    this.getAllCleanService();
+    // this.getAllCleanService();
     this.getAllcarWash();
   }
 
@@ -146,17 +149,39 @@ export class BookingComponent implements OnInit {
       });
     });
   }
-  public onRowSelect(e) {
-    // console.log(e.data);
-    // this.router.navigate(['/manageBooking/detail', book.reserv_id]);
+
+  selectMember(event) {
+    this.carService.getCarByMember(event.value).subscribe(rs => {
+      rs.map(res => {
+        this.carList = [
+          ...this.carList,
+          {
+            label: res.model_name + ' ' + res.brand + ' ' + res.size,
+            value: res.type_car_id
+          }
+        ];
+      });
+    });
+  }
+
+  changeCar() {
+    this.cleanList = [];
+    const { car } = this.formBooking.getRawValue();
+    this.cleanService.getCleanServiceByTypeCar(car.value).subscribe(rs => {
+      rs.map(res => {
+        this.cleanList = [
+          ...this.cleanList,
+          { label: res.service_name, value: res.clean_service_detail_id }
+        ];
+      });
+    });
   }
 
   initFormBooking() {
     this.formBooking = new FormGroup({
       member: new FormControl(null, Validators.required),
-      typeCar: new FormControl(null, Validators.required),
+      car: new FormControl(null, Validators.required),
       cleanServiceForm: new FormControl(null, Validators.required),
-      license: new FormControl(null, Validators.required),
       carWash: new FormControl(null, Validators.required),
       reserveDate: new FormControl(moment(new Date()).format('YYYY-MM-DD')),
       reserveTime: new FormControl(null, Validators.required),
@@ -169,12 +194,12 @@ export class BookingComponent implements OnInit {
 
   submitFormBooking() {
     this.reservation = [];
+    console.log(this.formBooking.getRawValue());
     if (this.formBooking.valid) {
       const {
         member,
-        typeCar,
+        car,
         cleanServiceForm,
-        license,
         carWash,
         reserveDate,
         reserveTime,
@@ -182,9 +207,8 @@ export class BookingComponent implements OnInit {
       } = this.formBooking.getRawValue();
       const payload = {
         members_id: member.value,
-        type_car_id: typeCar.value,
+        car_detail_id: car.value,
         clean_service_detail_id: cleanServiceForm,
-        license,
         carwash: carWash.value,
         reserveDate,
         reserveTime,
@@ -254,17 +278,17 @@ export class BookingComponent implements OnInit {
     });
   }
 
-  getAllCleanService() {
-    // let cleanServiceForm;
-    this.cleanService.getAllcleanService().subscribe(rs => {
-      rs.map(res => {
-        this.cleanList = [
-          ...this.cleanList,
-          { label: res.service_name, value: res.clean_service_detail_id }
-        ];
-      });
-    });
-  }
+  // getAllCleanService() {
+  //   // let cleanServiceForm;
+  //   this.cleanService.getAllcleanService().subscribe(rs => {
+  //     rs.map(res => {
+  //       this.cleanList = [
+  //         ...this.cleanList,
+  //         { label: res.service_name, value: res.clean_service_detail_id }
+  //       ];
+  //     });
+  //   });
+  // }
 
   getAllcarWash() {
     this.carWashService.getAllcarWash().subscribe(rs => {
@@ -282,35 +306,38 @@ export class BookingComponent implements OnInit {
     this.reservation = [];
     const payload = {
       reserv_status: data.reserv_status,
-      reserv_id: data.reserv_id
+      queue_id: data.queue_id
     };
-    this.reservationService.updateStatusReserve(payload).pipe(
-      switchMap(rs => {
-        this.msgs.push({
-          severity: 'info',
-          summary: 'Update Status Complete',
-          detail: 'Update Status Complete'
-        });
-        return this.reservationService
-          .getAllReservation(localStorage.getItem('userId'))
-          .pipe(
-            map(rs => {
-              this.reservation = [
-                ...this.reservation,
-                ...rs.map(res => {
-                  if (res.reserv_status === 0) {
-                    status = 'รอการดำเนินการ';
-                  } else if (res.reserv_status === 1) {
-                    status = 'กำลังดำเนินการ';
-                  } else if (res.reserv_status === 2) {
-                    status = 'เสร็จสิ้นการดำเนินการ';
-                  }
-                  return { ...res, ...{ status } };
-                })
-              ];
-            })
-          );
-      })
-    ).subscribe()
+    this.reservationService
+      .updateStatusReserve(payload)
+      .pipe(
+        switchMap(rs => {
+          this.msgs.push({
+            severity: 'info',
+            summary: 'Update Status Complete',
+            detail: 'Update Status Complete'
+          });
+          return this.reservationService
+            .getAllReservation(localStorage.getItem('userId'))
+            .pipe(
+              map(rs => {
+                this.reservation = [
+                  ...this.reservation,
+                  ...rs.map(res => {
+                    if (res.reserv_status === 0) {
+                      status = 'รอการดำเนินการ';
+                    } else if (res.reserv_status === 1) {
+                      status = 'กำลังดำเนินการ';
+                    } else if (res.reserv_status === 2) {
+                      status = 'เสร็จสิ้นการดำเนินการ';
+                    }
+                    return { ...res, ...{ status } };
+                  })
+                ];
+              })
+            );
+        })
+      )
+      .subscribe();
   }
 }

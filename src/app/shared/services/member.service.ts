@@ -9,8 +9,18 @@ export class MemberService {
   constructor(private http: HttpClient) {}
 
   insertMember(data) {
+    const payload = {
+      username : data.username,
+      password : data.password,
+      fname : data.fname,
+      lname : data.lname,
+      address : data.address,
+      tel : data.tel,
+      cashier_id : data.cashier_id,
+      car_detail_id : data.carList
+    }
     return this.http
-      .post('/app/insertMember', data, {
+      .post('/app/insertMember', payload, {
         headers: {
           Authorization: `${localStorage.getItem('access-token')}`
         }
@@ -36,13 +46,31 @@ export class MemberService {
       );
   }
 
+  getMemberForEdit(id){
+    return this.http
+      .get(`/app/getMemberForEdit/${id}`, {
+        headers: {
+          Authorization: `${localStorage.getItem('access-token')}`
+        }
+      })
+      .pipe(
+        map((rs: any) => {
+          return rs.data;
+        })
+      );
+  }
+
   updateMember(data) {
     const payload = {
+      username : data.editUsername,
+      password : data.editPassword,
+      cashier_id : data.editMemberCashierId,
       fname: data.editfname,
       lname: data.editlname,
       address: data.editaddress,
       tel: data.editTel,
-      id: data.editId
+      id: data.editId,
+      car_detail_id : data.editCarList
     };
     return this.http
       .patch('/app/updateMemberSef_el_etWeid', payload, {

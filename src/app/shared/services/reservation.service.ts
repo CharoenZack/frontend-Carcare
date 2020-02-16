@@ -78,4 +78,14 @@ export class ReservationService {
       return rs.data;
     }))
   }
+
+  getReservationForPayment(id){
+    return this.http.get(`app/getAllReservationsJEmployeeJMembersJCar_washJType_carJPositionWrs3/${id}` , {
+      headers: {
+        Authorization: `${localStorage.getItem('access-token')}`
+      }
+    }).pipe(map((rs:any)=>{
+      return rs.data;
+    }));
+  }
 }
