@@ -65,14 +65,13 @@ export class ManageQueueComponent implements OnInit {
         }
 
         this.queueDetail = {
-          license : res.license,
+          license : res.member_license,
           total_price : res.total_price,
           members_name : res.members_fname+" "+res.members_lname,
-          typeCar : res.size,
+          typeCar : res.model_name+' '+res.brand+' '+res.size,
           service
         }
       })
-      console.log(this.queueDetail);
     })
   }
 }

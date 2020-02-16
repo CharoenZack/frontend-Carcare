@@ -48,9 +48,6 @@ export class WithdrawReturnService {
   updateWithdraw(data) {
     const payload = {
       status_action : 2,
-      wash_tool_id : data.wash_tool_id,
-      amount : data.withdraw_amount,
-      date_end : moment(new Date()).format('YYYY-MM-DD'),
       withdraw_return_id : data.withdraw_return_id,
       approve_status : 1
     }
@@ -67,7 +64,7 @@ export class WithdrawReturnService {
       );
   }
 
-  updateManageWithDrawReturn(data){
+  updateManageWithDraw(data){
     return this.http.post('/app/updatWithdraw_returnSasWwrid' , data , {
       headers: {
         Authorization: `${localStorage.getItem('access-token')}`
@@ -76,4 +73,16 @@ export class WithdrawReturnService {
       return rs;
     }))
   }
+
+  updateManagerReturn(data){
+    return this.http.post('/app/updatWithdraw_returnSasWwridReturn' , data , {
+      headers: {
+        Authorization: `${localStorage.getItem('access-token')}`
+      }
+    }).pipe(map(rs=>{
+      return rs;
+    }))
+  }
+
+
 }

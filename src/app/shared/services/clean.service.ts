@@ -81,4 +81,14 @@ export class CleanService {
       return rs.result;
     }))
   }
+
+  getCleanServiceByTypeCar(id){
+    return this.http.get(`/app/getCleanServiceByTypeCar/${id}` , {
+      headers: {
+        Authorization: `${localStorage.getItem('access-token')}`
+      }
+    }).pipe(map((rs:any)=>{
+      return rs.data;
+    }))
+  }
 }

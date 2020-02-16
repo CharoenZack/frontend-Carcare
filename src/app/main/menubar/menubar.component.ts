@@ -103,7 +103,6 @@ export class MenubarComponent implements OnInit {
           },
           { label: 'ตรวจสอบโปรโมชั่น', icon: 'pi pi-fw pi-users' , routerLink: '/content/cashier/checkPromotion'},
           { label: 'ตรวจสอบคิวล้างรถ', icon: 'pi pi-fw pi-users' , routerLink: '/content/cashier/manageQueue' },
-          { label: 'จัดการใบรับรถ', icon: 'pi pi-fw pi-users' , routerLink: '/content/cashier/manageReceipt' },
           { label: 'ชำระเงิน', icon: 'pi pi-fw pi-users' , routerLink: '/content/cashier/payment' }
         ];
         break;

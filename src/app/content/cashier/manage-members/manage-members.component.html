@@ -89,11 +89,12 @@
   header="เพิ่มสมาชิก"
   [(visible)]="display"
   [modal]="true"
-  [style]="{ width: '50vw' }"
+  [style]="{ width: '50vw', overflow :'auto', position:'absolute' }"
   [maximizable]="true"
   [baseZIndex]="10000"
   [draggable]="false"
   [resizable]="false"
+  positionType="absolute"
 >
   <div class="p-grid" [formGroup]="formMember">
     <div class="p-col-4" style="text-align: right;">
@@ -150,6 +151,45 @@
       <div class="p-col-4" style="text-align: left;">
         <div *ngIf="formError.tel" class="text-danger text-invalid">{{formError.tel }}</div>
       </div>
+      <div class="p-col-4" style="text-align: right;">
+        <label for="car">เลือกรถ</label>
+      </div>
+      <div class="p-col-4"  *ngIf="formMember.get('carList').value.length === 0">
+        <button
+        pButton
+        type="button"
+        icon="pi pi-plus"
+        class="ui-button-danger"
+        (click)="addCar()"
+      ></button>
+      </div>
+      <div class="p-col-8" formArrayName="carList">
+        <div  
+        *ngFor="
+          let car of funcCarList.controls;
+          let i = index
+        "
+        formGroupName="{{ i }}">
+          <p-dropdown [options]="carDetail" formControlName = "car" optionLabel="label"></p-dropdown>
+          <button
+        pButton
+        type="button"
+        icon="pi pi-plus"
+        class="ui-button-danger"
+        (click)="addCar()"
+      ></button>
+      <button
+        pButton
+        type="button"
+        icon="pi pi-minus"
+        class="ui-button-danger"
+        (click)="removeCar(i)"
+      ></button>
+      <div>
+        <input type="text" pInputText formControlName="license" id ="license" placeholder="กรอกป้ายทะเบียน"/>
+      </div>
+        </div>
+      </div>
       <input type = "hidden" formControlName="cashier_id"/>
       <div class="p-col-12" style="text-align: center;">
         <button
@@ -196,6 +236,36 @@
       </div>
       <div class="p-col-8">
         <input type="text" pInputText formControlName="editTel" id ="editTel"/>
+      </div>
+      <div class="p-col-4" style="text-align: right;">
+        <label for="car">เลือกรถ</label>
+      </div>
+      <div class="p-col-8" formArrayName="editCarList" *ngIf="formEditMember.get('editCarList').value.length > 0">
+        <div  
+        *ngFor="
+          let car of funcEditCarList.controls;
+          let i = index
+        "
+        formGroupName="{{ i }}">
+          <p-dropdown [options]="carDetail" formControlName = "editcar" optionLabel="label"></p-dropdown>
+          <button
+        pButton
+        type="button"
+        icon="pi pi-plus"
+        class="ui-button-danger"
+        (click)="addCarEdit()"
+      ></button>
+      <button
+        pButton
+        type="button"
+        icon="pi pi-minus"
+        class="ui-button-danger"
+        (click)="removeCarEdit(i)"
+      ></button>
+      <div>
+        <input type="text" pInputText formControlName="editlicense" id ="editlicense" placeholder="กรอกป้ายทะเบียน"/>
+      </div>
+        </div>
       </div>
       <input type="hidden" formControlName="editId"/>
       <div class="p-col-12" style="text-align: center;">

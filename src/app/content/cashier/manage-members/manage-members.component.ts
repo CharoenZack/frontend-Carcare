@@ -1,13 +1,15 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormControl, Validators, FormArray } from '@angular/forms';
 import {
   debounceTime,
   distinctUntilChanged,
   switchMap,
-  map
+  map,
+  concatMap
 } from 'rxjs/operators';
 import { MemberService } from 'src/app/shared/services/member.service';
 import { ConfirmationService, Message } from 'primeng/api';
+import { TypecarService } from 'src/app/shared/services/typecar.service';
 
 @Component({
   selector: 'app-manage-members',
@@ -19,11 +21,18 @@ export class ManageMembersComponent implements OnInit {
   displayEdit = false;
   formMember: FormGroup;
   formEditMember: FormGroup;
-  members = []
+  members = [];
   msgs: Message[] = [];
+  carDetail: any[] = [
+    {
+      label: 'กรุณาเลือกรถ',
+      value: 0
+    }
+  ];
   constructor(
     private memberService: MemberService,
-    private confirmationService: ConfirmationService
+    private confirmationService: ConfirmationService,
+    private typeCarService: TypecarService
   ) {}
 
   public formError = {
@@ -32,7 +41,9 @@ export class ManageMembersComponent implements OnInit {
     fname: '',
     lname: '',
     address: '',
-    tel: ''
+    tel: '',
+    license: '',
+    car: ''
   };
   public validationMassages = {
     username: {
@@ -52,21 +63,45 @@ export class ManageMembersComponent implements OnInit {
     },
     tel: {
       required: '*กรุณากรอกเบอร์โทรศัพท์'
+    },
+    license: {
+      required: '*กรุณากรอกป้ายทะเบียน'
+    },
+    car: {
+      required: '*กรุณาเลือกรถ'
     }
   };
 
   ngOnInit() {
     this.memberService
-    .getMemberByCashierId(localStorage.getItem('userId'))
-    .subscribe(rs => {
-      this.members = rs;
-    });
+      .getMemberByCashierId(localStorage.getItem('userId'))
+      .subscribe(rs => {
+        this.members = rs;
+      });
     this.initFormMember();
+    this.getAllCarDetail();
     this.initFormEditMember();
   }
 
   addMember() {
     this.display = true;
+  }
+
+  addCar() {
+    this.funcCarList.push(
+      new FormGroup({
+        car: new FormControl(null),
+        license: new FormControl(null)
+      })
+    );
+  }
+
+  removeCar(arrayIndex) {
+    this.funcCarList.removeAt(arrayIndex);
+  }
+
+  get funcCarList(): FormArray {
+    return this.formMember.get('carList') as FormArray;
   }
 
   initFormMember() {
@@ -77,7 +112,8 @@ export class ManageMembersComponent implements OnInit {
       lname: new FormControl(null, Validators.required),
       address: new FormControl(null, Validators.required),
       tel: new FormControl(null, Validators.required),
-      cashier_id: new FormControl(localStorage.getItem('userId'))
+      cashier_id: new FormControl(localStorage.getItem('userId')),
+      carList: new FormArray([])
     });
     this.formMember.valueChanges
       .pipe(debounceTime(500), distinctUntilChanged())
@@ -86,10 +122,14 @@ export class ManageMembersComponent implements OnInit {
 
   initFormEditMember() {
     this.formEditMember = new FormGroup({
+      editUsername: new FormControl(null),
+      editPassword: new FormControl(null),
+      editMemberCashierId: new FormControl(null),
       editfname: new FormControl(null, Validators.required),
       editlname: new FormControl(null, Validators.required),
       editaddress: new FormControl(null, Validators.required),
       editTel: new FormControl(null, Validators.required),
+      editCarList: new FormArray([]),
       editId: new FormControl(null)
     });
   }
@@ -101,11 +141,17 @@ export class ManageMembersComponent implements OnInit {
         .pipe(
           switchMap(rs => {
             this.display = false;
-            this.msgs.push({severity:'info', summary:'Insert Employee', detail:'Insert Success'});
+            this.msgs.push({
+              severity: 'info',
+              summary: 'Insert Employee',
+              detail: 'Insert Success'
+            });
+            this.formMember.reset();
             return this.memberService
               .getMemberByCashierId(localStorage.getItem('userId'))
               .pipe(
                 map(res => {
+                  console.log(res);
                   return (this.members = res);
                 })
               );
@@ -118,15 +164,58 @@ export class ManageMembersComponent implements OnInit {
   }
 
   editMember(data) {
-    const datas = {
-      editfname : data.members_fname,
-      editlname : data.members_lname,
-      editaddress : data.members_address,
-      editTel : data.members_tel,
-      editId : data.members_id
+    let editCarListValue = [];
+    const existingItems = this.formEditMember.get('editCarList') as FormArray;
+    while (existingItems.length) {
+      existingItems.removeAt(0);
     }
-    this.formEditMember.patchValue(datas);
+    this.memberService.getMemberForEdit(data.members_id).subscribe(rs => {
+      rs.map(res => {
+        this.funcEditCarList.push(
+          new FormGroup({
+            editcar: new FormControl(null),
+            editlicense: new FormControl(null)
+          })
+        );
+        editCarListValue.push({
+          editcar: {
+            label: res.model_name + ' ' + res.brand + ' ' + res.size,
+            value: res.car_detail_id
+          },
+          editlicense: res.member_license
+        });
+        const editMember = {
+          editUsername: res.members_username,
+          editPassword: res.members_password,
+          editMemberCashierId: res.member_cashier_id,
+          editfname: res.members_fname,
+          editlname: res.members_lname,
+          editaddress: res.members_address,
+          editTel: res.members_tel,
+          editId: res.members_id
+        };
+        this.formEditMember.patchValue(editMember);
+      });
+      this.formEditMember.get('editCarList').setValue(editCarListValue);
+    });
     this.displayEdit = true;
+  }
+
+  get funcEditCarList(): FormArray {
+    return this.formEditMember.get('editCarList') as FormArray;
+  }
+
+  addCarEdit() {
+    this.funcEditCarList.push(
+      new FormGroup({
+        editcar: new FormControl(null),
+        editlicense: new FormControl(null)
+      })
+    );
+  }
+
+  removeCarEdit(arrayIndex) {
+    this.funcEditCarList.removeAt(arrayIndex);
   }
 
   private onValueChange() {
@@ -147,12 +236,17 @@ export class ManageMembersComponent implements OnInit {
 
   updateMember() {
     if (this.formEditMember.valid) {
+      console.log(this.formEditMember.getRawValue());
       this.memberService
         .updateMember(this.formEditMember.getRawValue())
         .pipe(
           switchMap(rs => {
             this.displayEdit = false;
-            this.msgs.push({severity:'info', summary:'Update Employee', detail:'Update Success'});
+            this.msgs.push({
+              severity: 'info',
+              summary: 'Update Employee',
+              detail: 'Update Success'
+            });
             return this.memberService
               .getMemberByCashierId(localStorage.getItem('userId'))
               .pipe(
@@ -191,6 +285,17 @@ export class ManageMembersComponent implements OnInit {
           )
           .subscribe();
       }
+    });
+  }
+
+  getAllCarDetail() {
+    this.typeCarService.getAllCarDetail().subscribe(rs => {
+      rs.map(res => {
+        this.carDetail.push({
+          label: res.model_name + ' ' + res.brand + ' ' + res.size,
+          value: res.car_detail_id
+        });
+      });
     });
   }
 }

@@ -1,28 +1,15 @@
 <div class="p-grid">
     <div class="p-col-12">
       <div style="text-align:center">
-        <h1>เบิกคืนอุปกรณ์ล้างรถ</h1>
+        <h1>ชำระเงิน</h1>
       </div>
         <hr />
         <p-messages ></p-messages>
-              <p-table [paginator]="true" [rows]="10" [responsive]="true">
-                <ng-template pTemplate="caption">
-                  <div style="text-align:left">
-                    <!-- <button pButton type="button" id="btn-Increase" label="เพิ่ม" class="ui-button-temple"
-                      style="width: 20%"></button> -->
-                    <button
-                      pButton
-                      type="button"
-                      label="เพิ่ม"
-                      class="ui-button-rounded ui-button-success"
-                      style="font-size: 15px; width: 10%;"
-                    ></button>
-                  </div>
-                </ng-template>
+              <p-table [paginator]="true" [rows]="10" [responsive]="true" [value]="payment">
                 <ng-template pTemplate="header" let-columns>
                   <tr>
                     <th pSortableColumn="name">
-                      ชื่ออุปกรณ์
+                      ชื่อสมาชิก
                       <p-sortIcon
                         field="nameAbbr"
                         ariaLabel="Activate to sort"
@@ -32,7 +19,17 @@
                       </p-sortIcon>
                     </th>
                     <th pSortableColumn="tel">
-                      จำนวน
+                       ประเภทรถ
+                      <p-sortIcon
+                        field="name"
+                        ariaLabel="Activate to sort"
+                        ariaLabelDesc="Activate to sort in descending order"
+                        ariaLabelAsc="Activate to sort in ascending order"
+                      >
+                      </p-sortIcon>
+                    </th>
+                    <th pSortableColumn="tel">
+                      เลขทะเบียน
                       <p-sortIcon
                         field="name"
                         ariaLabel="Activate to sort"
@@ -42,7 +39,7 @@
                       </p-sortIcon>
                     </th>
                     <th pSortableColumn="date">
-                      เวลาที่ยืม
+                      บริการ
                       <p-sortIcon
                         field="name"
                         ariaLabel="Activate to sort"
@@ -52,7 +49,7 @@
                       </p-sortIcon>
                     </th>
                     <th pSortableColumn="date">
-                      เวลาที่คืน
+                      เวลาที่เสร็จสิ้น
                       <p-sortIcon
                         field="name"
                         ariaLabel="Activate to sort"
@@ -61,16 +58,37 @@
                       >
                       </p-sortIcon>
                     </th>
-                    <th>สถานะ</th>
+                    <th pSortableColumn="date">
+                      ยอดเงินที่ต้องชำระ
+                      <p-sortIcon
+                        field="name"
+                        ariaLabel="Activate to sort"
+                        ariaLabelDesc="Activate to sort in descending order"
+                        ariaLabelAsc="Activate to sort in ascending order"
+                      >
+                      </p-sortIcon>
+                    </th>
+                    <th>
+                      ดำเนินการ
+                    </th>
                   </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-rowData let-columns="columns">
                   <tr>
-                  <td>{{ rowData.employee_fname }} {{ rowData.employee_lname }}</td>
-                  <td>{{ rowData.employee_tel }}</td>
-                  <td>ผู้จัดการร้าน</td>
-                    <td>
-                    </td>
+                  <td>{{ rowData.members_name }}</td>
+                  <td>{{ rowData.car }}</td>
+                  <td>{{ rowData.license }}</td>
+                  <td>{{ rowData.service }}</td>
+                  <td>{{ rowData.end_date }}</td>
+                  <td>{{ rowData.total_price }}</td>
+                  <td>
+                    <div *ngIf="rowData.reserv_status === 2; then cash else complete"></div>
+                    <ng-template #cash>
+                      <button pButton label="อัพเดตการชำระเงิน" (click)="updateStatusPayment(rowData)"></button>
+                    </ng-template>
+                    <ng-template #complete>เสร็จสิ้นการชำระเงิน</ng-template>
+                    
+                  </td>
                   </tr>
                 </ng-template>
               </p-table>

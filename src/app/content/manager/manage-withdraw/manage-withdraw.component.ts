@@ -30,10 +30,12 @@ export class ManageWithdrawComponent implements OnInit {
   allowWithDraw(data, approve_number) {
     const payload = {
       withdraw_return_id: data.withdraw_return_id,
-      approve_status: approve_number
+      approve_status: approve_number,
+      amount : data.withdraw_amount,
+      wash_tool_id : data.wash_tool_id
     };
     this.withDrawReturnService
-      .updateManageWithDrawReturn(payload)
+      .updateManageWithDraw(payload)
       .pipe(
         switchMap(rs => {
           this.msgs.push({

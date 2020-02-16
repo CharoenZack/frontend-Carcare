@@ -25,14 +25,14 @@ export class PromotionService {
   }
 
   createPromotion(data) {
-    const payload = {
-      promoDetail : data.promoDetail,
-      startDate : moment(data.startDate).format('YYYY-MM-DD'),
-      endDate : moment(data.endDate).format('YYYY-MM-DD'),
-      discount : data.discount
-    };
+    let formData = new FormData();
+    formData.append('promoDetail', data.promoDetail);
+    formData.append('startDate', moment(data.startDate).format('YYYY-MM-DD'));
+    formData.append('endDate', moment(data.endDate).format('YYYY-MM-DD'));
+    formData.append('discount', data.discount);
+    formData.append('promo_img', data.promoImg);
     return this.http
-      .post('/app/insertPromotion', payload, {
+      .post('/app/insertPromotion', formData, {
         headers: {
           Authorization: `${localStorage.getItem('access-token')}`
         }
@@ -45,15 +45,17 @@ export class PromotionService {
   }
 
   updatePromotion(data) {
-    const payload = {
-      promoDetail : data.editPromoDetail,
-      startDate : moment(data.editStartDate).format('YYYY-MM-DD'),
-      endDate : moment(data.editEndDate).format('YYYY-MM-DD'),
-      discount : data.editDiscount,
-      promotion_id : data.id
-    };
+    let formData = new FormData();
+    formData.append('promoDetail', data.editPromoDetail);
+    formData.append(
+      'startDate',
+      moment(data.editStartDate).format('YYYY-MM-DD')
+    );
+    formData.append('endDate', moment(data.editEndDate).format('YYYY-MM-DD'));
+    formData.append('discount', data.editDiscount);
+    formData.append('promo_img', data.editPromoImg);
     return this.http
-      .patch('/app/updatePromotionWpmid', payload, {
+      .patch('/app/updatePromotionWpmid', formData, {
         headers: {
           Authorization: `${localStorage.getItem('access-token')}`
         }
