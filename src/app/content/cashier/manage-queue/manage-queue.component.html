@@ -14,11 +14,11 @@
             <div
               *ngFor="let reservation of reservationList"
             >
-              <div *ngIf="reservation.car_wash_id === carWash.value" class="p-col-12">
-                <div style="width: 100%;" (click)="getDetailReservation(reservation.queue_id)">
-                  <p-card header="{{ reservation.members_fname }}">
-                    <div>เวลาจอง :{{ reservation.start_date }}</div>
-                    <div>เลขทะเบียน :{{ reservation.member_license }}</div>
+              <div *ngIf="reservation.car_detail.car_wash_id === carWash.value" class="p-col-12">
+                <div style="width: 100%;" (click)="getDetailReservation(reservation)">
+                  <p-card header="{{ reservation.member.members_fname }}">
+                    <div>เวลาจอง :{{ reservation.car_detail.start_date }}</div>
+                    <div>เลขทะเบียน :{{ reservation.member.member_license }}</div>
                   </p-card>
                 </div>
               </div>

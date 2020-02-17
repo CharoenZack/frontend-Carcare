@@ -14,14 +14,14 @@ import * as moment from 'moment';
 export class ManageQueueComponent implements OnInit {
   carWashList = [];
   reservationList = [];
-  reservationForm : FormGroup;
+  reservationForm: FormGroup;
   display = false;
   public queueDetail = {
-    license : null,
-    total_price : null,
-    members_name : null,
-    typeCar : null,
-    service : null
+    license: null,
+    total_price: null,
+    members_name: null,
+    typeCar: null,
+    service: null
   };
   constructor(
     private reservationService: ReservationService,
@@ -36,7 +36,10 @@ export class ManageQueueComponent implements OnInit {
   getAllCarWash() {
     this.carWashService.getAllcarWash().subscribe(rs => {
       rs.map(res => {
-        this.carWashList.push({label : res.car_wash_name , value : res.car_wash_id });
+        this.carWashList.push({
+          label: res.car_wash_name,
+          value: res.car_wash_id
+        });
       });
     });
   }
@@ -45,35 +48,35 @@ export class ManageQueueComponent implements OnInit {
     this.reservationService
       .getQueue(localStorage.getItem('userId'))
       .subscribe(rs => {
-        rs.map(res=>{
-          if (res.queue_date === moment(new Date()).format('YYYY-MM-DD')) {
+        rs.map((res: any) => {
+          if (
+            res.car_detail.queue_date ===
+            moment(new Date()).format('YYYY-MM-DD')
+          ) {
             this.reservationList.push(res);
           }
-        })
+        });
       });
   }
 
-  getDetailReservation(id){
+  getDetailReservation(data) {
     this.display = true;
     let service = '';
-    this.reservationService.getQueurById(id).subscribe(rs=>{
-      rs.map(res=>{
-        if(service === ''){
-          service = res.service_name;
-        }else{
-          if(service !== res.service_name){
-            service = ","+res.service_name;
-          }
-        }
-
-        this.queueDetail = {
-          license : res.member_license,
-          total_price : res.total_price,
-          members_name : res.members_fname+" "+res.members_lname,
-          typeCar : res.model_name+' '+res.brand+' '+res.size,
-          service
-        }
-      })
-    })
+    // this.reservationService.getQueurById(id).subscribe(rs=>{
+    //   rs.map(res=>{
+    this.queueDetail = {
+      license: data.member.member_license,
+      total_price: data.car_detail.total_price,
+      members_name: data.member.members_fname + ' ' + data.member.members_lname,
+      typeCar:
+        data.car_detail.model_name +
+        ' ' +
+        data.car_detail.brand +
+        ' ' +
+        data.car_detail.size,
+      service: data.car_detail.service_name
+    };
+    // })
+    // })
   }
 }
