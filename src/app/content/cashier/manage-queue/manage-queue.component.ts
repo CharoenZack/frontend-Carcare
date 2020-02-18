@@ -21,7 +21,8 @@ export class ManageQueueComponent implements OnInit {
     total_price: null,
     members_name: null,
     typeCar: null,
-    service: null
+    service: null,
+    province: null
   };
   constructor(
     private reservationService: ReservationService,
@@ -74,7 +75,8 @@ export class ManageQueueComponent implements OnInit {
         data.car_detail.brand +
         ' ' +
         data.car_detail.size,
-      service: data.car_detail.service_name
+      service: data.car_detail.service_name,
+      province : data.member.province_name
     };
     // })
     // })

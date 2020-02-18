@@ -19,6 +19,7 @@
                   <p-card header="{{ reservation.member.members_fname }}">
                     <div>เวลาจอง :{{ reservation.car_detail.start_date }}</div>
                     <div>เลขทะเบียน :{{ reservation.member.member_license }}</div>
+                    <div>จังหวัด :{{ reservation.member.province_name }}</div>
                   </p-card>
                 </div>
               </div>
@@ -45,6 +46,12 @@
     </div>
     <div class="p-col-6">
       <div>{{ queueDetail.license }}</div>
+    </div>
+    <div class="p-col-6" style="text-align: right;">
+      <label>จังหวัด</label>
+    </div>
+    <div class="p-col-6">
+      <div>{{ queueDetail.province }}</div>
     </div>
     <div class="p-col-6" style="text-align: right;">
       <label>จำนวนเงินที่ต้องจ่าย</label>

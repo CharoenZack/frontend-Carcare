@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ReservationService } from 'src/app/shared/services/reservation.service';
 import { CarWashService } from 'src/app/shared/services/car-wash.service';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-check-queue',
@@ -16,7 +17,8 @@ export class CheckQueueComponent implements OnInit {
     total_price : null,
     members_name : null,
     typeCar : null,
-    service : null
+    service : null,
+    province: null
   };
   constructor(
     private reservationService: ReservationService,
@@ -45,31 +47,34 @@ export class CheckQueueComponent implements OnInit {
       .getQueueByEmployeeId(localStorage.getItem('userId'))
       .subscribe(rs => {
         rs.map(res=>{
-          this.reservationList.push(res);
+          if (
+            res.car_detail.queue_date ===
+            moment(new Date()).format('YYYY-MM-DD')
+          ) {
+            this.reservationList.push(res);
+          }
         })
+        console.log(this.reservationList);
       });
   }
 
-  getDerailReservation(id){
+  getDerailReservation(data){
     this.display = true;
     let service = '';
-    this.reservationService.getQueurById(id).subscribe(rs=>{
-      rs.map(res=>{
-        if(service === ''){
-          service += res.service_name;
-        }else{
-          service += ","+res.service_name;
-        }
-
-        this.queueDetail = {
-          license : res.license,
-          total_price : res.total_price,
-          members_name : res.members_fname+" "+res.members_lname,
-          typeCar : res.size,
-          service
-        }
-      })
-      console.log(this.queueDetail);
-    })
+    // this.reservationService.getQueurById(id).subscribe(rs=>{
+    //   rs.map(res=>{
+    this.queueDetail = {
+      license: data.member.member_license,
+      total_price: data.car_detail.total_price,
+      members_name: data.member.members_fname + ' ' + data.member.members_lname,
+      typeCar:
+        data.car_detail.model_name +
+        ' ' +
+        data.car_detail.brand +
+        ' ' +
+        data.car_detail.size,
+      service: data.car_detail.service_name,
+      province: data.member.province_name
+    };
   }
 }
