@@ -99,8 +99,8 @@ export class MemberService {
       );
   }
 
-  getAllmembers(data){
-    return this.http.get(`/app/getAllMemberWmfL/${data}` , {
+  getAllmembers(){
+    return this.http.get(`/app/getAllMember` , {
       headers: {
         Authorization: `${localStorage.getItem('access-token')}`
       }

@@ -94,18 +94,21 @@ export class WithdrawComponent implements OnInit {
               });
               this.display = false;
               return this.withDrawReturnService.getAllWithDrawReturn().pipe(
-                map(rs=>{
+                map(rs => {
                   this.withdraw = rs.filter(res => {
-                    if(res.status_action === 1){
+                    if (res.status_action === 1) {
                       if (res.approve_status === 1) {
                         res.approve_status = 'รออนุมัติ';
+                      } else if (res.approve_status === 0) {
+                        res.approve_status = 'ไม่อนุมัติ';
                       } else {
                         res.approve_status = 'อนุมัติ';
                       }
                       return res;
                     }
                   });
-              }));
+                })
+              );
             } else {
               this.messageService.clear();
               this.messageService.add({
@@ -124,44 +127,51 @@ export class WithdrawComponent implements OnInit {
   }
 
   updateWithDraw(data) {
-    this.withDrawReturnService.updateWithdraw(data).pipe(
-      switchMap(rs => {
-        this.msgs.push({
-          severity: 'info',
-          summary: 'Return Success',
-          detail: 'Return Success'
-        });
-        return this.withDrawReturnService.getAllWithDrawReturn().pipe(
-          map(rs => {
-            this.withdraw = rs.filter(res => {
-              if (res.status_action === 1) {
-                if (res.approve_status === 1) {
-                  res.approve_status = 'รออนุมัติ';
-                } else {
-                  res.approve_status = 'อนุมัติ';
+    this.withDrawReturnService
+      .updateWithdraw(data)
+      .pipe(
+        switchMap(rs => {
+          this.msgs.push({
+            severity: 'info',
+            summary: 'Return Success',
+            detail: 'Return Success'
+          });
+          return this.withDrawReturnService.getAllWithDrawReturn().pipe(
+            map(rs => {
+              this.withdraw = rs.filter(res => {
+                if (res.status_action === 1) {
+                  if (res.approve_status === 1) {
+                    res.approve_status = 'รออนุมัติ';
+                  } else if (res.approve_status === 0) {
+                    res.approve_status = 'ไม่อนุมัติ';
+                  } else {
+                    res.approve_status = 'อนุมัติ';
+                  }
+                  return res;
                 }
-                return res;
-              }
-            });
-          })
-        );
-      })
-    ).subscribe()
+              });
+            })
+          );
+        })
+      )
+      .subscribe();
   }
 
   loadData() {
     this.withDrawReturnService.getAllWithDrawReturn().subscribe(rs => {
       this.withdraw = rs.filter(res => {
-        if(res.status_action === 1){
-            if (res.approve_status === 1) {
-              res.approve_status = 'รออนุมัติ';
-            } else {
-              res.approve_status = 'อนุมัติ';
-            }
-            return res;
-            }
-        });
+        if (res.status_action === 1) {
+          if (res.approve_status === 1) {
+            res.approve_status = 'รออนุมัติ';
+          } else if (res.approve_status === 0) {
+            res.approve_status = 'ไม่อนุมัติ';
+          } else {
+            res.approve_status = 'อนุมัติ';
+          }
+          return res;
+        }
       });
+    });
   }
 
   getAllWashTool() {

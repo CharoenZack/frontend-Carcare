@@ -187,6 +187,9 @@
       ></button>
       <div>
         <input type="text" pInputText formControlName="license" id ="license" placeholder="กรอกป้ายทะเบียน"/>
+        <div>
+          <p-dropdown [options]="provinceList" formControlName = "province" optionLabel="label"></p-dropdown>
+        </div>
       </div>
         </div>
       </div>
@@ -206,7 +209,7 @@
   header="แก้ไขข้อมูลสมาชิก"
   [(visible)]="displayEdit"
   [modal]="true"
-  [style]="{ width: '50vw' }"
+  [style]="{ width: '50vw' ,overflow :'auto', position:'absolute'}"
   [maximizable]="true"
   [baseZIndex]="10000"
   [draggable]="false"
@@ -264,6 +267,9 @@
       ></button>
       <div>
         <input type="text" pInputText formControlName="editlicense" id ="editlicense" placeholder="กรอกป้ายทะเบียน"/>
+        <div>
+          <p-dropdown [options]="provinceList" formControlName = "editprovince" optionLabel="label"></p-dropdown>
+        </div>
       </div>
         </div>
       </div>

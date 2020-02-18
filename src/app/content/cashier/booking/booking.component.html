@@ -109,7 +109,7 @@
       <label for="member">สมาชิก</label>
     </div>
     <div class="p-col-4">
-      <p-autoComplete formControlName = "member" id = "member" [suggestions]="results" (completeMethod)="search($event)" field="name" (onSelect)="selectMember($event)"></p-autoComplete>
+      <p-dropdown [options]="results" formControlName = "member" optionLabel="label" (onChange)="selectMember($event)"></p-dropdown>
     </div>
     <div class="p-col-4" style="text-align: left;">
       <div *ngIf="formError.member" class="text-danger text-invalid">{{formError.member }}</div>

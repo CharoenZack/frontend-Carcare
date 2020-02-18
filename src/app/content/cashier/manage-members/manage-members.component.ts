@@ -10,6 +10,7 @@ import {
 import { MemberService } from 'src/app/shared/services/member.service';
 import { ConfirmationService, Message } from 'primeng/api';
 import { TypecarService } from 'src/app/shared/services/typecar.service';
+import { ProvinceService } from 'src/app/shared/services/province.service';
 
 @Component({
   selector: 'app-manage-members',
@@ -29,10 +30,17 @@ export class ManageMembersComponent implements OnInit {
       value: 0
     }
   ];
+  provinceList : any[] = [
+    {
+        label: 'กรุณาเลือกจังหวัด',
+        value: 0
+    }
+  ];
   constructor(
     private memberService: MemberService,
     private confirmationService: ConfirmationService,
-    private typeCarService: TypecarService
+    private typeCarService: TypecarService,
+    private provinceService : ProvinceService
   ) {}
 
   public formError = {
@@ -81,6 +89,7 @@ export class ManageMembersComponent implements OnInit {
     this.initFormMember();
     this.getAllCarDetail();
     this.initFormEditMember();
+    this.getAllProvince();
   }
 
   addMember() {
@@ -91,7 +100,8 @@ export class ManageMembersComponent implements OnInit {
     this.funcCarList.push(
       new FormGroup({
         car: new FormControl(null),
-        license: new FormControl(null)
+        license: new FormControl(null),
+        province : new FormControl(null)
       })
     );
   }
@@ -113,7 +123,7 @@ export class ManageMembersComponent implements OnInit {
       address: new FormControl(null, Validators.required),
       tel: new FormControl(null, Validators.required),
       cashier_id: new FormControl(localStorage.getItem('userId')),
-      carList: new FormArray([])
+      carList: new FormArray([]),
     });
     this.formMember.valueChanges
       .pipe(debounceTime(500), distinctUntilChanged())
@@ -151,7 +161,6 @@ export class ManageMembersComponent implements OnInit {
               .getMemberByCashierId(localStorage.getItem('userId'))
               .pipe(
                 map(res => {
-                  console.log(res);
                   return (this.members = res);
                 })
               );
@@ -174,7 +183,9 @@ export class ManageMembersComponent implements OnInit {
         this.funcEditCarList.push(
           new FormGroup({
             editcar: new FormControl(null),
-            editlicense: new FormControl(null)
+            editlicense: new FormControl(null),
+            editprovince: new FormControl(null),
+            editDetailId : new FormControl(null)
           })
         );
         editCarListValue.push({
@@ -182,7 +193,12 @@ export class ManageMembersComponent implements OnInit {
             label: res.model_name + ' ' + res.brand + ' ' + res.size,
             value: res.car_detail_id
           },
-          editlicense: res.member_license
+          editlicense: res.member_license,
+          editprovince : {
+            label : res.province_name,
+            value : res.province_id
+          },
+          editDetailId : res.members_detail_id
         });
         const editMember = {
           editUsername: res.members_username,
@@ -192,7 +208,7 @@ export class ManageMembersComponent implements OnInit {
           editlname: res.members_lname,
           editaddress: res.members_address,
           editTel: res.members_tel,
-          editId: res.members_id
+          editId: res.members_id,
         };
         this.formEditMember.patchValue(editMember);
       });
@@ -209,7 +225,8 @@ export class ManageMembersComponent implements OnInit {
     this.funcEditCarList.push(
       new FormGroup({
         editcar: new FormControl(null),
-        editlicense: new FormControl(null)
+        editlicense: new FormControl(null),
+        editprovince : new FormControl(null)
       })
     );
   }
@@ -236,7 +253,6 @@ export class ManageMembersComponent implements OnInit {
 
   updateMember() {
     if (this.formEditMember.valid) {
-      console.log(this.formEditMember.getRawValue());
       this.memberService
         .updateMember(this.formEditMember.getRawValue())
         .pipe(
@@ -296,6 +312,14 @@ export class ManageMembersComponent implements OnInit {
           value: res.car_detail_id
         });
       });
+    });
+  }
+
+  getAllProvince(){
+    this.provinceService.getAllProvince().subscribe(rs=>{
+        rs.map(res=>{
+          this.provinceList.push({ label: res.province_name , value: res.province_id})
+        })
     });
   }
 }

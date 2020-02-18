@@ -29,7 +29,7 @@ interface City {
 export class BookingComponent implements OnInit {
   display = false;
   date: Date;
-  results = [];
+  results = [{ label: 'โปรดเลือกสมาชิก', value: 0 }];
   typeCar = [];
   cleanList = [];
   carWashList = [{ label: 'โปรดเลือกช่องล้างรถ', value: 0 }];
@@ -88,6 +88,7 @@ export class BookingComponent implements OnInit {
     this.getAllTypeCar();
     // this.getAllCleanService();
     this.getAllcarWash();
+    this.getAllmember();
   }
 
   bookingCarWash() {
@@ -139,26 +140,26 @@ export class BookingComponent implements OnInit {
       });
   }
 
-  search(event) {
-    this.memberService.getAllmembers(event.query).subscribe(rs => {
-      rs.map(res => {
-        this.results = [
-          this.results,
-          { name: res.members_fname, value: res.members_id }
-        ];
+  getAllmember() {
+    this.memberService
+      .getAllmembers()
+      .subscribe(rs => {
+        rs.map(res => {
+          this.results = [...this.results , { label: res.members_fname, value: res.members_id }];
+        });
       });
-    });
   }
 
   selectMember(event) {
-    this.carService.getCarByMember(event.value).subscribe(rs => {
+    this.carList = [{ label: 'โปรดเลือกรถ', value: 0 }];
+    this.carService.getCarByMember(event.value.value).subscribe(rs => {
       rs.map(res => {
         this.carList = [
           ...this.carList,
           {
             label: res.model_name + ' ' + res.brand + ' ' + res.size,
             value: res.car_detail_id,
-            type_car : res.type_car_id
+            type_car: res.type_car_id
           }
         ];
       });
@@ -225,6 +226,7 @@ export class BookingComponent implements OnInit {
               summary: 'Booking Complete',
               detail: 'Booking Complete'
             });
+            this.formBooking.reset();
             return this.reservationService
               .getAllReservation(localStorage.getItem('userId'))
               .pipe(
