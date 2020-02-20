@@ -48,32 +48,28 @@ export class CheckQueueComponent implements OnInit {
       .subscribe(rs => {
         rs.map(res=>{
           if (
-            res.car_detail.queue_date ===
+            res.car_detail.resultReserve.queue_date ===
             moment(new Date()).format('YYYY-MM-DD')
           ) {
             this.reservationList.push(res);
           }
         })
-        console.log(this.reservationList);
       });
   }
 
   getDerailReservation(data){
     this.display = true;
-    let service = '';
-    // this.reservationService.getQueurById(id).subscribe(rs=>{
-    //   rs.map(res=>{
     this.queueDetail = {
       license: data.member.member_license,
-      total_price: data.car_detail.total_price,
+      total_price: data.car_detail.resultReserve.total_price,
       members_name: data.member.members_fname + ' ' + data.member.members_lname,
       typeCar:
-        data.car_detail.model_name +
+        data.car_detail.resultReserve.model_name +
         ' ' +
-        data.car_detail.brand +
+        data.car_detail.resultReserve.brand +
         ' ' +
-        data.car_detail.size,
-      service: data.car_detail.service_name,
+        data.car_detail.resultReserve.size,
+      service: data.car_detail.service,
       province: data.member.province_name
     };
   }
