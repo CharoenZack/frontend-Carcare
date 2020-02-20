@@ -117,8 +117,8 @@ export class BookingComponent implements OnInit {
       });
   }
 
-  changeCarWash() {
-    const { carWash } = this.formBooking.getRawValue();
+  changeCarWash(event) {
+    const carWash = event.value;
     const payload = {
       employee_id: localStorage.getItem('userId'),
       car_wash_id: carWash.value

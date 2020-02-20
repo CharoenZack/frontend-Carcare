@@ -139,7 +139,7 @@
       </div>
       <div class="p-col-4">
         <div>
-          <p-dropdown [options]="carWashList" formControlName = "carWash" optionLabel="label" (onChange)="changeCarWash()"></p-dropdown>
+          <p-dropdown [options]="carWashList" formControlName = "carWash" optionLabel="label" (onChange)="changeCarWash($event)"></p-dropdown>
         </div>
       </div>
       <div class="p-col-4" style="text-align: left;">
