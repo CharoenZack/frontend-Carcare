@@ -24,23 +24,25 @@ export class ManageMembersComponent implements OnInit {
   formEditMember: FormGroup;
   members = [];
   msgs: Message[] = [];
+  displayWarningMember = false;
+  displayWarningLicense = false;
   carDetail: any[] = [
     {
       label: 'กรุณาเลือกรถ',
       value: 0
     }
   ];
-  provinceList : any[] = [
+  provinceList: any[] = [
     {
-        label: 'กรุณาเลือกจังหวัด',
-        value: 0
+      label: 'กรุณาเลือกจังหวัด',
+      value: 0
     }
   ];
   constructor(
     private memberService: MemberService,
     private confirmationService: ConfirmationService,
     private typeCarService: TypecarService,
-    private provinceService : ProvinceService
+    private provinceService: ProvinceService
   ) {}
 
   public formError = {
@@ -101,7 +103,7 @@ export class ManageMembersComponent implements OnInit {
       new FormGroup({
         car: new FormControl(null),
         license: new FormControl(null),
-        province : new FormControl(null)
+        province: new FormControl(null)
       })
     );
   }
@@ -123,7 +125,7 @@ export class ManageMembersComponent implements OnInit {
       address: new FormControl(null, Validators.required),
       tel: new FormControl(null, Validators.required),
       cashier_id: new FormControl(localStorage.getItem('userId')),
-      carList: new FormArray([]),
+      carList: new FormArray([])
     });
     this.formMember.valueChanges
       .pipe(debounceTime(500), distinctUntilChanged())
@@ -150,20 +152,27 @@ export class ManageMembersComponent implements OnInit {
         .insertMember(this.formMember.getRawValue())
         .pipe(
           switchMap(rs => {
-            this.display = false;
-            this.msgs.push({
-              severity: 'info',
-              summary: 'Insert Employee',
-              detail: 'Insert Success'
-            });
-            this.formMember.reset();
-            return this.memberService
-              .getMemberByCashierId(localStorage.getItem('userId'))
-              .pipe(
-                map(res => {
-                  return (this.members = res);
-                })
-              );
+            if (rs.member === false) {
+              this.displayWarningMember = true;
+            } 
+            else if(rs.license === false){
+              this.displayWarningLicense = true;
+            } else {
+              this.display = false;
+              this.msgs.push({
+                severity: 'info',
+                summary: 'Insert Employee',
+                detail: 'Insert Success'
+              });
+              this.formMember.reset();
+              return this.memberService
+                .getMemberByCashierId(localStorage.getItem('userId'))
+                .pipe(
+                  map(res => {
+                    return (this.members = res);
+                  })
+                );
+            }
           })
         )
         .subscribe();
@@ -185,7 +194,7 @@ export class ManageMembersComponent implements OnInit {
             editcar: new FormControl(null),
             editlicense: new FormControl(null),
             editprovince: new FormControl(null),
-            editDetailId : new FormControl(null)
+            editDetailId: new FormControl(null)
           })
         );
         editCarListValue.push({
@@ -194,11 +203,11 @@ export class ManageMembersComponent implements OnInit {
             value: res.car_detail_id
           },
           editlicense: res.member_license,
-          editprovince : {
-            label : res.province_name,
-            value : res.province_id
+          editprovince: {
+            label: res.province_name,
+            value: res.province_id
           },
-          editDetailId : res.members_detail_id
+          editDetailId: res.members_detail_id
         });
         const editMember = {
           editUsername: res.members_username,
@@ -208,7 +217,7 @@ export class ManageMembersComponent implements OnInit {
           editlname: res.members_lname,
           editaddress: res.members_address,
           editTel: res.members_tel,
-          editId: res.members_id,
+          editId: res.members_id
         };
         this.formEditMember.patchValue(editMember);
       });
@@ -226,7 +235,7 @@ export class ManageMembersComponent implements OnInit {
       new FormGroup({
         editcar: new FormControl(null),
         editlicense: new FormControl(null),
-        editprovince : new FormControl(null)
+        editprovince: new FormControl(null)
       })
     );
   }
@@ -315,11 +324,14 @@ export class ManageMembersComponent implements OnInit {
     });
   }
 
-  getAllProvince(){
-    this.provinceService.getAllProvince().subscribe(rs=>{
-        rs.map(res=>{
-          this.provinceList.push({ label: res.province_name , value: res.province_id})
-        })
+  getAllProvince() {
+    this.provinceService.getAllProvince().subscribe(rs => {
+      rs.map(res => {
+        this.provinceList.push({
+          label: res.province_name,
+          value: res.province_id
+        });
+      });
     });
   }
 }
