@@ -287,8 +287,16 @@
 </p-dialog>
 <p-confirmDialog #cd header="ลบข้อมูลสมาชิก" icon="pi pi-exclamation-triangle">
     <p-footer>
-      <button type="button" pButton icon="pi pi-check" label="คกลง" (click)="cd.accept()"></button>
+      <button type="button" pButton icon="pi pi-check" label="ตกลง" (click)="cd.accept()"></button>
         <button type="button" pButton icon="pi pi-times" label="ยกเลิก" (click)="cd.reject()"></button>
     </p-footer>
   </p-confirmDialog>
+<p-dialog header="แจ้งเตือนรหัสผู้ใช้" [(visible)] = "displayWarningMember" [modal]="true" [style]="{width: '50vw'}" [baseZIndex]="10000"
+    [draggable]="false" [resizable]="false">
+    <p style="color : red" >รหัสผู้ใช้นี้ถูกใช้งานแล้ว โปรดเปลี่ยนรหัสผู้ใช้</p>
+</p-dialog>
+<p-dialog header="แจ้งเตือนเลขทะเบียน" [(visible)] = "displayWarningLicense" [modal]="true" [style]="{width: '50vw'}" [baseZIndex]="10000"
+    [draggable]="false" [resizable]="false">
+    <p style="color : red" >เลขทะเบียนดังกล่าวได้ถูกลงทะเบียนแล้วโปรดเปลี่ยนเลขทะเบียน</p>
+</p-dialog>
 
