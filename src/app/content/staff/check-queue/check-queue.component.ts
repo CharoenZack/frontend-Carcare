@@ -47,6 +47,7 @@ export class CheckQueueComponent implements OnInit {
       .getQueueByEmployeeId(localStorage.getItem('userId'))
       .subscribe(rs => {
         rs.map(res=>{
+          console.log(res.car_detail.resultReserve.queue_date);
           if (
             res.car_detail.resultReserve.queue_date ===
             moment(new Date()).format('YYYY-MM-DD')

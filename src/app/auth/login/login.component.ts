@@ -1,7 +1,7 @@
 import { Router } from '@angular/router';
 import { AuthService } from './../../shared/services/auth.service';
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, Validators } from '@angular/forms';
+import { FormGroup, Validators, FormControl } from '@angular/forms';
 import { FormBuilder } from '@angular/forms';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { MessageService } from 'primeng/api';
@@ -30,7 +30,6 @@ export class LoginComponent implements OnInit {
 
   constructor(
     private authService: AuthService,
-    private formBuilder: FormBuilder,
     private router: Router,
     private spinner: NgxSpinnerService,
     private messageService: MessageService
@@ -40,13 +39,12 @@ export class LoginComponent implements OnInit {
   ngOnInit() {
     this.createForm();
   }
-  get formControls() { return this.form.controls; }
 
   private createForm() {
-    this.form = this.formBuilder.group({
-      username: ['', Validators.required],
-      password: ['', Validators.required],
-    });
+    this.form = new FormGroup({
+      username : new FormControl(null , Validators.required),
+      password : new FormControl(null , Validators.required)
+    })
     this.form
       .valueChanges
       .pipe(
@@ -56,14 +54,9 @@ export class LoginComponent implements OnInit {
       .subscribe(() => this.onValueChange());
     this.onValueChange();
   }
-  onSubmit(e) {
-    e.preventDefault();
-    const username = this.form.get('username').value;
-    const password = this.form.get('password').value;
-    console.log(username, password);
-    // check accessToken
+  onSubmit() {
+    const { username , password } = this.form.getRawValue();
     if (this.form.valid) {
-      this.spinner.show();
       this.authService.login(username, password).toPromise().then(res => {
         if (res['result'] === true) {
           const accessToken = res['token'];

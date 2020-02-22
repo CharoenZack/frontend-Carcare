@@ -98,7 +98,7 @@ body {
   margin-top: 10px;
 }
 
-.login input[type="submit"] {
+.button_login {
   width: 260px;
   height: 35px;
   background: #fff;
@@ -109,7 +109,6 @@ body {
   font-family: "Exo", sans-serif;
   font-size: 16px;
   font-weight: 400;
-  padding: 6px;
   margin-top: 10px;
 }
 
@@ -117,7 +116,7 @@ body {
   opacity: 0.8;
 }
 
-.login input[type="submit"]:active {
+.button_login {
   opacity: 0.6;
 }
 
@@ -131,7 +130,7 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.9);
 }
 
-.login input[type="submit"]:focus {
+.button_login {
   outline: none;
 }
 
@@ -162,10 +161,4 @@ label {
 .text-invalid {
   color: red;
   width: 500px;
-}
-.ng-valid:not(form) {
-  border: 1px solid #42a948;
-}
-.ng-invalid:not(form) {
-  border: 1px solid #a94442;
 }
