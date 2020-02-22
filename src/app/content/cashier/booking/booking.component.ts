@@ -145,7 +145,7 @@ export class BookingComponent implements OnInit {
       .getAllmembers()
       .subscribe(rs => {
         rs.map(res => {
-          this.results = [...this.results , { label: res.members_fname, value: res.members_id }];
+          this.results = [...this.results , { label: res.members_fname + ' ' + res.members_lname, value: res.members_id }];
         });
       });
   }
