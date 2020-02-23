@@ -19,13 +19,13 @@ export class CarWashService {
     }))
   }
 
-  getAllcarWashByEmp(){
-    return this.http.get('/app/getAllCar_washByEmpId' , {
-      headers: {
-        Authorization: `${localStorage.getItem('access-token')}`
-      }
-    }).pipe(map((rs : any)=>{
-      return rs.data;
-    }))
-  }
+  // getAllcarWashByEmp(){
+  //   return this.http.get('/app/getAllCar_washByEmpId' , {
+  //     headers: {
+  //       Authorization: `${localStorage.getItem('access-token')}`
+  //     }
+  //   }).pipe(map((rs : any)=>{
+  //     return rs.data;
+  //   }))
+  // }
 }

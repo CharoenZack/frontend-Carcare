@@ -35,7 +35,7 @@ export class ManageQueueComponent implements OnInit {
   }
 
   getAllCarWash() {
-    this.carWashService.getAllcarWashByEmp().subscribe(rs => {
+    this.carWashService.getAllcarWash().subscribe(rs => {
       rs.map(res => {
         this.carWashList.push({
           label: res.car_wash_name,

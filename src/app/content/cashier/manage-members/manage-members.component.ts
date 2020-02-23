@@ -43,7 +43,7 @@ export class ManageMembersComponent implements OnInit {
     private confirmationService: ConfirmationService,
     private typeCarService: TypecarService,
     private provinceService: ProvinceService
-  ) {}
+  ) { }
 
   public formError = {
     username: '',
@@ -154,8 +154,8 @@ export class ManageMembersComponent implements OnInit {
           switchMap(rs => {
             if (rs.member === false) {
               this.displayWarningMember = true;
-            } 
-            else if(rs.license === false){
+            }
+            else if (rs.license === false) {
               this.displayWarningLicense = true;
             } else {
               this.display = false;
@@ -266,19 +266,23 @@ export class ManageMembersComponent implements OnInit {
         .updateMember(this.formEditMember.getRawValue())
         .pipe(
           switchMap(rs => {
-            this.displayEdit = false;
-            this.msgs.push({
-              severity: 'info',
-              summary: 'Update Employee',
-              detail: 'Update Success'
-            });
-            return this.memberService
-              .getMemberByCashierId(localStorage.getItem('userId'))
-              .pipe(
-                map(res => {
-                  return (this.members = res);
-                })
-              );
+            if (rs.license === false) {
+              this.displayWarningLicense = true;
+            } else {
+              this.displayEdit = false;
+              this.msgs.push({
+                severity: 'info',
+                summary: 'Update Employee',
+                detail: 'Update Success'
+              });
+              return this.memberService
+                .getMemberByCashierId(localStorage.getItem('userId'))
+                .pipe(
+                  map(res => {
+                    return (this.members = res);
+                  })
+                );
+            }
           })
         )
         .subscribe();
