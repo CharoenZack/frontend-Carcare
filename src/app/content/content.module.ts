@@ -55,7 +55,7 @@ import { WashStatusComponent } from './staff/wash-status/wash-status.component';
 import { ToolComponent } from './staff/tool/tool.component';
 import { ManageQueueComponent } from './cashier/manage-queue/manage-queue.component';
 import { ManageReceiptComponent } from './cashier/manage-receipt/manage-receipt.component';
-import {TabViewModule} from 'primeng/tabview';
+import { TabViewModule } from 'primeng/tabview';
 import { WithdrawComponent } from './staff/withdraw-return/withdraw/withdraw.component';
 import { ReturnComponent } from './staff/withdraw-return/return/return.component';
 import { WithdrawReturnService } from '../shared/services/withdraw-return.service';
@@ -63,6 +63,8 @@ import { ManageWithdrawComponent } from './manager/manage-withdraw/manage-withdr
 import { ManageReturnComponent } from './manager/manage-return/manage-return.component';
 import { ProfileStaffComponent } from './staff/profile-staff/profile-staff.component';
 import { ProfileCashierComponent } from './cashier/profile-cashier/profile-cashier.component';
+import { ManageCleanerComponent } from './cashier/manage-cleaner/manage-cleaner.component';
+import { EditQueueComponent } from './staff/edit-queue/edit-queue.component';
 @NgModule({
   declarations: [
     ContentComponent,
@@ -88,7 +90,9 @@ import { ProfileCashierComponent } from './cashier/profile-cashier/profile-cashi
     ManageWithdrawComponent,
     ManageReturnComponent,
     ProfileStaffComponent,
-    ProfileCashierComponent
+    ProfileCashierComponent,
+    ManageCleanerComponent,
+    EditQueueComponent
   ],
   imports: [
     CommonModule,
@@ -137,4 +141,4 @@ import { ProfileCashierComponent } from './cashier/profile-cashier/profile-cashi
   ],
   exports: [ContentComponent]
 })
-export class ContentModule {}
+export class ContentModule { }

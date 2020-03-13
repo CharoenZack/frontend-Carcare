@@ -7,56 +7,75 @@ import { map } from 'rxjs/operators';
 })
 export class WashtoolService {
 
-  constructor(private http : HttpClient) { }
+  constructor(private http: HttpClient) { }
 
-  getAllWashTool(){
-    return this.http.get('/app/getAllWash_tool' , {
+  getAllWashTool() {
+    return this.http.get('/app/getAllWash_tool', {
       headers: {
         Authorization: `${localStorage.getItem('access-token')}`
       }
-    }).pipe(map((rs:any)=>{
+    }).pipe(map((rs: any) => {
       return rs.data;
     }))
   }
-
-  createWashTool(data){
+  getWashTool() {
+    return this.http.get('/app/getWash_tool', {
+      headers: {
+        Authorization: `${localStorage.getItem('access-token')}`
+      }
+    }).pipe(map((rs: any) => {
+      return rs.data;
+    }))
+  }
+  getWashToolWPosition(id) {
+    console.log(id);
+    return this.http.get(`/app/getWash_toolWPosition/${id}`, {
+      headers: {
+        Authorization: `${localStorage.getItem('access-token')}`
+      }
+    }).pipe(map((rs: any) => {
+      return rs.data;
+    }))
+  }
+  createWashTool(data) {
     const payload = {
-      tool_name : data.tool,
-      amount : data.amount,
-      tool_status : data.status,
-      employee_id : data.employeeId
+      tool_name: data.tool,
+      amount: data.amount,
+      tool_status: data.status,
+      employee_id: data.employeeId,
+      position: data.position.value
     }
-    return this.http.post('/app/insertWash_tool' , payload , {
+    return this.http.post('/app/insertWash_tool', payload, {
       headers: {
         Authorization: `${localStorage.getItem('access-token')}`
       }
-    }).pipe(map((rs : any)=>{
+    }).pipe(map((rs: any) => {
       return rs.data;
     }))
   }
 
-  updateWashTool(data){
+  updateWashTool(data) {
     const payload = {
-      tool_name : data.editTool,
-      amount : data.editAmount,
-      tool_status : data.editStatus,
-      wash_tool_id : data.id
+      tool_name: data.editTool,
+      amount: data.editAmount,
+      tool_status: data.editStatus,
+      wash_tool_id: data.id
     }
-    return this.http.patch('/app/updateWash_toolStn_am_tsWwtid' , payload , {
+    return this.http.patch('/app/updateWash_toolStn_am_tsWwtid', payload, {
       headers: {
         Authorization: `${localStorage.getItem('access-token')}`
       }
-    }).pipe(map((rs : any)=>{
+    }).pipe(map((rs: any) => {
       return rs.data;
     }))
   }
 
-  deleteWashTool(id){
+  deleteWashTool(id) {
     return this.http.delete(`/app/deleteWash_toolWwtid/${id}`, {
       headers: {
         Authorization: `${localStorage.getItem('access-token')}`
       }
-    }).pipe(map((rs:any)=>{
+    }).pipe(map((rs: any) => {
       return rs.data;
     }))
   }

@@ -13,7 +13,7 @@ export class ManageUserService {
     private http: HttpClient,
     private authService: AuthService,
     private httpService: HttpClientService
-  ) {}
+  ) { }
 
   getUser(id) {
     return this.http
@@ -122,6 +122,33 @@ export class ManageUserService {
   getAllStaff() {
     return this.http
       .get('/app/getEmployeeWpidN12/', {
+        headers: {
+          Authorization: `${localStorage.getItem('access-token')}`
+        }
+      })
+      .pipe(
+        map((rs: any) => {
+          return rs.data;
+        })
+      );
+  }
+
+  getEmployeeWCar_wash() {
+    return this.http
+      .get('/app/getEmployeeWCar_wash/', {
+        headers: {
+          Authorization: `${localStorage.getItem('access-token')}`
+        }
+      })
+      .pipe(
+        map((rs: any) => {
+          return rs.data;
+        })
+      );
+  }
+  getEmployeeWCar_wash2() {
+    return this.http
+      .get('/app/getEmployeeWCar_wash2/', {
         headers: {
           Authorization: `${localStorage.getItem('access-token')}`
         }

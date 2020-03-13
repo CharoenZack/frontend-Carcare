@@ -11,18 +11,18 @@
         <div class="p-col-12">
             <div class="p-grid">
                 <div *ngFor="let reservation of reservationList"
-                        class="p-col-4">
+                        >
                     <div
                       *ngIf="reservation.car_detail.resultReserve.car_wash_id === carWash.value"
                     >
                       <div
                         (click)="getDerailReservation(reservation)"
                       >
-                        <p-card header="{{ reservation.member.members_fname }}">
-                          <div>เวลาจอง :{{ reservation.car_detail.resultReserve.start_date }}</div>
-                          <div>เลขทะเบียน :{{ reservation.member.member_license }}</div>
-                          <div>จังหวัด :{{ reservation.member.province_name }}</div>
-                        </p-card>
+                      <p-card header="{{ 'ชื่อ' + ' ' +reservation.member.members_fname + ' ' + 'นามสกุล ' + ' ' + reservation.member.members_lname}}">
+                        <div>เวลาเริ่ม :{{ reservation.car_detail.resultReserve.start_date + ' น.'}}   -   {{ 'เวลาที่เสร็จสิ้น : ' + reservation.car_detail.resultReserve.end_date + ' น.' }}</div>
+                        <div>เลขทะเบียน :{{ reservation.member.member_license }}</div>
+                        <div>จังหวัด :{{ reservation.member.province_name }}</div>
+                      </p-card>
                       </div>
                     </div>
                   </div>

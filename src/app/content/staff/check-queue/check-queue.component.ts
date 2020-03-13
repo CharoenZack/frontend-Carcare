@@ -28,10 +28,11 @@ export class CheckQueueComponent implements OnInit {
   ngOnInit() {
     this.getAllCarWash();
     this.getAllReservation();
+
   }
 
   getAllCarWash() {
-    this.carWashService.getAllcarWash().subscribe(rs => {
+    this.carWashService.getAllcarWashDetail().subscribe(rs => {
       rs.map(res => {
         // console.log(typeof(res.employee_id) +"="+ parseInt(localStorage.getItem('userId')))
         if(res.employee_id === parseInt(localStorage.getItem('userId').toString())){
@@ -47,7 +48,7 @@ export class CheckQueueComponent implements OnInit {
       .getQueueByEmployeeId(localStorage.getItem('userId'))
       .subscribe(rs => {
         rs.map(res=>{
-          console.log(res.car_detail.resultReserve.queue_date);
+          console.log(rs);
           if (
             res.car_detail.resultReserve.queue_date ===
             moment(new Date()).format('YYYY-MM-DD')

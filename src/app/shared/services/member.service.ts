@@ -19,6 +19,7 @@ export class MemberService {
       cashier_id : data.cashier_id,
       car_detail_id : data.carList
     }
+    console.log(data);
     return this.http
       .post('/app/insertMember', payload, {
         headers: {

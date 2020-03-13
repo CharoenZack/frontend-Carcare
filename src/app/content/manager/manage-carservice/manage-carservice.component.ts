@@ -100,7 +100,7 @@ export class ManageCarserviceComponent implements OnInit {
             this.display = false;
             this.msgs.push({
               severity: 'info',
-              summary: 'Insert Employee',
+              summary: 'Insert Service',
               detail: 'Insert Success'
             });
             return this.cleanService.getAllCleanServiceDetailFull().pipe(

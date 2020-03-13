@@ -16,6 +16,7 @@ export class ProfileStaffComponent implements OnInit {
 
   public userData: any[];
   public userId: string;
+  public userRole: string;
   public formEditProfile: FormGroup;
   public displayDialog = false;
   public employee: Employee;
@@ -35,6 +36,9 @@ export class ProfileStaffComponent implements OnInit {
   ngOnInit() {
     this.getData();
     this.userId = localStorage.getItem('userId');
+    this.userRole = localStorage.getItem('position');
+    console.log('id ' + this.userId + 'role ' + this.userRole);
+
     this.createForm();
   }
   createForm() {
@@ -48,6 +52,7 @@ export class ProfileStaffComponent implements OnInit {
   }
   getData() {
     this.route.params.pipe(map(res => res.id)).subscribe(id => {
+      console.log(id);
       this.manageUser.getProfile(id).subscribe(rs => {
         rs.map(res=>{
           this.userData = res;

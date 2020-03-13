@@ -6,7 +6,7 @@ import { map } from 'rxjs/internal/operators/map';
   providedIn: 'root'
 })
 export class CarService {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
   getAllCar() {
     return this.http
       .get('/app/getAllCar', {
@@ -62,12 +62,12 @@ export class CarService {
         })
       );
   }
-  getCarByMember(id){
-    return this.http.get(`/app/getDetailCarByMember/${id}` ,{
+  getCarByMember(id) {
+    return this.http.get(`/app/getDetailCarByMember/${id}`, {
       headers: {
         Authorization: `${localStorage.getItem('access-token')}`
       }
-    }).pipe(map((rs:any)=>{
+    }).pipe(map((rs: any) => {
       return rs.data;
     }))
   }

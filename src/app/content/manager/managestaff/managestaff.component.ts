@@ -171,12 +171,12 @@ export class ManagestaffComponent implements OnInit {
         console.log(res);
         this.positionList = [
           ...this.positionList,
-          { label: res.position_role, value: res.position_id }
+          { label: res.position_role + ' ' + res.position_work, value: res.position_id }
         ];
       })
     })
   }
-  
+
 
 }
 

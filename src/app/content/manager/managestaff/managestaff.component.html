@@ -59,7 +59,7 @@
                   <tr>
                   <td>{{ rowData.employee_fname }} {{ rowData.employee_lname }}</td>
                   <td>{{ rowData.employee_tel }}</td>
-                  <td>{{ rowData.position_role }}</td>
+                  <td>{{ rowData.position_role }} {{rowData.position_work}}</td>
                     <td>
                       <div style="text-align:center">
                         <button
@@ -161,7 +161,7 @@
         </div>
     </div>
   </p-dialog>
-  
+
   <p-dialog
     header="แก้ไขข้อมูลพนักงาน"
     [(visible)]="displayEdit"
@@ -203,11 +203,10 @@
         </div>
     </div>
   </p-dialog>
-  
+
   <p-confirmDialog #cd header="ลบข้อมูล" icon="pi pi-exclamation-triangle">
     <p-footer>
-      <button type="button" pButton icon="pi pi-check" label="คกลง" (click)="cd.accept()"></button>
+      <button type="button" pButton icon="pi pi-check" label="ตกลง" (click)="cd.accept()"></button>
         <button type="button" pButton icon="pi pi-times" label="ยกเลิก" (click)="cd.reject()"></button>
     </p-footer>
   </p-confirmDialog>
-  

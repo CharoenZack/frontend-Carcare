@@ -26,6 +26,8 @@ export class ManageMembersComponent implements OnInit {
   msgs: Message[] = [];
   displayWarningMember = false;
   displayWarningLicense = false;
+  showCar: any[] = [
+  ];
   carDetail: any[] = [
     {
       label: 'กรุณาเลือกรถ',
@@ -155,7 +157,7 @@ export class ManageMembersComponent implements OnInit {
             if (rs.member === false) {
               this.displayWarningMember = true;
             }
-            else if (rs.license === false) {
+            if (rs.license === false) {
               this.displayWarningLicense = true;
             } else {
               this.display = false;
@@ -169,7 +171,9 @@ export class ManageMembersComponent implements OnInit {
                 .getMemberByCashierId(localStorage.getItem('userId'))
                 .pipe(
                   map(res => {
+                    console.log(this.memberService);
                     return (this.members = res);
+
                   })
                 );
             }
@@ -266,23 +270,21 @@ export class ManageMembersComponent implements OnInit {
         .updateMember(this.formEditMember.getRawValue())
         .pipe(
           switchMap(rs => {
-            if (rs.license === false) {
-              this.displayWarningLicense = true;
-            } else {
-              this.displayEdit = false;
-              this.msgs.push({
-                severity: 'info',
-                summary: 'Update Employee',
-                detail: 'Update Success'
-              });
-              return this.memberService
-                .getMemberByCashierId(localStorage.getItem('userId'))
-                .pipe(
-                  map(res => {
-                    return (this.members = res);
-                  })
-                );
-            }
+
+            this.displayEdit = false;
+            this.msgs.push({
+              severity: 'info',
+              summary: 'Update Employee',
+              detail: 'Update Success'
+            });
+            return this.memberService
+              .getMemberByCashierId(localStorage.getItem('userId'))
+              .pipe(
+                map(res => {
+                  return (this.members = res);
+                })
+              );
+
           })
         )
         .subscribe();
@@ -327,7 +329,17 @@ export class ManageMembersComponent implements OnInit {
       });
     });
   }
-
+  getCarDetailById(id) {
+    console.log(id.value.value);
+    this.typeCarService.getAllCarDetailById(id.value.value).subscribe(rs => {
+      rs.map(res => {
+        this.showCar.push({
+          label: res.brand
+        });
+        console.log(this.showCar);
+      });
+    });
+  }
   getAllProvince() {
     this.provinceService.getAllProvince().subscribe(rs => {
       rs.map(res => {

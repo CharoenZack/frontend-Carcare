@@ -164,13 +164,13 @@
       ></button>
       </div>
       <div class="p-col-8" formArrayName="carList">
-        <div  
+        <div
         *ngFor="
           let car of funcCarList.controls;
           let i = index
         "
         formGroupName="{{ i }}">
-          <p-dropdown [options]="carDetail" formControlName = "car" optionLabel="label"></p-dropdown>
+          <p-dropdown [options]="carDetail" formControlName = "car" optionLabel="label" value="value" (onChange)=getCarDetailById($event)></p-dropdown>
           <button
         pButton
         type="button"
@@ -185,6 +185,9 @@
         class="ui-button-danger"
         (click)="removeCar(i)"
       ></button>
+        <!-- <div>
+          <p-dropdown [options]="showCar" optionLabel="label"  ></p-dropdown>
+        </div> -->
       <div>
         <input type="text" pInputText formControlName="license" id ="license" placeholder="กรอกป้ายทะเบียน"/>
         <div>
@@ -244,7 +247,7 @@
         <label for="car">เลือกรถ</label>
       </div>
       <div class="p-col-8" formArrayName="editCarList" *ngIf="formEditMember.get('editCarList').value.length > 0">
-        <div  
+        <div
         *ngFor="
           let car of funcEditCarList.controls;
           let i = index

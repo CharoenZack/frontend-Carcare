@@ -12,12 +12,18 @@ import { TypecarService } from 'src/app/shared/services/typecar.service';
   styleUrls: ['./manage-typecar.component.css']
 })
 export class ManageTypecarComponent implements OnInit {
+  brands: string;
   display = false;
   displayEdit = false;
+  displayCar = false;
+  displayModel = false;
   formTypeCar: FormGroup;
+  formAddCar: FormGroup;
+  formAddModel: FormGroup;
   formEditTypeCar: FormGroup;
   carDetail: any[];
   carList = [];
+  brand = [];
   typeCarList = [];
   modelList = [];
   msgs: Message[] = [];
@@ -40,9 +46,9 @@ export class ManageTypecarComponent implements OnInit {
   constructor(
     private typeCarService: TypecarService,
     private confirmationService: ConfirmationService,
-    private carService : CarService,
-    private modelService : ModelService
-  ) {}
+    private carService: CarService,
+    private modelService: ModelService
+  ) { }
 
   ngOnInit() {
     this.loadData();
@@ -50,6 +56,8 @@ export class ManageTypecarComponent implements OnInit {
     this.getCar();
     this.getTypeCar();
     this.getModel();
+    this.CarForm();
+    this.ModelForm();
     this.formEditTypeCar = new FormGroup({
       editModel: new FormControl(null, Validators.required),
       editCar: new FormControl(null, Validators.required),
@@ -61,7 +69,22 @@ export class ManageTypecarComponent implements OnInit {
   addTypeCar() {
     this.display = true;
   }
-
+  addCar() {
+    this.displayCar = true;
+  }
+  CarForm() {
+    this.formAddCar = new FormGroup({
+      car: new FormControl(null, Validators.required)
+    });
+  }
+  ModelForm() {
+    this.formAddModel = new FormGroup({
+      model: new FormControl(null, Validators.required)
+    });
+  }
+  addModel() {
+    this.displayModel = true;
+  }
   initForm() {
     this.formTypeCar = new FormGroup({
       model: new FormControl(null, Validators.required),
@@ -72,8 +95,57 @@ export class ManageTypecarComponent implements OnInit {
       .pipe(debounceTime(500), distinctUntilChanged())
       .subscribe(() => this.onValueChange());
   }
-
-submitFormTypeCar() {
+  submitAddCar() {
+    if (this.formAddCar.valid) {
+      this.msgs = [];
+      this.typeCarService
+        .insertCar(this.formAddCar.getRawValue())
+        .pipe(
+          switchMap(rs => {
+            this.displayCar = false;
+            this.msgs.push({
+              severity: 'info',
+              summary: 'Insert Car',
+              detail: 'Insert Success'
+            });
+            return this.typeCarService.getAllCarDetail().pipe(
+              map(rs => {
+                return this.carDetail = rs;
+              })
+            );
+          })
+        )
+        .subscribe();
+    } else {
+      this.onValueChange();
+    }
+  }
+  submitAddModel() {
+    if (this.formAddModel.valid) {
+      this.msgs = [];
+      this.typeCarService
+        .insertModel(this.formAddModel.getRawValue())
+        .pipe(
+          switchMap(rs => {
+            this.displayModel = false;
+            this.msgs.push({
+              severity: 'info',
+              summary: 'Insert Model',
+              detail: 'Insert Success'
+            });
+            return this.typeCarService.getAllCarDetail().pipe(
+              map(rs => {
+                return this.carDetail = rs;
+              })
+            );
+          })
+        )
+        .subscribe();
+    } else {
+      this.onValueChange();
+    }
+  }
+  submitFormTypeCar() {
     if (this.formTypeCar.valid) {
       this.msgs = [];
       this.typeCarService
@@ -83,7 +155,7 @@ submitFormTypeCar() {
             this.display = false;
             this.msgs.push({
               severity: 'info',
-              summary: 'Insert Employee',
+              summary: 'Insert Typecar',
               detail: 'Insert Success'
             });
             return this.typeCarService.getAllCarDetail().pipe(
@@ -117,26 +189,26 @@ submitFormTypeCar() {
 
   editTypeCar(event) {
     this.displayEdit = true;
-    this.carService.getAllCar().pipe(switchMap(rs=>{
-      rs.map(res=>{
-        if(res.car_id === event.car_id){
-          const car = {label : res.brand , value : res.car_id }
+    this.carService.getAllCar().pipe(switchMap(rs => {
+      rs.map(res => {
+        if (res.car_id === event.car_id) {
+          const car = { label: res.brand, value: res.car_id }
           this.formEditTypeCar.get('editCar').patchValue(car);
           return res;
         }
       })
-      return this.typeCarService.getAllTypeCar().pipe(switchMap(rs=>{
-        rs.map(res=>{
-          if(res.type_car_id === event.type_car_id){
-            const typeCar = { label : res.size , value : res.type_car_id }
+      return this.typeCarService.getAllTypeCar().pipe(switchMap(rs => {
+        rs.map(res => {
+          if (res.type_car_id === event.type_car_id) {
+            const typeCar = { label: res.size, value: res.type_car_id }
             this.formEditTypeCar.get('editTypeCar').patchValue(typeCar);
             return typeCar;
           }
         })
-        return this.modelService.getAllModel().pipe(map(rs=>{
-          rs.map(res=>{
-            if(res.model_id === event.model_id){
-              const modelDropdown = { label : res.model_name , value : res.model_id }
+        return this.modelService.getAllModel().pipe(map(rs => {
+          rs.map(res => {
+            if (res.model_id === event.model_id) {
+              const modelDropdown = { label: res.model_name, value: res.model_id }
               this.formEditTypeCar.get('editModel').patchValue(modelDropdown);
               return modelDropdown;
             }
@@ -214,7 +286,16 @@ submitFormTypeCar() {
       });
     });
   }
-
+  filterBrands(event) {
+    this.brand = [];
+    for (let i = 0; i < this.carList.length; i++) {
+      let brand = this.carList[i].label;
+      console.log(brand);
+      if (brand.toLowerCase().indexOf(event.query.toLowerCase()) === 0) {
+        this.brand.push(this.carList[i]);
+      }
+    }
+  }
   getTypeCar() {
     this.typeCarService.getAllTypeCar().subscribe(rs => {
       rs.map(res => {
@@ -226,9 +307,9 @@ submitFormTypeCar() {
     });
   }
 
-  getModel(){
-    this.modelService.getAllModel().subscribe(rs=>{
-      rs.map(res=>{
+  getModel() {
+    this.modelService.getAllModel().subscribe(rs => {
+      rs.map(res => {
         this.modelList = [
           ...this.modelList,
           { label: res.model_name, value: res.model_id }

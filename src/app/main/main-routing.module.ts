@@ -1,3 +1,4 @@
+import { EditQueueComponent } from '../content/staff/edit-queue/edit-queue.component';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { ManageManagerComponent } from '../content/admin/manage-manager/manage-manager.component';
@@ -22,6 +23,7 @@ import { ManageWithdrawComponent } from '../content/manager/manage-withdraw/mana
 import { ManageReturnComponent } from '../content/manager/manage-return/manage-return.component';
 import { ProfileStaffComponent } from '../content/staff/profile-staff/profile-staff.component';
 import { ProfileCashierComponent } from '../content/cashier/profile-cashier/profile-cashier.component';
+import { ManageCleanerComponent } from '../content/cashier/manage-cleaner/manage-cleaner.component';
 
 const routes: Routes = [
   {
@@ -97,6 +99,10 @@ const routes: Routes = [
             component : CheckPromotionComponent
           },
           {
+            path: 'manageEmployee',
+            component : ManageCleanerComponent
+          },
+          {
             path: 'manageMember',
             component : ManageMembersComponent
           },
@@ -138,9 +144,14 @@ const routes: Routes = [
             component: WithdrawReturnComponent
           },
           {
+            path : 'editQueue',
+            component : EditQueueComponent
+          },
+          {
             path : ':id',
             component : ProfileStaffComponent
           }
+
         ]
       }
     ]

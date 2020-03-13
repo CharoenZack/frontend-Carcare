@@ -87,9 +87,14 @@ export class MenubarComponent implements OnInit {
       case 3:
         this.menuSideBar = [
           {
-            label: 'จัดารโปรไฟล์',
+            label: 'จัดการโปรไฟล์',
             icon: 'pi pi-fw pi-users',
             routerLink: ['/content/cashier/', this.userId]
+          },
+          {
+            label: 'จัดการพนักงาน',
+            icon: 'pi pi-fw pi-users',
+            routerLink: '/content/cashier/manageEmployee'
           },
           {
             label: 'จัดการสมาชิก',
@@ -117,6 +122,11 @@ export class MenubarComponent implements OnInit {
             label: 'ตรวจสอบคิวล้างรถ',
             icon: 'pi pi-fw pi-users',
             routerLink: '/content/staff/checkqueue'
+          },
+          {
+            label: 'จัดการคิวล้างรถ',
+            icon: 'pi pi-fw pi-users',
+            routerLink: '/content/staff/editQueue'
           },
           { label: 'อุปกรณ์', icon: 'pi pi-fw pi-users' , routerLink: '/content/staff/tool'},
           { label: 'เบิกอุปกรณ์ล้างรถ', icon: 'pi pi-fw pi-users' , routerLink: '/content/staff/withdraw' }

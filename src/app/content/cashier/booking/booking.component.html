@@ -118,7 +118,7 @@
       <label for="car">เลือกรถ</label>
     </div>
     <div class="p-col-4">
-      <p-dropdown [options]="carList" formControlName = "car" optionLabel="label" (onChange)="changeCar()"></p-dropdown>
+      <p-dropdown [options]="carList" formControlName = "car" optionLabel="label" (onChange)="changeCar($event)"></p-dropdown>
     </div>
     <div class="p-col-4" style="text-align: left;"></div>
       <div class="p-col-4" style="text-align: right;">
@@ -156,7 +156,8 @@
         <label for="reserveTime">เวลาจอง</label>
       </div>
       <div class="p-col-4">
-        <input type="text" formControlName="reserveTime" pInputText readonly/>
+        <!-- <input type="text" formControlName="reserveTime" pInputText readonly/> -->
+        <p-calendar formControlName="reserveTime" [timeOnly]="true"></p-calendar>
       </div>
       <div class="p-col-4" style="text-align: left;">
         <div *ngIf="formError.reserveDateTime" class="text-danger text-invalid">{{formError.reserveDateTime }}</div>

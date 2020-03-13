@@ -105,11 +105,11 @@ export class BookingComponent implements OnInit {
           ...this.reservation,
           ...rs.map(res => {
             if (res.reserv_status === 0) {
-              status = 'รอการดำเนินการ';
+              status = 'จองคิว';
             } else if (res.reserv_status === 1) {
-              status = 'กำลังดำเนินการ';
+              status = 'กำลังล้าง';
             } else if (res.reserv_status === 2) {
-              status = 'เสร็จสิ้นการดำเนินการ';
+              status = 'รอการชำระเงิน';
             }
             return { ...res, ...{ status } };
           })
@@ -128,14 +128,15 @@ export class BookingComponent implements OnInit {
       .subscribe((rs: any[]) => {
         if (typeof rs !== 'undefined' && rs.length > 0) {
           rs.map(res => {
-            if (res.queue_date === moment(new Date()).format('YYYY-MM-DD')) {
+            if (res.queue_date === moment(new Date()).format('YYYY-MM-DD') || res.reserv_status !== 3) {
+              // this.formBooking.get('reserveTime').setValue(moment(new Date()).format('kk:mm'));
               this.formBooking.get('reserveTime').setValue(res.end_date);
-            } else {
-              this.formBooking.get('reserveTime').setValue('09:00');
+            } else if (res.queue_date === moment(new Date()).format('YYYY-MM-DD') && res.reserv_status === 3){
+              this.formBooking.get('reserveTime').setValue(moment(new Date()).format('kk:mm'));
             }
           });
         } else {
-          this.formBooking.get('reserveTime').setValue('09:00');
+          this.formBooking.get('reserveTime').setValue(moment(new Date()).format('kk:mm'));
         }
       });
   }
@@ -154,6 +155,7 @@ export class BookingComponent implements OnInit {
     this.carList = [{ label: 'โปรดเลือกรถ', value: 0 }];
     this.carService.getCarByMember(event.value.value).subscribe(rs => {
       rs.map(res => {
+
         this.carList = [
           ...this.carList,
           {
@@ -166,15 +168,15 @@ export class BookingComponent implements OnInit {
     });
   }
 
-  changeCar() {
+  changeCar(event) {
     this.cleanList = [];
     const { car } = this.formBooking.getRawValue();
     this.formBooking.get('cleanServiceForm').reset();
-    this.cleanService.getCleanServiceByTypeCar(car.type_car).subscribe(rs => {
+    this.cleanService.getCleanServiceByTypeCar(event.value.type_car).subscribe(rs => {
       rs.map(res => {
         this.cleanList = [
           ...this.cleanList,
-          { label: res.service_name, value: res.clean_service_detail_id }
+          { label: [res.service_name + ' ' + res.service_price + ' ' + "บาท" ], value: res.clean_service_detail_id }
         ];
       });
     });
@@ -187,7 +189,7 @@ export class BookingComponent implements OnInit {
       cleanServiceForm: new FormControl(null, Validators.required),
       carWash: new FormControl(null, Validators.required),
       reserveDate: new FormControl(moment(new Date()).format('YYYY-MM-DD')),
-      reserveTime: new FormControl(null, Validators.required),
+      reserveTime: new FormControl(moment(new Date()).format('kk:mm')),
       cashierId: new FormControl(localStorage.getItem('userId'))
     });
     this.formBooking.valueChanges
@@ -197,6 +199,7 @@ export class BookingComponent implements OnInit {
 
   submitFormBooking() {
     this.reservation = [];
+    console.log(this.formBooking.getRawValue());
     if (this.formBooking.valid) {
       const {
         member,
@@ -235,11 +238,11 @@ export class BookingComponent implements OnInit {
                     ...this.reservation,
                     ...rs.map(res => {
                       if (res.reserv_status === 0) {
-                        status = 'รอการดำเนินการ';
+                        status = 'จองคิว';
                       } else if (res.reserv_status === 1) {
-                        status = 'กำลังดำเนินการ';
+                        status = 'กำลังล้าง';
                       } else if (res.reserv_status === 2) {
-                        status = 'เสร็จสิ้นการดำเนินการ';
+                        status = 'รอการชำระเงิน';
                       }
                       return { ...res, ...{ status } };
                     })
@@ -328,11 +331,11 @@ export class BookingComponent implements OnInit {
                   ...this.reservation,
                   ...rs.map(res => {
                     if (res.reserv_status === 0) {
-                      status = 'รอการดำเนินการ';
+                      status = 'จองคิว';
                     } else if (res.reserv_status === 1) {
-                      status = 'กำลังดำเนินการ';
+                      status = 'กำลังล้าง';
                     } else if (res.reserv_status === 2) {
-                      status = 'เสร็จสิ้นการดำเนินการ';
+                      status = 'รอการชำระเงิน';
                     }
                     return { ...res, ...{ status } };
                   })

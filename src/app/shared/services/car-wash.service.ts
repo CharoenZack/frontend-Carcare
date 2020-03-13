@@ -7,14 +7,24 @@ import { map } from 'rxjs/operators';
 })
 export class CarWashService {
 
-  constructor(private http : HttpClient) { }
+  constructor(private http: HttpClient) { }
 
-  getAllcarWash(){
-    return this.http.get('/app/getAllCar_wash' , {
+  getAllcarWash() {
+    return this.http.get('/app/getAllCar_wash', {
       headers: {
         Authorization: `${localStorage.getItem('access-token')}`
       }
-    }).pipe(map((rs : any)=>{
+    }).pipe(map((rs: any) => {
+      return rs.data;
+    }))
+  }
+
+  getAllcarWashDetail() {
+    return this.http.get('/app/getAllCar_wash_detail', {
+      headers: {
+        Authorization: `${localStorage.getItem('access-token')}`
+      }
+    }).pipe(map((rs: any) => {
       return rs.data;
     }))
   }

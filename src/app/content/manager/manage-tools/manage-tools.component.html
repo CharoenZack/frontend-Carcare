@@ -3,104 +3,73 @@
     <div style="text-align:center">
       <h1>จัดการอุปกรณ์ล้างรถ</h1>
     </div>
-      <hr />
-      <p-messages [(value)]="msgs"></p-messages>
-            <p-table [paginator]="true" [rows]="10" [responsive]="true" [value]="tool">
-              <ng-template pTemplate="caption">
-                <div style="text-align:left">
-                  <!-- <button pButton type="button" id="btn-Increase" label="เพิ่ม" class="ui-button-temple"
+    <hr />
+    <p-messages [(value)]="msgs"></p-messages>
+    <p-table [paginator]="true" [rows]="10" [responsive]="true" [value]="tool">
+      <ng-template pTemplate="caption">
+        <div style="text-align:left">
+          <!-- <button pButton type="button" id="btn-Increase" label="เพิ่ม" class="ui-button-temple"
                     style="width: 20%"></button> -->
-                  <button
-                    pButton
-                    type="button"
-                    label="เพิ่ม"
-                    class="ui-button-rounded ui-button-success"
-                    style="font-size: 15px; width: 10%;"
-                    (click)="addTool()"
-                  ></button>
-                </div>
-              </ng-template>
-              <ng-template pTemplate="header" let-columns>
-                <tr>
-                  <th pSortableColumn="name">
-                    ชื่ออุปกรณ์
-                    <p-sortIcon
-                      field="nameAbbr"
-                      ariaLabel="Activate to sort"
-                      ariaLabelDesc="Activate to sort in descending order"
-                      ariaLabelAsc="Activate to sort in ascending order"
-                    >
-                    </p-sortIcon>
-                  </th>
-                  <th pSortableColumn="tel">
-                    จำนวน
-                    <p-sortIcon
-                      field="name"
-                      ariaLabel="Activate to sort"
-                      ariaLabelDesc="Activate to sort in descending order"
-                      ariaLabelAsc="Activate to sort in ascending order"
-                    >
-                    </p-sortIcon>
-                  </th>
-                  <th pSortableColumn="date">
-                    คงเหลือ
-                    <p-sortIcon
-                      field="name"
-                      ariaLabel="Activate to sort"
-                      ariaLabelDesc="Activate to sort in descending order"
-                      ariaLabelAsc="Activate to sort in ascending order"
-                    >
-                    </p-sortIcon>
-                  </th>
-                  <th>ดำเนินการ</th>
-                </tr>
-              </ng-template>
-              <ng-template pTemplate="body" let-rowData let-columns="columns">
-                <tr>
-                <td>{{ rowData.tool_name }}</td>
-                <td>{{ rowData.amount }}</td>
-                <td>{{ rowData.tool_status }}</td>
-                  <td>
-                    <div style="text-align:center">
-                      <button
-                        pButton
-                        type="button"
-                        label="แก้ไข"
-                        class="ui-button-warning"
-                        style="width: 40%;"
-                        (click) = "editTool(rowData)"
-                      ></button>
-                      <button
-                        pButton
-                        type="button"
-                        label="ลบ"
-                        class="ui-button-danger"
-                        style="width: 40%;margin-left: 5mm"
-                        (click)="confirm(rowData.employee_id)"
-                      ></button>
-                    </div>
-                  </td>
-                </tr>
-              </ng-template>
-            </p-table>
-          </div>
+          <button pButton type="button" label="เพิ่ม" class="ui-button-rounded ui-button-success"
+            style="font-size: 15px; width: 10%;" (click)="addTool()"></button>
         </div>
-<p-dialog
-  header="เพิ่มอุปกรณ์ในการล้างรถ"
-  [(visible)]="display"
-  [modal]="true"
-  [style]="{ width: '50vw' }"
-  [maximizable]="true"
-  [baseZIndex]="10000"
-  [draggable]="false"
-  [resizable]="false"
->
+      </ng-template>
+      <ng-template pTemplate="header" let-columns>
+        <tr>
+          <th pSortableColumn="name">
+            ชื่ออุปกรณ์
+            <p-sortIcon field="nameAbbr" ariaLabel="Activate to sort"
+              ariaLabelDesc="Activate to sort in descending order" ariaLabelAsc="Activate to sort in ascending order">
+            </p-sortIcon>
+          </th>
+          <th pSortableColumn="tel">
+            จำนวน
+            <p-sortIcon field="name" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order"
+              ariaLabelAsc="Activate to sort in ascending order">
+            </p-sortIcon>
+          </th>
+          <th pSortableColumn="date">
+            คงเหลือ
+            <p-sortIcon field="name" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order"
+              ariaLabelAsc="Activate to sort in ascending order">
+            </p-sortIcon>
+          </th>
+          <th pSortableColumn="position">
+            ตำแหน่ง
+            <p-sortIcon field="name" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order"
+              ariaLabelAsc="Activate to sort in ascending order">
+            </p-sortIcon>
+          </th>
+          <th>ดำเนินการ</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-rowData let-columns="columns">
+        <tr>
+          <td>{{ rowData.tool_name }}</td>
+          <td>{{ rowData.amount }}</td>
+          <td>{{ rowData.tool_status }}</td>
+          <td>{{ rowData.position_work }}</td>
+          <td>
+            <div style="text-align:center">
+              <button pButton type="button" label="แก้ไข" class="ui-button-warning" style="width: 40%;"
+                (click)="editTool(rowData)"></button>
+              <button pButton type="button" label="ลบ" class="ui-button-danger" style="width: 40%;margin-left: 5mm"
+                (click)="confirm(rowData.wash_tool_id)"></button>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+</div>
+<p-dialog header="เพิ่มอุปกรณ์ในการล้างรถ" [(visible)]="display" [modal]="true" [style]="{ width: '55vw' }"
+  [maximizable]="true" [baseZIndex]="10000" [draggable]="false" [resizable]="false">
   <div class="p-grid" [formGroup]="formTool">
     <div class="p-col-4" style="text-align: right;">
       <label for="tool">อุปกรณ์</label>
     </div>
     <div class="p-col-4">
-      <input type="text" pInputText formControlName="tool" id ="tool"/>
+      <input type="text" pInputText formControlName="tool" id="tool" />
     </div>
     <div class="p-col-4" style="text-align: left;">
       <div *ngIf="formError.tool" class="text-danger text-invalid">{{formError.tool }}</div>
@@ -109,74 +78,63 @@
       <label for="amount">จำนวน</label>
     </div>
     <div class="p-col-4">
-      <input type="number" pInputText formControlName="amount" id ="amount"/>
+      <input type="number" pInputText formControlName="amount" id="amount" />
     </div>
     <div class="p-col-4" style="text-align: left;">
       <div *ngIf="formError.amount" class="text-danger text-invalid">{{formError.amount }}</div>
     </div>
-      <div class="p-col-4" style="text-align: right;">
-        <label for="status">สถานะ</label>
-      </div>
-      <div class="p-col-4">
-        <input type="text" pInputText formControlName="status" id="status"/>
-      </div>
-      <div class="p-col-12" style="text-align: center;">
-        <button
-      type="button"
-      pButton
-      icon="pi pi-check"
-      label="บันทึก"
-      (click)="submitFormTool()"
-    ></button>
-      </div>
+    <div class="p-col-4" style="text-align: right;">
+      <label for="status">สถานะ</label>
+    </div>
+    <div class="p-col-6">
+      <input type="text" pInputText formControlName="status" id="status" />
+    </div>
+    <div class="p-col-4" style="text-align: right;">
+      <label for="position">ตำแหน่ง</label>
+    </div>
+    <div class="p-col-4">
+      <p-dropdown [options]="positionList" formControlName="position" optionLabel="label"></p-dropdown>
+    </div>
+    <div class="p-col-4" style="text-align: left;">
+      <div *ngIf="formError.position" class="text-danger text-invalid">{{formError.position }}</div>
+    </div>
+    <div class="p-col-12" style="text-align: center;">
+      <button type="button" pButton icon="pi pi-check" label="บันทึก" (click)="submitFormTool()"></button>
+    </div>
   </div>
 </p-dialog>
 
-<p-dialog
-  header="แก้ไขข้อมูลอุปกรณ์ล้างรถ"
-  [(visible)]="displayEdit"
-  [modal]="true"
-  [style]="{ width: '50vw' }"
-  [maximizable]="true"
-  [baseZIndex]="10000"
-  [draggable]="false"
-  [resizable]="false"
->
+<p-dialog header="แก้ไขข้อมูลอุปกรณ์ล้างรถ" [(visible)]="displayEdit" [modal]="true" [style]="{ width: '50vw' }"
+  [maximizable]="true" [baseZIndex]="10000" [draggable]="false" [resizable]="false">
   <div class="p-grid" [formGroup]="formEditTool">
-      <div class="p-col-4" style="text-align: right;">
-        <label for="editTool">อุปกรณ์</label>
-      </div>
-      <div class="p-col-8">
-        <input type="text" pInputText formControlName="editTool" id="editTool"/>
-      </div>
-      <div class="p-col-4" style="text-align: right;">
-        <label for="editAmount">จำนวน</label>
-      </div>
-      <div class="p-col-8">
-        <input type="number" pInputText formControlName="editAmount" id="editAmount"/>
-      </div>
-      <div class="p-col-4" style="text-align: right;">
-        <label for="editStatus">สถานะ</label>
-      </div>
-      <div class="p-col-8">
-        <input type="text" pInputText formControlName="editStatus" id ="editStatus"/>
-      </div>
-      <input type="hidden" formControlName="id"/>
-      <div class="p-col-12" style="text-align: center;">
-        <button
-      type="button"
-      pButton
-      icon="pi pi-check"
-      label="บันทึก"
-      (click)="updateTool()"
-    ></button>
-      </div>
+    <div class="p-col-4" style="text-align: right;">
+      <label for="editTool">อุปกรณ์</label>
+    </div>
+    <div class="p-col-8">
+      <input type="text" pInputText formControlName="editTool" id="editTool" />
+    </div>
+    <div class="p-col-4" style="text-align: right;">
+      <label for="editAmount">จำนวน</label>
+    </div>
+    <div class="p-col-8">
+      <input type="number" pInputText formControlName="editAmount" id="editAmount" />
+    </div>
+    <div class="p-col-4" style="text-align: right;">
+      <label for="editStatus">สถานะ</label>
+    </div>
+    <div class="p-col-8">
+      <input type="text" pInputText formControlName="editStatus" id="editStatus" />
+    </div>
+    <input type="hidden" formControlName="id" />
+    <div class="p-col-12" style="text-align: center;">
+      <button type="button" pButton icon="pi pi-check" label="บันทึก" (click)="updateTool()"></button>
+    </div>
   </div>
 </p-dialog>
 
 <p-confirmDialog #cd header="ลบข้อมูล" icon="pi pi-exclamation-triangle">
   <p-footer>
     <button type="button" pButton icon="pi pi-check" label="คกลง" (click)="cd.accept()"></button>
-      <button type="button" pButton icon="pi pi-times" label="ยกเลิก" (click)="cd.reject()"></button>
+    <button type="button" pButton icon="pi pi-times" label="ยกเลิก" (click)="cd.reject()"></button>
   </p-footer>
 </p-confirmDialog>
