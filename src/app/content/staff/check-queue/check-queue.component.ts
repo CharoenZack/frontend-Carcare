@@ -18,7 +18,9 @@ export class CheckQueueComponent implements OnInit {
     members_name : null,
     typeCar : null,
     service : null,
-    province: null
+    province: null,
+    queueId: 0,
+    reservStatus : null
   };
   constructor(
     private reservationService: ReservationService,
@@ -37,7 +39,6 @@ export class CheckQueueComponent implements OnInit {
         if(res.employee_id === parseInt(localStorage.getItem('userId').toString())){
           this.carWashList.push({label : res.car_wash_name , value : res.car_wash_id });
         }
-        console.log(this.carWashList);
       });
     });
   }
@@ -47,7 +48,7 @@ export class CheckQueueComponent implements OnInit {
       .getQueueByEmployeeId(localStorage.getItem('userId'))
       .subscribe(rs => {
         rs.map(res=>{
-          console.log(res.car_detail.resultReserve.queue_date);
+          console.log(res);
           if (
             res.car_detail.resultReserve.queue_date ===
             moment(new Date()).format('YYYY-MM-DD')
@@ -71,7 +72,22 @@ export class CheckQueueComponent implements OnInit {
         ' ' +
         data.car_detail.resultReserve.size,
       service: data.car_detail.service,
-      province: data.member.province_name
+      province: data.member.province_name,
+      queueId: data.car_detail.resultReserve.queue_id,
+      reservStatus : data.car_detail.resultReserve.reserv_status
     };
+  }
+
+  updateStatus(queue){
+
+    const payload = {
+      status : queue.reservStatus,
+      queue_id : queue.queueId
+    };
+    
+    this.reservationService.updateStatusReservationByStaff(payload).subscribe(rs=>{
+      this.display = false;
+      location.reload();
+    });
   }
 }

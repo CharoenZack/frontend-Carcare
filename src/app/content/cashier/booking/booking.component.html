@@ -80,8 +80,16 @@
                   <td>{{ rowData.car_wash_name}}</td>
                   <td>{{ rowData.status}}</td>
                   <td>
-                    <div *ngIf="rowData.reserv_status !== 2">
-                      <button pButton label="อัพเดตสถานะ" (click)="updateStatusReserve(rowData)"></button>
+                    <div [ngSwitch]="rowData.reserv_status">
+                      <div *ngSwitchCase="0">
+                        <label>กำลังรอการดำเนินงาน</label>
+                      </div>
+                      <div *ngSwitchCase="1">
+                        <label>กำลังดำเนินงาน</label>
+                      </div>
+                      <div *ngSwitchCase="2">
+                        <label>เสร็จสิ้นการดำเนินงาน</label>
+                      </div>
                     </div>
                   </td>
                 </tr>
