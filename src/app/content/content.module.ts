@@ -117,7 +117,8 @@ import { ProfileCashierComponent } from './cashier/profile-cashier/profile-cashi
     TooltipModule,
     KeyFilterModule,
     FileUploadModule,
-    TabViewModule
+    TabViewModule,
+    ButtonModule
   ],
   providers: [
     AuthService,

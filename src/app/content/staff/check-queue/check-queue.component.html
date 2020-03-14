@@ -22,6 +22,17 @@
                           <div>เวลาจอง :{{ reservation.car_detail.resultReserve.start_date }}</div>
                           <div>เลขทะเบียน :{{ reservation.member.member_license }}</div>
                           <div>จังหวัด :{{ reservation.member.province_name }}</div>
+                          <div style="text-align: right;" [ngSwitch]="reservation.car_detail.resultReserve.reserv_status">
+                            <div *ngSwitchCase="0" style="color: red;">
+                              สถานะ : รอการดำเนินงาน
+                            </div>
+                            <div *ngSwitchCase="1" style="color: orange;">
+                              สถานะ : กำลังดำเนินงาน
+                            </div>
+                            <div *ngSwitchCase="2" style="color : green">
+                              สถานะ : เสร็จสิ้นการดำเนินงาน
+                            </div>
+                          </div>
                         </p-card>
                       </div>
                     </div>
@@ -76,6 +87,9 @@
       </div>
       <div class="p-col-6">
         <div>{{ queueDetail.service }}</div>
+      </div>
+      <div class="p-col-12" style="text-align: right;" *ngIf="queueDetail.reservStatus == 0 || queueDetail.reservStatus == 1">
+        <button (click)="updateStatus(queueDetail)" label="อัพเดตสถานะ" pButton></button>
       </div>
     </div>
   </p-dialog>
