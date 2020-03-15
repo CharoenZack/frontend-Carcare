@@ -119,6 +119,11 @@ export class BookingComponent implements OnInit {
 
   changeCarWash(event) {
     const carWash = event.value;
+    const currentDate = moment(new Date()).format('YYYY-MM-DD');
+    const currentTime = moment.utc(
+      moment(new Date()).format('HH:mm'),
+      'HH:mm'
+    );
     const payload = {
       employee_id: localStorage.getItem('userId'),
       car_wash_id: carWash.value
@@ -127,28 +132,60 @@ export class BookingComponent implements OnInit {
       .getAllReservationByCarWash(payload)
       .subscribe((rs: any[]) => {
         if (typeof rs !== 'undefined' && rs.length > 0) {
-          rs.map(res => {
-            if (res.queue_date === moment(new Date()).format('YYYY-MM-DD') || res.reserv_status !== 3) {
-              // this.formBooking.get('reserveTime').setValue(moment(new Date()).format('kk:mm'));
-              this.formBooking.get('reserveTime').setValue(res.end_date);
-            } else if (res.queue_date === moment(new Date()).format('YYYY-MM-DD') && res.reserv_status === 3){
-              this.formBooking.get('reserveTime').setValue(moment(new Date()).format('kk:mm'));
+          rs.forEach(res => {
+            if (res.queue_date === currentDate) {
+              const start = moment.utc(res.start_date, 'HH:mm');
+              const end = moment.utc(res.end_date, 'HH:mm');
+              const diffTimeSE = moment.duration(end.diff(start));
+              const totalTimeSE =
+                diffTimeSE.get('hours') * 60 + diffTimeSE.get('minutes');
+              const diffTimeEC = moment.duration(currentTime.diff(start));
+              const totalTimeEC =
+                diffTimeEC.get('hours') * 60 + diffTimeEC.get('minutes');
+              if (totalTimeEC > totalTimeSE) {
+                this.formBooking.get('reserveTime').setValue(moment(new Date()).format('HH:mm:ss'));
+              } else {
+                this.formBooking.get('reserveTime').setValue(res.end_date);
+              }
+            } else {
+              const initial = moment.utc('09:00','HH:mm');
+              const diffTimeIC = moment.duration(currentTime.diff(initial));
+              const totalTimeIC =
+              diffTimeIC.get('hours') * 60 + diffTimeIC.get('minutes');
+              if(totalTimeIC > 0){
+                this.formBooking.get('reserveTime').setValue(moment(new Date()).format('HH:mm:ss'));
+              }else{
+                this.formBooking.get('reserveTime').setValue('09:00:00');
+              }
             }
           });
-        } else {
-          this.formBooking.get('reserveTime').setValue(moment(new Date()).format('kk:mm'));
+        }else{
+          const initial = moment.utc('09:00','HH:mm');
+          const current = moment.utc(
+            moment(new Date()).format('HH:mm'),
+            'HH:mm'
+          );
+          const diffTimeIC = moment.duration(current.diff(initial));
+          const totalTimeIC =
+          diffTimeIC.get('hours') * 60 + diffTimeIC.get('minutes');
+          if(totalTimeIC > 0){
+            this.formBooking.get('reserveTime').setValue(moment(new Date()).format('HH:mm:ss'));
+          }else{
+            this.formBooking.get('reserveTime').setValue('09:00:00');
+          }
         }
       });
   }
 
   getAllmember() {
-    this.memberService
-      .getAllmembers()
-      .subscribe(rs => {
-        rs.map(res => {
-          this.results = [...this.results , { label: res.members_fname + ' ' + res.members_lname, value: res.members_id }];
-        });
+    this.memberService.getAllmembers().subscribe(rs => {
+      rs.map(res => {
+        this.results = [
+          ...this.results,
+          { label: res.members_fname, value: res.members_id }
+        ];
       });
+    });
   }
 
   selectMember(event) {
@@ -165,6 +202,7 @@ export class BookingComponent implements OnInit {
           }
         ];
       });
+      console.log(this.carList);
     });
   }
 

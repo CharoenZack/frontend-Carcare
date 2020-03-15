@@ -156,8 +156,7 @@
         <label for="reserveTime">เวลาจอง</label>
       </div>
       <div class="p-col-4">
-        <!-- <input type="text" formControlName="reserveTime" pInputText readonly/> -->
-        <p-calendar formControlName="reserveTime" [timeOnly]="true"></p-calendar>
+        <input type="text" formControlName="reserveTime" pInputText readonly/>
       </div>
       <div class="p-col-4" style="text-align: left;">
         <div *ngIf="formError.reserveDateTime" class="text-danger text-invalid">{{formError.reserveDateTime }}</div>

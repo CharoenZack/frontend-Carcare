@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ReservationService } from 'src/app/shared/services/reservation.service';
 import { Message } from 'primeng/api';
+import { CarWashService } from 'src/app/shared/services/car-wash.service';
 @Component({
   selector: 'app-edit-queue',
   templateUrl: './edit-queue.component.html',
@@ -9,19 +10,32 @@ import { Message } from 'primeng/api';
 export class EditQueueComponent implements OnInit {
   reservation = [];
   msgs: Message[] = [];
+  carWashList = [];
   constructor(
     private reservationService: ReservationService,
+    private carWashService: CarWashService
   ) { }
 
   ngOnInit() {
     this.getAllReservation();
+    this.getAllCarWash();
+  }
+  getAllCarWash() {
+    this.carWashService.getAllcarWashDetail().subscribe(rs => {
+      rs.map(res => {
+        // console.log(typeof(res.employee_id) +"="+ parseInt(localStorage.getItem('userId')))
+        console.log(rs);
+
+        this.carWashList.push({ label: res.car_wash_name, value: res.car_wash_id });
+      });
+    });
   }
 
   getAllReservation() {
     let status = '';
     this.reservation = [];
     this.reservationService
-      .getAllReservation(localStorage.getItem('userId'))
+      .getAllReservationsWCleaner(localStorage.getItem('userId'))
       .subscribe(rs => {
         this.reservation = [
           ...this.reservation,
@@ -38,4 +52,5 @@ export class EditQueueComponent implements OnInit {
         ];
       });
   }
+
 }

@@ -18,7 +18,16 @@ export class ReservationService {
       return rs.data;
     }))
   }
-
+  getAllReservationsWCleaner(id) {
+    console.log(id);
+    return this.http.get(`/app/getAllReservationsWCleaner/`, {
+      headers: {
+        Authorization: `${localStorage.getItem('access-token')}`
+      }
+    }).pipe(map((rs: any) => {
+      return rs.data;
+    }))
+  }
   createReservation(data) {
     return this.http.post('/app/create', data, {
       headers: {
