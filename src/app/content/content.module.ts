@@ -121,7 +121,8 @@ import { EditQueueComponent } from './staff/edit-queue/edit-queue.component';
     TooltipModule,
     KeyFilterModule,
     FileUploadModule,
-    TabViewModule
+    TabViewModule,
+    ButtonModule
   ],
   providers: [
     AuthService,

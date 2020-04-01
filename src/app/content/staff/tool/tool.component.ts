@@ -10,6 +10,7 @@ import { map } from 'rxjs/operators';
 })
 export class ToolComponent implements OnInit {
   public userRole: string;
+  display = false;
   washTool = [];
   constructor(
     private route: ActivatedRoute,
@@ -18,12 +19,15 @@ export class ToolComponent implements OnInit {
   ngOnInit() {
     this.getAllWashTool();
     this.userRole = localStorage.getItem('position');
+    console.log(this.userRole);
+
   }
 
   getAllWashTool() {
-    this.washToolService.getAllWashTool().subscribe(rs => {
-        this.washTool = rs;
-        console.log(this.washTool);
-      })
+    this.washToolService.getWashToolWPosition(localStorage.getItem('position')).subscribe(rs => {
+      rs.map(res => {
+        this.washTool.push(res)
+      });
+    })
   }
 }

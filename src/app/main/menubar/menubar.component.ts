@@ -123,11 +123,11 @@ export class MenubarComponent implements OnInit {
             icon: 'pi pi-fw pi-users',
             routerLink: '/content/staff/checkqueue'
           },
-          {
-            label: 'จัดการคิวล้างรถ',
-            icon: 'pi pi-fw pi-users',
-            routerLink: '/content/staff/editQueue'
-          },
+          // {
+          //   label: 'จัดการคิวล้างรถ',
+          //   icon: 'pi pi-fw pi-users',
+          //   routerLink: '/content/staff/editQueue'
+          // },
           { label: 'อุปกรณ์', icon: 'pi pi-fw pi-users' , routerLink: '/content/staff/tool'},
           { label: 'เบิกอุปกรณ์ล้างรถ', icon: 'pi pi-fw pi-users' , routerLink: '/content/staff/withdraw' }
         ];

@@ -20,7 +20,9 @@ export class ManageQueueComponent implements OnInit {
     license: null,
     total_price: null,
     members_name: null,
-    typeCar: null,
+    brandCar: null,
+    sizeCar: null,
+    modelCar: null,
     service: null,
     province: null
   };
@@ -69,12 +71,9 @@ export class ManageQueueComponent implements OnInit {
       license: data.member.member_license,
       total_price: data.car_detail.resultReserve.total_price,
       members_name: data.member.members_fname + ' ' + data.member.members_lname,
-      typeCar:
-        data.car_detail.resultReserve.model_name +
-        ' ' +
-        data.car_detail.resultReserve.brand +
-        ' ' +
-        data.car_detail.resultReserve.size,
+      modelCar: data.car_detail.resultReserve.model_name,
+      brandCar: data.car_detail.resultReserve.brand,
+      sizeCar: data.car_detail.resultReserve.size,
       service: data.car_detail.service,
       province : data.member.province_name
     };

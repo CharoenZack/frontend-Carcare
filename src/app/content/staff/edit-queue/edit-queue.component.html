@@ -10,9 +10,13 @@
         <div class="p-gird">
           <div class="p-col-12">
             <p-messages [(value)]="msgs"></p-messages>
-            <p-table #dt [paginator]="true" [value]="reservation" [rows]="10" [responsive]="true"
-              selectionMode="single">
+            <p-table #dt [paginator]="true" [value]="reservation" [rows]="10" [responsive]="true" selectionMode="single">
               <ng-template pTemplate="caption">
+                <div style="text-align:left">
+                  <button pButton type="button" label="จองคิว" class="ui-button-rounded ui-button-success"
+                    style="font-size: 15px; width: 10%;" (click)="bookingCarWash()"></button>
+                </div>
+
               </ng-template>
               <ng-template pTemplate="header" let-columns>
                 <tr>
@@ -68,7 +72,7 @@
               </ng-template>
               <ng-template pTemplate="body" let-rowData let-columns="columns">
                 <tr>
-                  <td>{{ rowData.members_fname}} {{ rowData.members_lname}}</td>
+                <td>{{ rowData.members_fname}} {{ rowData.members_lname}}</td>
                   <td>{{ rowData.queue_date}}</td>
                   <td>{{ rowData.start_date}}</td>
                   <td>{{ rowData.model_name+' '+rowData.brand+' '+rowData.size}}</td>
@@ -76,9 +80,17 @@
                   <td>{{ rowData.car_wash_name}}</td>
                   <td>{{ rowData.status}}</td>
                   <td>
-                    <!-- <div *ngIf="rowData.reserv_status !== 2">
-                      <button pButton label="อัพเดตสถานะ" (click)="updateStatusReserve(rowData)"></button>
-                    </div> -->
+                    <div [ngSwitch]="rowData.reserv_status">
+                      <div *ngSwitchCase="0">
+                        <label>กำลังรอการดำเนินงาน</label>
+                      </div>
+                      <div *ngSwitchCase="1">
+                        <label>กำลังดำเนินงาน</label>
+                      </div>
+                      <div *ngSwitchCase="2">
+                        <label>เสร็จสิ้นการดำเนินงาน</label>
+                      </div>
+                    </div>
                   </td>
                 </tr>
               </ng-template>
@@ -89,3 +101,84 @@
     </div>
   </div>
 </div>
+<p-dialog
+  header="จองคิวล้างรถ"
+  [(visible)]="display"
+  [modal]="true"
+  [style]="{ width: '50vw' , overflowY: 'scroll'}"
+  [maximizable]="true"
+  [baseZIndex]="10000"
+  [draggable]="false"
+  [resizable]="false"
+  [blockScroll]="true"
+>
+  <div class="p-grid" [formGroup]="formBooking">
+    <div class="p-col-4" style="text-align: right;">
+      <label for="member">สมาชิก</label>
+    </div>
+    <div class="p-col-4">
+      <p-dropdown [options]="results" formControlName = "member" optionLabel="label" (onChange)="selectMember($event)"></p-dropdown>
+    </div>
+    <div class="p-col-4" style="text-align: left;">
+      <div *ngIf="formError.member" class="text-danger text-invalid">{{formError.member }}</div>
+    </div>
+    <div class="p-col-4" style="text-align: right;">
+      <label for="car">เลือกรถ</label>
+    </div>
+    <div class="p-col-4">
+      <p-dropdown [options]="carList" formControlName = "car" optionLabel="label" (onChange)="changeCar($event)"></p-dropdown>
+    </div>
+    <div class="p-col-4" style="text-align: left;"></div>
+      <div class="p-col-4" style="text-align: right;">
+        <label for="cleanService">บริการ</label>
+      </div>
+      <div class="p-col-4">
+        <div class="p-col-12">
+          <div *ngFor="let serviceForm of cleanList;let i=index;">
+            <p-checkbox [value]="serviceForm.value" [label]="serviceForm.label" [formControl]="formBooking.get('cleanServiceForm')"></p-checkbox>
+          </div>
+        </div>
+      </div>
+      <div class="p-col-4" style="text-align: left;">
+        <div *ngIf="formError.cleanService" class="text-danger text-invalid">{{formError.cleanService }}</div>
+      </div>
+      <div class="p-col-4" style="text-align: right;">
+        <label for="phone">ช่องล้างรถ</label>
+      </div>
+      <div class="p-col-4">
+        <div>
+          <p-dropdown [options]="carWashList" formControlName = "carWash" optionLabel="label" (onChange)="changeCarWash($event)"></p-dropdown>
+        </div>
+      </div>
+      <div class="p-col-4" style="text-align: left;">
+        <div *ngIf="formError.carWash" class="text-danger text-invalid">{{formError.carWash }}</div>
+      </div>
+      <div class="p-col-4" style="text-align: right;">
+        <label for="reserveDate">วันที่จอง</label>
+      </div>
+      <div class="p-col-4">
+        <input type="text" formControlName="reserveDate" pInputText readonly/>
+      </div>
+      <div class="p-col-4"></div>
+      <div class="p-col-4" style="text-align: right;">
+        <label for="reserveTime">เวลาจอง</label>
+      </div>
+      <div class="p-col-4">
+        <input type="text" formControlName="reserveTime" pInputText readonly/>
+      </div>
+      <div class="p-col-4" style="text-align: left;">
+        <div *ngIf="formError.reserveDateTime" class="text-danger text-invalid">{{formError.reserveDateTime }}</div>
+      </div>
+      <input type="hidden" formControlName="cashierId"/>
+      <div class="p-col-12" style="text-align: center;">
+        <button
+      type="button"
+      pButton
+      icon="pi pi-check"
+      label="บันทึก"
+      (click)="submitFormBooking()"
+    ></button>
+      </div>
+  </div>
+</p-dialog>
+

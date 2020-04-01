@@ -31,8 +31,28 @@ export class TypecarService {
       return rs.data;
     }));
   }
+  getAllCar_detailOrderByBrand() {
+    return this.http.get('/app/getAllCar_detailOrderByBrand', {
+      headers: {
+        Authorization: `${localStorage.getItem('access-token')}`
+      }
+    }).pipe(map((rs: any) => {
+      return rs.data;
+    }));
+  }
   getAllCarDetailById(id) {
     return this.http.get(`/app/getCar_detailWId/${id}`, {
+      headers: {
+        Authorization: `${localStorage.getItem('access-token')}`
+      }
+    }).pipe(map((rs: any) => {
+      return rs.data;
+    }));
+  }
+  getCar_detailWSize(id) {
+    console.log(id);
+
+    return this.http.get(`/app/getCar_detailWSize/${id}`, {
       headers: {
         Authorization: `${localStorage.getItem('access-token')}`
       }

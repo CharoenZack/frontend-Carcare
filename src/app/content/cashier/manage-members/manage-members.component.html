@@ -10,46 +10,28 @@
         <div style="text-align:left">
           <!-- <button pButton type="button" id="btn-Increase" label="เพิ่ม" class="ui-button-temple"
                 style="width: 20%"></button> -->
-          <button
-            pButton
-            type="button"
-            label="เพิ่ม"
-            class="ui-button-rounded ui-button-success"
-            style="font-size: 15px; width: 10%;"
-            (click)="addMember()"
-          ></button>
+          <button pButton type="button" label="เพิ่ม" class="ui-button-rounded ui-button-success"
+            style="font-size: 15px; width: 10%;" (click)="addMember()"></button>
         </div>
       </ng-template>
       <ng-template pTemplate="header" let-columns>
         <tr>
           <th pSortableColumn="name">
             ชื่อ-นามสุกล
-            <p-sortIcon
-              field="nameAbbr"
-              ariaLabel="Activate to sort"
-              ariaLabelDesc="Activate to sort in descending order"
-              ariaLabelAsc="Activate to sort in ascending order"
-            >
+            <p-sortIcon field="nameAbbr" ariaLabel="Activate to sort"
+              ariaLabelDesc="Activate to sort in descending order" ariaLabelAsc="Activate to sort in ascending order">
             </p-sortIcon>
           </th>
           <th pSortableColumn="tel">
             ที่อยู่
-            <p-sortIcon
-              field="name"
-              ariaLabel="Activate to sort"
-              ariaLabelDesc="Activate to sort in descending order"
-              ariaLabelAsc="Activate to sort in ascending order"
-            >
+            <p-sortIcon field="name" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order"
+              ariaLabelAsc="Activate to sort in ascending order">
             </p-sortIcon>
           </th>
           <th pSortableColumn="date">
             เบอร์โทรศัพท์
-            <p-sortIcon
-              field="name"
-              ariaLabel="Activate to sort"
-              ariaLabelDesc="Activate to sort in descending order"
-              ariaLabelAsc="Activate to sort in ascending order"
-            >
+            <p-sortIcon field="name" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order"
+              ariaLabelAsc="Activate to sort in ascending order">
             </p-sortIcon>
           </th>
           <th>ดำเนินการ</th>
@@ -62,22 +44,10 @@
           <td>{{ rowData.members_tel }}</td>
           <td>
             <div style="text-align:center">
-              <button
-                pButton
-                type="button"
-                label="แก้ไข"
-                class="ui-button-warning"
-                style="width: 40%;"
-                (click)="editMember(rowData)"
-              ></button>
-              <button
-                pButton
-                type="button"
-                label="ลบ"
-                class="ui-button-danger"
-                style="width: 40%;margin-left: 5mm"
-                (click)="deleteMember(rowData.members_id)"
-              ></button>
+              <button pButton type="button" label="แก้ไข" class="ui-button-warning" style="width: 40%;"
+                (click)="editMember(rowData)"></button>
+              <button pButton type="button" label="ลบ" class="ui-button-danger" style="width: 40%;margin-left: 5mm"
+                (click)="deleteMember(rowData.members_id)"></button>
             </div>
           </td>
         </tr>
@@ -85,221 +55,175 @@
     </p-table>
   </div>
 </div>
-<p-dialog
-  header="เพิ่มสมาชิก"
-  [(visible)]="display"
-  [modal]="true"
-  [style]="{ width: '50vw', overflow :'auto', position:'absolute' }"
-  [maximizable]="true"
-  [baseZIndex]="10000"
-  [draggable]="false"
-  [resizable]="false"
-  positionType="absolute"
->
+<p-dialog header="เพิ่มสมาชิก" [(visible)]="display" [modal]="true"
+  [style]="{ width: '60vw', overflow :'auto', position:'absolute' }" [maximizable]="true" [baseZIndex]="10000"
+  [draggable]="false" [resizable]="false" positionType="absolute">
   <div class="p-grid" [formGroup]="formMember">
-    <div class="p-col-4" style="text-align: right;">
-      <label for="username">UserName</label>
+    <div class="p-col-3" style="text-align: right;">
+      <label for="username">Username</label>
     </div>
-    <div class="p-col-4">
-      <input type="text" pInputText formControlName="username" id ="username"/>
-    </div>
-    <div class="p-col-4" style="text-align: left;">
+    <div class="p-col-2">
+      <input type="text" pInputText formControlName="username" id="username" placeholder="Username" />
       <div *ngIf="formError.username" class="text-danger text-invalid">{{formError.username }}</div>
     </div>
-    <div class="p-col-4" style="text-align: right;">
+    <div class="p-col-2" style="text-align: right;">
       <label for="password">Password</label>
     </div>
-    <div class="p-col-4">
-      <input type="password" pInputText formControlName="password" id ="password"/>
-    </div>
-    <div class="p-col-4" style="text-align: left;">
+    <div class="p-col-3">
+      <input type="password" pInputText formControlName="password" id="password" placeholder="Password" />
       <div *ngIf="formError.password" class="text-danger text-invalid">{{formError.password }}</div>
     </div>
-      <div class="p-col-4" style="text-align: right;">
-        <label for="fname">ชื่อ</label>
-      </div>
-      <div class="p-col-4">
-        <input type="text" pInputText formControlName="fname" id="fname"/>
-      </div>
-      <div class="p-col-4" style="text-align: left;">
-        <div *ngIf="formError.fname" class="text-danger text-invalid">{{formError.fname }}</div>
-      </div>
-      <div class="p-col-4" style="text-align: right;">
-        <label for="lname">นามสกุล</label>
-      </div>
-      <div class="p-col-4">
-        <input type="text" pInputText formControlName="lname" id="lname"/>
-      </div>
-      <div class="p-col-4" style="text-align: left;">
-        <div *ngIf="formError.lname" class="text-danger text-invalid">{{formError.lname }}</div>
-      </div>
-      <div class="p-col-4" style="text-align: right;">
-        <label for="address">ที่อยู่</label>
-      </div>
-      <div class="p-col-4">
-        <input type="text" pInputText formControlName="address" id ="address"/>
-      </div>
-      <div class="p-col-4" style="text-align: left;">
-        <div *ngIf="formError.address" class="text-danger text-invalid">{{formError.address }}</div>
-      </div>
-      <div class="p-col-4" style="text-align: right;">
-        <label for="phone">เบอร์โทรศัพท์</label>
-      </div>
-      <div class="p-col-4">
-        <input type="text" pInputText formControlName="tel" id ="tel"/>
-      </div>
-      <div class="p-col-4" style="text-align: left;">
-        <div *ngIf="formError.tel" class="text-danger text-invalid">{{formError.tel }}</div>
-      </div>
-      <div class="p-col-4" style="text-align: right;">
-        <label for="car">เลือกรถ</label>
-      </div>
-      <div class="p-col-4"  *ngIf="formMember.get('carList').value.length === 0">
-        <button
-        pButton
-        type="button"
-        icon="pi pi-plus"
-        class="ui-button-danger"
-        (click)="addCar()"
-      ></button>
-      </div>
-      <div class="p-col-8" formArrayName="carList">
-        <div
-        *ngFor="
+    <!-- <div class="p-col-4" style="text-align: left;"></div> -->
+    <div class="p-col-3" style="text-align: right;">
+      <label for="fname">ชื่อ</label>
+    </div>
+    <div class="p-col-2">
+      <input type="text" pInputText formControlName="fname" id="fname" placeholder="ชื่อ" />
+      <div *ngIf="formError.fname" class="text-danger text-invalid">{{formError.fname }}</div>
+    </div>
+    <div class="p-col-2" style="text-align: right;">
+      <label for="lname">นามสกุล</label>
+    </div>
+    <div class="p-col-3">
+      <input type="text" pInputText formControlName="lname" id="lname" placeholder="นามสกุล" />
+      <div *ngIf="formError.lname" class="text-danger text-invalid">{{formError.lname }}</div>
+    </div>
+    <div class="p-col-3" style="text-align: right;">
+      <label for="address">ที่อยู่</label>
+    </div>
+    <div class="p-col-2">
+      <input type="text" pInputText formControlName="address" id="address" placeholder="ที่อยู่" />
+      <div *ngIf="formError.address" class="text-danger text-invalid">{{formError.address }}</div>
+    </div>
+    <div class="p-col-2" style="text-align: right;">
+      <label for="phone">เบอร์โทรศัพท์</label>
+    </div>
+    <div class="p-col-3">
+      <p-inputMask mask="(999) 999-9999" formControlName="tel" id="tel" placeholder="(999) 999-9999"></p-inputMask>
+      <div *ngIf="formError.tel" class="text-danger text-invalid">{{formError.tel }}</div>
+    </div>
+    <div class="p-col-3" style="text-align: right;">
+      <label for="car">เลือกรถ</label>
+    </div>
+    <div class="p-col-2" *ngIf="formMember.get('carList').value.length === 0">
+      <button pButton type="button" icon="pi pi-plus" class="ui-button-danger" (click)="addCar()"></button>
+    </div>
+    <div class="p-col-8" formArrayName="carList">
+      <div *ngFor="
           let car of funcCarList.controls;
           let i = index
-        "
-        formGroupName="{{ i }}">
-          <p-dropdown [options]="carDetail" formControlName = "car" optionLabel="label" value="value" (onChange)=getCarDetailById($event)></p-dropdown>
-          <button
-        pButton
-        type="button"
-        icon="pi pi-plus"
-        class="ui-button-danger"
-        (click)="addCar()"
-      ></button>
-      <button
-        pButton
-        type="button"
-        icon="pi pi-minus"
-        class="ui-button-danger"
-        (click)="removeCar(i)"
-      ></button>
-        <!-- <div>
-          <p-dropdown [options]="showCar" optionLabel="label"  ></p-dropdown>
-        </div> -->
-      <div>
-        <input type="text" pInputText formControlName="license" id ="license" placeholder="กรอกป้ายทะเบียน"/>
-        <div>
-          <p-dropdown [options]="provinceList" formControlName = "province" optionLabel="label"></p-dropdown>
+        " formGroupName="{{ i }}">
+        <div class="p-col-12">
+          <p-dropdown [options]="carDetail" optionLabel="label" value="value" (onChange)=getCarDetailById($event)>
+          </p-dropdown>
         </div>
-      </div>
+        <div class="p-col-12">
+          <p-dropdown [options]="carModelDetail" formControlName="car" optionLabel="label" value="value"
+            placeholder="กรุณาเลือกรุ่นรถ" (onChange)=getCarSize($event)></p-dropdown>
         </div>
+        <div class="p-col-12">
+          <p-dropdown [options]="size" optionLabel="label" value="value" dropdownIcon="" readonly="true"></p-dropdown>
+        </div>
+        <div class="p-col-4">
+          <input type="text" pInputText formControlName="license" id="license" placeholder="กรอกป้ายทะเบียน" />
+        </div>
+        <div class="p-col-4">
+          <p-dropdown [options]="provinceList" formControlName="province" optionLabel="label"></p-dropdown>
+        </div>
+        <button pButton type="button" icon="pi pi-plus" class="ui-button-danger" (click)="addCar()"></button>
+        <button pButton type="button" icon="pi pi-minus" class="ui-button-danger" (click)="removeCar(i)"></button>
       </div>
-      <input type = "hidden" formControlName="cashier_id"/>
-      <div class="p-col-12" style="text-align: center;">
-        <button
-      type="button"
-      pButton
-      icon="pi pi-check"
-      label="บันทึก"
-      (click)="submitFormMember()"
-    ></button>
-      </div>
+    </div>
+    <input type="hidden" formControlName="cashier_id" />
+    <div class="p-col-12" style="text-align: center;">
+      <button type="button" pButton icon="pi pi-check" label="บันทึก" (click)="submitFormMember()"></button>
+    </div>
   </div>
 </p-dialog>
-<p-dialog
-  header="แก้ไขข้อมูลสมาชิก"
-  [(visible)]="displayEdit"
-  [modal]="true"
-  [style]="{ width: '50vw' ,overflow :'auto', position:'absolute'}"
-  [maximizable]="true"
-  [baseZIndex]="10000"
-  [draggable]="false"
-  [resizable]="false"
->
+<p-dialog header="แก้ไขข้อมูลสมาชิก" [(visible)]="displayEdit" [modal]="true"
+  [style]="{ width: '50vw' ,overflow :'auto', position:'absolute'}" [maximizable]="true" [baseZIndex]="10000"
+  [draggable]="false" [resizable]="false">
   <div class="p-grid" [formGroup]="formEditMember">
-      <div class="p-col-4" style="text-align: right;">
-        <label for="editfname">ชื่อ</label>
-      </div>
-      <div class="p-col-8">
-        <input type="text" pInputText formControlName="editfname" id="editfname"/>
-      </div>
-      <div class="p-col-4" style="text-align: right;">
-        <label for="editlname">นามสกุล</label>
-      </div>
-      <div class="p-col-8">
-        <input type="text" pInputText formControlName="editlname" id="editlname"/>
-      </div>
-      <div class="p-col-4" style="text-align: right;">
-        <label for="editaddress">ที่อยู่</label>
-      </div>
-      <div class="p-col-8">
-        <input type="text" pInputText formControlName="editaddress" id ="editaddress"/>
-      </div>
-      <div class="p-col-4" style="text-align: right;">
-        <label for="editTel">เบอร์โทรศัพท์</label>
-      </div>
-      <div class="p-col-8">
-        <input type="text" pInputText formControlName="editTel" id ="editTel"/>
-      </div>
-      <div class="p-col-4" style="text-align: right;">
-        <label for="car">เลือกรถ</label>
-      </div>
-      <div class="p-col-8" formArrayName="editCarList" *ngIf="formEditMember.get('editCarList').value.length > 0">
-        <div
-        *ngFor="
+    <div class="p-col-4" style="text-align: right;">
+      <label for="editfname">ชื่อ</label>
+    </div>
+    <div class="p-col-8">
+      <input type="text" pInputText formControlName="editfname" id="editfname" />
+    </div>
+    <div class="p-col-4" style="text-align: right;">
+      <label for="editlname">นามสกุล</label>
+    </div>
+    <div class="p-col-8">
+      <input type="text" pInputText formControlName="editlname" id="editlname" />
+    </div>
+    <div class="p-col-4" style="text-align: right;">
+      <label for="editaddress">ที่อยู่</label>
+    </div>
+    <div class="p-col-8">
+      <input type="text" pInputText formControlName="editaddress" id="editaddress" />
+    </div>
+    <div class="p-col-4" style="text-align: right;">
+      <label for="editTel">เบอร์โทรศัพท์</label>
+    </div>
+    <div class="p-col-8">
+      <input type="text" pInputText formControlName="editTel" id="editTel" />
+    </div>
+    <div class="p-col-4" style="text-align: right;">
+      <label for="car">เลือกรถ</label>
+    </div>
+    <div class="p-col-8" formArrayName="editCarList" *ngIf="formEditMember.get('editCarList').value.length > 0">
+      <div *ngFor="
           let car of funcEditCarList.controls;
           let i = index
-        "
-        formGroupName="{{ i }}">
-          <p-dropdown [options]="carDetail" formControlName = "editcar" optionLabel="label"></p-dropdown>
-          <button
-        pButton
-        type="button"
-        icon="pi pi-plus"
-        class="ui-button-danger"
-        (click)="addCarEdit()"
-      ></button>
-      <button
-        pButton
-        type="button"
-        icon="pi pi-minus"
-        class="ui-button-danger"
-        (click)="removeCarEdit(i)"
-      ></button>
-      <div>
-        <input type="text" pInputText formControlName="editlicense" id ="editlicense" placeholder="กรอกป้ายทะเบียน"/>
+        " formGroupName="{{ i }}">
+        <div class="p-col-12">
+          <p-dropdown [options]="carDetail" optionLabel="label" value="value" (onChange)=getCarDetailById($event)>
+          </p-dropdown>
+        </div>
+        <div class="p-col-12">
+          <p-dropdown [options]="carModelDetail" formControlName="editcar" optionLabel="label" value="value"
+            placeholder="กรุณาเลือกรุ่นรถ" (onChange)=getCarSize($event)></p-dropdown>
+        </div>
+        <div class="p-col-12">
+          <p-dropdown [options]="size" optionLabel="label" value="value" dropdownIcon="" readonly="true"></p-dropdown>
+        </div>
+        <div class="p-col-4">
+          <input type="text" pInputText formControlName="editlicense" id="editlicense" placeholder="กรอกป้ายทะเบียน" />
+        </div>
+        <div class="p-col-4">
+          <p-dropdown [options]="provinceList" formControlName="editprovince" optionLabel="label"></p-dropdown>
+        </div>
+        <button pButton type="button" icon="pi pi-plus" class="ui-button-danger" (click)="addCarEdit()"></button>
+        <button pButton type="button" icon="pi pi-minus" class="ui-button-danger" (click)="removeCarEdit(i)"></button>
+
+        <!-- <p-dropdown [options]="carDetail" formControlName="editcar" optionLabel="label"></p-dropdown>
+        <button pButton type="button" icon="pi pi-plus" class="ui-button-danger" (click)="addCarEdit()"></button>
+        <button pButton type="button" icon="pi pi-minus" class="ui-button-danger" (click)="removeCarEdit(i)"></button>
         <div>
-          <p-dropdown [options]="provinceList" formControlName = "editprovince" optionLabel="label"></p-dropdown>
-        </div>
+          <input type="text" pInputText formControlName="editlicense" id="editlicense" placeholder="กรอกป้ายทะเบียน" />
+          <div>
+            <p-dropdown [options]="provinceList" formControlName="editprovince" optionLabel="label"></p-dropdown>
+          </div>
+        </div>-->
       </div>
-        </div>
-      </div>
-      <input type="hidden" formControlName="editId"/>
-      <div class="p-col-12" style="text-align: center;">
-        <button
-      type="button"
-      pButton
-      icon="pi pi-check"
-      label="บันทึก"
-      (click)="updateMember()"
-    ></button>
-      </div>
+    </div>
+    <input type="hidden" formControlName="editId" />
+    <div class="p-col-12" style="text-align: center;">
+      <button type="button" pButton icon="pi pi-check" label="บันทึก" (click)="updateMember()"></button>
+    </div>
   </div>
 </p-dialog>
 <p-confirmDialog #cd header="ลบข้อมูลสมาชิก" icon="pi pi-exclamation-triangle">
-    <p-footer>
-      <button type="button" pButton icon="pi pi-check" label="ตกลง" (click)="cd.accept()"></button>
-        <button type="button" pButton icon="pi pi-times" label="ยกเลิก" (click)="cd.reject()"></button>
-    </p-footer>
-  </p-confirmDialog>
-<p-dialog header="แจ้งเตือนรหัสผู้ใช้" [(visible)] = "displayWarningMember" [modal]="true" [style]="{width: '50vw'}" [baseZIndex]="10000"
-    [draggable]="false" [resizable]="false">
-    <p style="color : red" >รหัสผู้ใช้นี้ถูกใช้งานแล้ว โปรดเปลี่ยนรหัสผู้ใช้</p>
+  <p-footer>
+    <button type="button" pButton icon="pi pi-check" label="ตกลง" (click)="cd.accept()"></button>
+    <button type="button" pButton icon="pi pi-times" label="ยกเลิก" (click)="cd.reject()"></button>
+  </p-footer>
+</p-confirmDialog>
+<p-dialog header="แจ้งเตือนรหัสผู้ใช้" [(visible)]="displayWarningMember" [modal]="true" [style]="{width: '50vw'}"
+  [baseZIndex]="10000" [draggable]="false" [resizable]="false">
+  <p style="color : red">รหัสผู้ใช้นี้ถูกใช้งานแล้ว โปรดเปลี่ยนรหัสผู้ใช้</p>
 </p-dialog>
-<p-dialog header="แจ้งเตือนเลขทะเบียน" [(visible)] = "displayWarningLicense" [modal]="true" [style]="{width: '50vw'}" [baseZIndex]="10000"
-    [draggable]="false" [resizable]="false">
-    <p style="color : red" >เลขทะเบียนดังกล่าวได้ถูกลงทะเบียนแล้วโปรดเปลี่ยนเลขทะเบียน</p>
+<p-dialog header="แจ้งเตือนเลขทะเบียน" [(visible)]="displayWarningLicense" [modal]="true" [style]="{width: '50vw'}"
+  [baseZIndex]="10000" [draggable]="false" [resizable]="false">
+  <p style="color : red">เลขทะเบียนดังกล่าวได้ถูกลงทะเบียนแล้วโปรดเปลี่ยนเลขทะเบียน</p>
 </p-dialog>
-

@@ -56,6 +56,8 @@ export class ProfileStaffComponent implements OnInit {
       this.manageUser.getProfile(id).subscribe(rs => {
         rs.map(res=>{
           this.userData = res;
+          console.log(this.userData);
+
           this.imageUrls = this.sanitization.bypassSecurityTrustUrl(
             '' + res.employee_image
           );

@@ -13,8 +13,8 @@ import { PositionService } from 'src/app/shared/services/position.service';
 export class ManagestaffComponent implements OnInit {
   display = false;
   displayEdit = false;
-  formStaff : FormGroup;
-  formEditStaff : FormGroup;
+  formStaff: FormGroup;
+  formEditStaff: FormGroup;
   staff: any[];
   positionList = [];
   msgs: Message[] = [];
@@ -24,7 +24,7 @@ export class ManagestaffComponent implements OnInit {
     fname: '',
     lname: '',
     tel: '',
-    position : '',
+    position: '',
   };
   public validationMassages = {
     username: {
@@ -46,16 +46,20 @@ export class ManagestaffComponent implements OnInit {
       required: '*กรุณาเลือกตำแหน่ง'
     }
   };
-  constructor(private manageStaffService: ManageUserService,private confirmationService : ConfirmationService , private positionService : PositionService) {}
+  constructor(
+    private manageStaffService: ManageUserService,
+    private confirmationService: ConfirmationService,
+    private positionService: PositionService
+  ) { }
 
   ngOnInit() {
     this.loadData();
     this.initForm();
     this.getPosition();
     this.formEditStaff = new FormGroup({
-      editfname: new FormControl(null , Validators.required),
-      editlname: new FormControl(null , Validators.required),
-      editTel: new FormControl(null , Validators.required),
+      editfname: new FormControl(null, Validators.required),
+      editlname: new FormControl(null, Validators.required),
+      editTel: new FormControl(null, Validators.required),
       id: new FormControl(null)
     });
   }
@@ -66,40 +70,40 @@ export class ManagestaffComponent implements OnInit {
 
   initForm() {
     this.formStaff = new FormGroup({
-      username: new FormControl(null , Validators.required),
-      password: new FormControl(null , Validators.required),
-      fname: new FormControl(null , Validators.required),
-      lname: new FormControl(null , Validators.required),
-      tel: new FormControl(null , Validators.required),
-      position : new FormControl(null , Validators.required)
+      username: new FormControl(null, Validators.required),
+      password: new FormControl(null, Validators.required),
+      fname: new FormControl(null, Validators.required),
+      lname: new FormControl(null, Validators.required),
+      tel: new FormControl(null, Validators.required),
+      position: new FormControl(null, Validators.required)
     });
     this.formStaff
-    .valueChanges
-    .pipe(
-      debounceTime(500),
-      distinctUntilChanged()
-    )
-    .subscribe(() => this.onValueChange());
+      .valueChanges
+      .pipe(
+        debounceTime(500),
+        distinctUntilChanged()
+      )
+      .subscribe(() => this.onValueChange());
   }
 
   submitFormStaff() {
-    if(this.formStaff.valid){
-    this.msgs = [];
-    this.manageStaffService
-      .crateStaff(this.formStaff.getRawValue())
-      .pipe(
-        switchMap(rs => {
-          this.display = false;
-          this.msgs.push({severity:'info', summary:'Insert Employee', detail:'Insert Success'});
-          return this.manageStaffService.getAllStaff().pipe(map(rs=>{
-            return this.staff = rs;
-          }))
-        })
-      )
-      .subscribe();
-      }else{
-        this.onValueChange()
-      }
+    if (this.formStaff.valid) {
+      this.msgs = [];
+      this.manageStaffService
+        .crateStaff(this.formStaff.getRawValue())
+        .pipe(
+          switchMap(rs => {
+            this.display = false;
+            this.msgs.push({ severity: 'info', summary: 'Insert Employee', detail: 'Insert Success' });
+            return this.manageStaffService.getAllStaff().pipe(map(rs => {
+              return this.staff = rs;
+            }))
+          })
+        )
+        .subscribe();
+    } else {
+      this.onValueChange()
+    }
   }
 
   private onValueChange() {
@@ -129,33 +133,33 @@ export class ManagestaffComponent implements OnInit {
   }
 
   updateStaff() {
-      this.msgs = [];
-      this.manageStaffService
-        .updateStaff(this.formEditStaff.getRawValue())
-        .pipe(
-          switchMap(rs => {
-            this.displayEdit = false;
-            this.msgs.push({severity:'info', summary:'Update Employee', detail:'Update Success'});
-            return this.manageStaffService.getAllStaff().pipe(map(rs=>{
-              return this.staff = rs;
-            }))
-          })
-        )
-        .subscribe();
+    this.msgs = [];
+    this.manageStaffService
+      .updateStaff(this.formEditStaff.getRawValue())
+      .pipe(
+        switchMap(rs => {
+          this.displayEdit = false;
+          this.msgs.push({ severity: 'info', summary: 'Update Employee', detail: 'Update Success' });
+          return this.manageStaffService.getAllStaff().pipe(map(rs => {
+            return this.staff = rs;
+          }))
+        })
+      )
+      .subscribe();
   }
 
   confirm(id) {
     this.msgs = [];
     this.confirmationService.confirm({
-        message: 'คุณต้องการลบข้อมูลผู้จัดการร้านคนนี้ใช่หรือไม่',
-        accept: () => {
-          this.manageStaffService.deleteStaff(id).pipe(switchMap(rs=>{
-            this.msgs.push({severity:'info', summary:'Delete Success', detail:'Delete Success'});
-            return this.manageStaffService.getAllStaff().pipe(map(rs=>{
-              return this.staff = rs;
-            }))
-          })).subscribe()
-        }
+      message: 'คุณต้องการลบข้อมูลผู้จัดการร้านคนนี้ใช่หรือไม่',
+      accept: () => {
+        this.manageStaffService.deleteStaff(id).pipe(switchMap(rs => {
+          this.msgs.push({ severity: 'info', summary: 'Delete Success', detail: 'Delete Success' });
+          return this.manageStaffService.getAllStaff().pipe(map(rs => {
+            return this.staff = rs;
+          }))
+        })).subscribe()
+      }
     });
   }
 
@@ -165,9 +169,9 @@ export class ManagestaffComponent implements OnInit {
     });
   }
 
-  getPosition(){
-    this.positionService.getAllPositionNotAM().subscribe(rs=>{
-      rs.map(res=>{
+  getPosition() {
+    this.positionService.getAllPositionNotAM().subscribe(rs => {
+      rs.map(res => {
         console.log(res);
         this.positionList = [
           ...this.positionList,

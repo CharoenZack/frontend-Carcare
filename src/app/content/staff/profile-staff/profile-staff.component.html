@@ -15,23 +15,29 @@
               </div>
               <div class="p-col-6">
                 <div class="p-grid">
-                  <div class="p-col-6 text-info" style = "text-align:left;">
-                    <span>FirstName : </span>
+                  <div class="p-col-2 text-info" style = "text-align:right;">
+                    <span>ชื่อ : </span>
                   </div>
-                  <div class="p-col-6 " style="text-align:right;">
+                  <div class="p-col-10 " style="text-align:left;">
                     <span>{{(userData) ? userData['employee_fname']: ''}} </span>
                   </div>
-                  <div class="p-col-6 text-info" style = "text-align:left;">
-                    <span>LastName : </span>
+                  <div class="p-col-2 text-info" style = "text-align:right;">
+                    <span>นามสกุล : </span>
                   </div>
-                  <div class="p-col-6 " style="text-align:right;">
+                  <div class="p-col-10 " style="text-align:left;">
                     <span>{{(userData) ? userData['employee_lname']: ''}} </span>
                   </div>
-                  <div class="p-col-6 text-info" style = "text-align:left;">
-                    <span>Telephone Number : </span>
+                  <div class="p-col-2 text-info" style = "text-align:right;">
+                    <span>เบอร์โทร : </span>
                   </div>
-                  <div class="p-col-6 " style="text-align:right;">
+                  <div class="p-col-10 " style="text-align:left;">
                     <span>{{(userData) ? userData['employee_tel']: ''}} </span>
+                  </div>
+                  <div class="p-col-2 text-info" style = "text-align:right;">
+                    <span>ตำแหน่ง : </span>
+                  </div>
+                  <div class="p-col-4 " style="text-align:left;">
+                    <span>{{(userData) ? userData['position_work']: ''}} </span>
                   </div>
                   <div class="p-col-12" style="text-align:center;">
                     <button pButton type="button" label="แก้ไข" class="ui-button-raised ui-button-raised"
@@ -82,4 +88,3 @@
       </p-footer>
     </p-dialog>
   <p-confirmDialog [style]="{width: '50vw'}"></p-confirmDialog>
-  

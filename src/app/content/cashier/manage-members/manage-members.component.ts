@@ -11,6 +11,7 @@ import { MemberService } from 'src/app/shared/services/member.service';
 import { ConfirmationService, Message } from 'primeng/api';
 import { TypecarService } from 'src/app/shared/services/typecar.service';
 import { ProvinceService } from 'src/app/shared/services/province.service';
+import { InputMaskModule } from 'primeng/inputmask';
 
 @Component({
   selector: 'app-manage-members',
@@ -26,14 +27,32 @@ export class ManageMembersComponent implements OnInit {
   msgs: Message[] = [];
   displayWarningMember = false;
   displayWarningLicense = false;
+  size: any[] = [
+    {
+      label: 'ขนาดรถ',
+      value: 0
+    }
+  ];
   showCar: any[] = [
   ];
   carDetail: any[] = [
     {
-      label: 'กรุณาเลือกรถ',
+      label: 'กรุณาเลือกยี่ห้อรถ',
       value: 0
     }
   ];
+  carModelDetail: any[] = [
+    {
+      label: 'กรุณาเลือกรุ่นรถ',
+      value: 0
+    }
+  ];
+  // carModelDetail: any[] = [
+  //   {
+  //     label: 'กรุณาเลือกรุ่นรถ',
+  //     value: 0
+  //   }
+  // ];
   provinceList: any[] = [
     {
       label: 'กรุณาเลือกจังหวัด',
@@ -320,24 +339,38 @@ export class ManageMembersComponent implements OnInit {
   }
 
   getAllCarDetail() {
-    this.typeCarService.getAllCarDetail().subscribe(rs => {
+    this.typeCarService.getAllCar_detailOrderByBrand().subscribe(rs => {
       rs.map(res => {
         this.carDetail.push({
-          label: res.model_name + ' ' + res.brand + ' ' + res.size,
-          value: res.car_detail_id
+          label: res.brand,
+          // label: res.model_name + ' ' + res.brand + ' ' + res.size,
+          value: res.car_id
         });
       });
     });
   }
   getCarDetailById(id) {
-    console.log(id.value.value);
+    console.log(id.value);
     this.typeCarService.getAllCarDetailById(id.value.value).subscribe(rs => {
-      rs.map(res => {
-        this.showCar.push({
-          label: res.brand
-        });
-        console.log(this.showCar);
+      this.carModelDetail = rs.map(res => {
+        return {
+          label: res.model_name,
+          value: res.car_detail_id
+        };
       });
+      console.log(this.carModelDetail);
+    });
+  }
+  getCarSize(id) {
+    console.log(id.value);
+    this.typeCarService.getCar_detailWSize(id.value.value).subscribe(rs => {
+      this.size = rs.map(res => {
+        return {
+          label: res.size,
+          value: res.type_car_id
+        };
+      });
+      console.log(this.size);
     });
   }
   getAllProvince() {
