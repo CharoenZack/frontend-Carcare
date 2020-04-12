@@ -5,18 +5,19 @@ import {
   distinctUntilChanged,
   switchMap,
   map,
-  concatMap
+  concatMap,
 } from 'rxjs/operators';
 import { MemberService } from 'src/app/shared/services/member.service';
 import { ConfirmationService, Message } from 'primeng/api';
 import { TypecarService } from 'src/app/shared/services/typecar.service';
 import { ProvinceService } from 'src/app/shared/services/province.service';
 import { InputMaskModule } from 'primeng/inputmask';
+import { ModelService } from 'src/app/shared/services/model.service';
 
 @Component({
   selector: 'app-manage-members',
   templateUrl: './manage-members.component.html',
-  styleUrls: ['./manage-members.component.css']
+  styleUrls: ['./manage-members.component.css'],
 })
 export class ManageMembersComponent implements OnInit {
   display = false;
@@ -27,44 +28,33 @@ export class ManageMembersComponent implements OnInit {
   msgs: Message[] = [];
   displayWarningMember = false;
   displayWarningLicense = false;
-  size: any[] = [
+  sizeList: any[] = [
     {
       label: 'ขนาดรถ',
-      value: 0
-    }
+      value: 0,
+    },
   ];
-  showCar: any[] = [
-  ];
+  showCar: any[] = [];
   carDetail: any[] = [
     {
       label: 'กรุณาเลือกยี่ห้อรถ',
-      value: 0
-    }
+      value: 0,
+    },
   ];
-  carModelDetail: any[] = [
-    {
-      label: 'กรุณาเลือกรุ่นรถ',
-      value: 0
-    }
-  ];
+  carModelDetail: any[] = [];
   // carModelDetail: any[] = [
   //   {
   //     label: 'กรุณาเลือกรุ่นรถ',
   //     value: 0
   //   }
   // ];
-  provinceList: any[] = [
-    {
-      label: 'กรุณาเลือกจังหวัด',
-      value: 0
-    }
-  ];
+  provinceList: any[] = [];
   constructor(
     private memberService: MemberService,
     private confirmationService: ConfirmationService,
     private typeCarService: TypecarService,
     private provinceService: ProvinceService
-  ) { }
+  ) {}
 
   public formError = {
     username: '',
@@ -74,39 +64,39 @@ export class ManageMembersComponent implements OnInit {
     address: '',
     tel: '',
     license: '',
-    car: ''
+    car: '',
   };
   public validationMassages = {
     username: {
-      required: '*กรุณากรอกชื่อผู้ใช้'
+      required: '*กรุณากรอกชื่อผู้ใช้',
     },
     password: {
-      required: '*กรุณากรอกรหัสผ่าน'
+      required: '*กรุณากรอกรหัสผ่าน',
     },
     fname: {
-      required: '*กรุณากรอกชื่อ'
+      required: '*กรุณากรอกชื่อ',
     },
     lname: {
-      required: '*กรุณากรอกนามสกุล'
+      required: '*กรุณากรอกนามสกุล',
     },
     address: {
-      required: '*กรุณากรอกที่อยู่'
+      required: '*กรุณากรอกที่อยู่',
     },
     tel: {
-      required: '*กรุณากรอกเบอร์โทรศัพท์'
+      required: '*กรุณากรอกเบอร์โทรศัพท์',
     },
     license: {
-      required: '*กรุณากรอกป้ายทะเบียน'
+      required: '*กรุณากรอกป้ายทะเบียน',
     },
     car: {
-      required: '*กรุณาเลือกรถ'
-    }
+      required: '*กรุณาเลือกรถ',
+    },
   };
 
   ngOnInit() {
     this.memberService
       .getMemberByCashierId(localStorage.getItem('userId'))
-      .subscribe(rs => {
+      .subscribe((rs) => {
         this.members = rs;
       });
     this.initFormMember();
@@ -122,9 +112,11 @@ export class ManageMembersComponent implements OnInit {
   addCar() {
     this.funcCarList.push(
       new FormGroup({
-        car: new FormControl(null),
+        brand: new FormControl(null),
+        model: new FormControl(null),
+        size: new FormControl(null),
         license: new FormControl(null),
-        province: new FormControl(null)
+        province: new FormControl(null),
       })
     );
   }
@@ -146,7 +138,7 @@ export class ManageMembersComponent implements OnInit {
       address: new FormControl(null, Validators.required),
       tel: new FormControl(null, Validators.required),
       cashier_id: new FormControl(localStorage.getItem('userId')),
-      carList: new FormArray([])
+      carList: new FormArray([]),
     });
     this.formMember.valueChanges
       .pipe(debounceTime(500), distinctUntilChanged())
@@ -163,11 +155,12 @@ export class ManageMembersComponent implements OnInit {
       editaddress: new FormControl(null, Validators.required),
       editTel: new FormControl(null, Validators.required),
       editCarList: new FormArray([]),
-      editId: new FormControl(null)
+      editId: new FormControl(null),
     });
   }
 
   submitFormMember() {
+    console.log(this.formMember.getRawValue());
     if (this.formMember.valid) {
       this.memberService
         .insertMember(this.formMember.getRawValue())
@@ -175,8 +168,7 @@ export class ManageMembersComponent implements OnInit {
           switchMap(rs => {
             if (rs.member === false) {
               this.displayWarningMember = true;
-            }
-            if (rs.license === false) {
+            } else if (rs.license === false) {
               this.displayWarningLicense = true;
             } else {
               this.display = false;
@@ -210,28 +202,30 @@ export class ManageMembersComponent implements OnInit {
     while (existingItems.length) {
       existingItems.removeAt(0);
     }
-    this.memberService.getMemberForEdit(data.members_id).subscribe(rs => {
-      rs.map(res => {
+    this.memberService.getMemberForEdit(data.members_id).subscribe((rs) => {
+      console.log(rs);
+      rs.map((res , index) => {
+        console.log(index);
         this.funcEditCarList.push(
           new FormGroup({
-            editcar: new FormControl(null),
+            editBrand: new FormControl(null),
+            editModel: new FormControl(null),
+            editSize: new FormControl(null),
             editlicense: new FormControl(null),
             editprovince: new FormControl(null),
-            editDetailId: new FormControl(null)
           })
         );
         editCarListValue.push({
-          editcar: {
-            label: res.model_name + ' ' + res.brand + ' ' + res.size,
-            value: res.car_detail_id
-          },
+          editBrand: { label: res.brand, value: res.car_id },
+          editModel: { label: res.model_name, value: res.car_detail_id },
+          editSize: { label: res.size, value: res.type_car_id },
           editlicense: res.member_license,
           editprovince: {
             label: res.province_name,
-            value: res.province_id
+            value: res.province_id,
           },
-          editDetailId: res.members_detail_id
         });
+
         const editMember = {
           editUsername: res.members_username,
           editPassword: res.members_password,
@@ -240,11 +234,16 @@ export class ManageMembersComponent implements OnInit {
           editlname: res.members_lname,
           editaddress: res.members_address,
           editTel: res.members_tel,
-          editId: res.members_id
+          editId: res.members_id,
         };
         this.formEditMember.patchValue(editMember);
       });
       this.formEditMember.get('editCarList').setValue(editCarListValue);
+      this.funcEditCarList.value.map((rs , index) => {
+        console.log(rs);
+        this.getCarDetailByIdEdit({ label: rs.editBrand.label, value: rs.editBrand.value }, index);
+        this.getCarSizeEdit({ label: rs.editModel.label, value: rs.editModel.value }, index);
+      });
     });
     this.displayEdit = true;
   }
@@ -256,9 +255,11 @@ export class ManageMembersComponent implements OnInit {
   addCarEdit() {
     this.funcEditCarList.push(
       new FormGroup({
-        editcar: new FormControl(null),
+        editBrand: new FormControl(null),
+        editModel: new FormControl(null),
+        editSize: new FormControl(null),
         editlicense: new FormControl(null),
-        editprovince: new FormControl(null)
+        editprovince: new FormControl(null),
       })
     );
   }
@@ -288,22 +289,20 @@ export class ManageMembersComponent implements OnInit {
       this.memberService
         .updateMember(this.formEditMember.getRawValue())
         .pipe(
-          switchMap(rs => {
-
+          switchMap((rs) => {
             this.displayEdit = false;
             this.msgs.push({
               severity: 'info',
               summary: 'Update Employee',
-              detail: 'Update Success'
+              detail: 'Update Success',
             });
             return this.memberService
               .getMemberByCashierId(localStorage.getItem('userId'))
               .pipe(
-                map(res => {
+                map((res) => {
                   return (this.members = res);
                 })
               );
-
           })
         )
         .subscribe();
@@ -318,67 +317,111 @@ export class ManageMembersComponent implements OnInit {
         this.memberService
           .deleteMember(id)
           .pipe(
-            switchMap(rs => {
+            switchMap((rs) => {
               this.msgs.push({
                 severity: 'info',
                 summary: 'Delete Success',
-                detail: 'Delete Success'
+                detail: 'Delete Success',
               });
               return this.memberService
                 .getMemberByCashierId(localStorage.getItem('userId'))
                 .pipe(
-                  map(rs => {
+                  map((rs) => {
                     return (this.members = rs);
                   })
                 );
             })
           )
           .subscribe();
-      }
+      },
     });
   }
 
   getAllCarDetail() {
-    this.typeCarService.getAllCar_detailOrderByBrand().subscribe(rs => {
-      rs.map(res => {
+    this.typeCarService.getAllCar_detailOrderByBrand().subscribe((rs) => {
+      rs.map((res) => {
         this.carDetail.push({
           label: res.brand,
           // label: res.model_name + ' ' + res.brand + ' ' + res.size,
-          value: res.car_id
+          value: res.car_id,
         });
       });
     });
   }
-  getCarDetailById(id) {
-    console.log(id.value);
-    this.typeCarService.getAllCarDetailById(id.value.value).subscribe(rs => {
-      this.carModelDetail = rs.map(res => {
+  getCarDetailById(id, index) {
+    this.typeCarService.getAllCarDetailById(id.value).subscribe((rs) => {
+      const carModelDetailObj = rs.map((res) => {
         return {
           label: res.model_name,
-          value: res.car_detail_id
+          value: res.car_detail_id,
         };
       });
-      console.log(this.carModelDetail);
+
+      for (let i = 0; i < this.funcCarList.length; i++) {
+        if (index === i) {
+          this.carModelDetail[i] = carModelDetailObj;
+        }
+      }
     });
   }
-  getCarSize(id) {
-    console.log(id.value);
-    this.typeCarService.getCar_detailWSize(id.value.value).subscribe(rs => {
-      this.size = rs.map(res => {
+
+  getCarDetailByIdEdit(id, index) {
+    this.typeCarService.getAllCarDetailById(id.value).subscribe((rs) => {
+      const carModelDetailObj = rs.map((res) => {
+        return {
+          label: res.model_name,
+          value: res.car_detail_id,
+        };
+      });
+
+      for (let i = 0; i < this.funcEditCarList.length; i++) {
+        if (index === i) {
+          this.carModelDetail[i] = carModelDetailObj;
+        }
+      }
+    });
+  }
+
+  getCarSize(id, index) {
+    this.typeCarService.getCar_detailWSize(id.value).subscribe((rs) => {
+      const sizeObj = rs.map((res) => {
         return {
           label: res.size,
-          value: res.type_car_id
+          value: res.type_car_id,
         };
       });
-      console.log(this.size);
+
+      for (let i = 0; i < this.funcCarList.length; i++) {
+        if (index === i) {
+          this.sizeList[i] = sizeObj;
+        }
+      }
     });
   }
+
+  getCarSizeEdit(id, index) {
+    this.typeCarService.getCar_detailWSize(id.value).subscribe((rs) => {
+      const sizeObj = rs.map((res) => {
+        return {
+          label: res.size,
+          value: res.type_car_id,
+        };
+      });
+
+      for (let i = 0; i < this.funcEditCarList.length; i++) {
+        if (index === i) {
+          this.sizeList[i] = sizeObj;
+        }
+      }
+    });
+  }
+
   getAllProvince() {
-    this.provinceService.getAllProvince().subscribe(rs => {
-      rs.map(res => {
+    this.provinceService.getAllProvince().subscribe((rs) => {
+      rs.map((res) => {
         this.provinceList.push({
           label: res.province_name,
-          value: res.province_id
+          value: res.province_id,
         });
       });
     });
