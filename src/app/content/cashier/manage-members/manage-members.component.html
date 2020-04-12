@@ -62,7 +62,7 @@
     <div class="p-col-3" style="text-align: right;">
       <label for="username">Username</label>
     </div>
-    <div class="p-col-2">
+    <div class="p-col-3">
       <input type="text" pInputText formControlName="username" id="username" placeholder="Username" />
       <div *ngIf="formError.username" class="text-danger text-invalid">{{formError.username }}</div>
     </div>
@@ -73,11 +73,10 @@
       <input type="password" pInputText formControlName="password" id="password" placeholder="Password" />
       <div *ngIf="formError.password" class="text-danger text-invalid">{{formError.password }}</div>
     </div>
-    <!-- <div class="p-col-4" style="text-align: left;"></div> -->
     <div class="p-col-3" style="text-align: right;">
       <label for="fname">ชื่อ</label>
     </div>
-    <div class="p-col-2">
+    <div class="p-col-3">
       <input type="text" pInputText formControlName="fname" id="fname" placeholder="ชื่อ" />
       <div *ngIf="formError.fname" class="text-danger text-invalid">{{formError.fname }}</div>
     </div>
@@ -91,7 +90,7 @@
     <div class="p-col-3" style="text-align: right;">
       <label for="address">ที่อยู่</label>
     </div>
-    <div class="p-col-2">
+    <div class="p-col-3">
       <input type="text" pInputText formControlName="address" id="address" placeholder="ที่อยู่" />
       <div *ngIf="formError.address" class="text-danger text-invalid">{{formError.address }}</div>
     </div>
@@ -112,17 +111,17 @@
       <div *ngFor="
           let car of funcCarList.controls;
           let i = index
-        " formGroupName="{{ i }}">
+        " [formGroup]="car">
         <div class="p-col-12">
-          <p-dropdown [options]="carDetail" optionLabel="label" value="value" (onChange)=getCarDetailById($event)>
+          <p-dropdown [options]="carDetail" optionLabel="label" formControlName="brand" (onChange)="getCarDetailById($event.value , i)">
           </p-dropdown>
         </div>
         <div class="p-col-12">
-          <p-dropdown [options]="carModelDetail" formControlName="car" optionLabel="label" value="value"
-            placeholder="กรุณาเลือกรุ่นรถ" (onChange)=getCarSize($event)></p-dropdown>
+          <p-dropdown [options]="carModelDetail[i]" formControlName="model" optionLabel="label"
+            placeholder="กรุณาเลือกรุ่นรถ" (onChange)="getCarSize($event.value , i)"></p-dropdown>
         </div>
         <div class="p-col-12">
-          <p-dropdown [options]="size" optionLabel="label" value="value" dropdownIcon="" readonly="true"></p-dropdown>
+          <p-dropdown [options]="sizeList[i]" optionLabel="label" dropdownIcon="" readonly="true" formControlName="size"></p-dropdown>
         </div>
         <div class="p-col-4">
           <input type="text" pInputText formControlName="license" id="license" placeholder="กรอกป้ายทะเบียน" />
@@ -144,31 +143,36 @@
   [style]="{ width: '50vw' ,overflow :'auto', position:'absolute'}" [maximizable]="true" [baseZIndex]="10000"
   [draggable]="false" [resizable]="false">
   <div class="p-grid" [formGroup]="formEditMember">
-    <div class="p-col-4" style="text-align: right;">
-      <label for="editfname">ชื่อ</label>
+    <div class="p-col-2" style="text-align: right;">
+      <label for="fname">ชื่อ</label>
     </div>
-    <div class="p-col-8">
-      <input type="text" pInputText formControlName="editfname" id="editfname" />
+    <div class="p-col-3">
+      <input type="text" pInputText formControlName="editfname" id="editfname" placeholder="ชื่อ" />
+      <!-- <div *ngIf="formError.fname" class="text-danger text-invalid">{{formError.fname }}</div> -->
     </div>
-    <div class="p-col-4" style="text-align: right;">
-      <label for="editlname">นามสกุล</label>
+    <div class="p-col-3" style="text-align: right;">
+      <label for="lname">นามสกุล</label>
     </div>
-    <div class="p-col-8">
-      <input type="text" pInputText formControlName="editlname" id="editlname" />
+    <div class="p-col-3">
+      <input type="text" pInputText formControlName="editlname" id="editlname" placeholder="นามสกุล" />
+      <!-- <div *ngIf="formError.lname" class="text-danger text-invalid">{{formError.lname }}</div> -->
     </div>
-    <div class="p-col-4" style="text-align: right;">
-      <label for="editaddress">ที่อยู่</label>
+    <div class="p-col-1"></div>
+    <div class="p-col-2" style="text-align: right;">
+      <label for="address">ที่อยู่</label>
     </div>
-    <div class="p-col-8">
-      <input type="text" pInputText formControlName="editaddress" id="editaddress" />
+    <div class="p-col-3">
+      <input type="text" pInputText formControlName="editaddress" id="editaddress" placeholder="ที่อยู่" />
+      <!-- <div *ngIf="formError.address" class="text-danger text-invalid">{{formError.address }}</div> -->
     </div>
-    <div class="p-col-4" style="text-align: right;">
-      <label for="editTel">เบอร์โทรศัพท์</label>
+    <div class="p-col-3" style="text-align: right;">
+      <label for="phone">เบอร์โทรศัพท์</label>
     </div>
-    <div class="p-col-8">
-      <input type="text" pInputText formControlName="editTel" id="editTel" />
+    <div class="p-col-3">
+      <p-inputMask mask="(999) 999-9999" formControlName="editTel" id="editTel" placeholder="(999) 999-9999"></p-inputMask>
+      <!-- <div *ngIf="formError.tel" class="text-danger text-invalid">{{formError.tel }}</div> -->
     </div>
-    <div class="p-col-4" style="text-align: right;">
+    <div class="p-col-2" style="text-align: right;">
       <label for="car">เลือกรถ</label>
     </div>
     <div class="p-col-8" formArrayName="editCarList" *ngIf="formEditMember.get('editCarList').value.length > 0">
@@ -177,15 +181,15 @@
           let i = index
         " formGroupName="{{ i }}">
         <div class="p-col-12">
-          <p-dropdown [options]="carDetail" optionLabel="label" value="value" (onChange)=getCarDetailById($event)>
+          <p-dropdown [options]="carDetail" formControlName = "editBrand" optionLabel="label" value="value" (onChange)="getCarDetailByIdEdit($event.value , i)">
           </p-dropdown>
         </div>
         <div class="p-col-12">
-          <p-dropdown [options]="carModelDetail" formControlName="editcar" optionLabel="label" value="value"
-            placeholder="กรุณาเลือกรุ่นรถ" (onChange)=getCarSize($event)></p-dropdown>
+          <p-dropdown [options]="carModelDetail[i]" formControlName="editModel" optionLabel="label" value="value"
+            (onChange)="getCarSizeEdit($event.value , i)"></p-dropdown>
         </div>
         <div class="p-col-12">
-          <p-dropdown [options]="size" optionLabel="label" value="value" dropdownIcon="" readonly="true"></p-dropdown>
+          <p-dropdown [options]="sizeList[i]" optionLabel="label" value="value" dropdownIcon="" readonly="true" formControlName="editSize"></p-dropdown>
         </div>
         <div class="p-col-4">
           <input type="text" pInputText formControlName="editlicense" id="editlicense" placeholder="กรอกป้ายทะเบียน" />
