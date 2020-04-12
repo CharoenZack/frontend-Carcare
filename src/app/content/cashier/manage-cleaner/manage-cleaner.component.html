@@ -6,6 +6,7 @@
     <div class="container" style="width: 95%;">
       <div class="line"></div>
       <br>
+      <p-messages [(value)]="msgs"></p-messages>
       <div style="text-align:left">
         <!-- <button pButton type="button" id="btn-Increase" label="เพิ่ม" class="ui-button-temple"
           style="width: 20%"></button> -->
@@ -24,7 +25,7 @@
         <p-tabView (onChange)="getTabViewStatus($event)">
           <p-tabPanel header="ช่อง 1">
             <h3>คิวล้าง : วันที่ 1-04-2563 รอบเวลา : </h3>
-            <p-table [paginator]="true" [rows]="10" [responsive]="true" [value]="staff">
+            <p-table [paginator]="true" [rows]="10" [responsive]="true" [value]="staff1">
               <ng-template pTemplate="header" let-columns>
                 <tr>
                   <th pSortableColumn="name">
@@ -55,6 +56,13 @@
                       ariaLabelAsc="Activate to sort in ascending order">
                     </p-sortIcon>
                   </th>
+                  <th pSortableColumn="date">
+                    สถานะการคืนอุปกรณ์
+                    <p-sortIcon field="name" ariaLabel="Activate to sort"
+                      ariaLabelDesc="Activate to sort in descending order"
+                      ariaLabelAsc="Activate to sort in ascending order">
+                    </p-sortIcon>
+                  </th>
                   <th></th>
                 </tr>
               </ng-template>
@@ -63,13 +71,19 @@
                   <td>{{ rowData.employee_fname }} {{ rowData.employee_lname }}</td>
                   <td>{{ rowData.employee_tel }}</td>
                   <td>{{rowData.position_work}}</td>
-                  <td>{{rowData.approve_status}}</td>
+                  <td *ngIf="rowData.approve_status === 2 ">อนุมัติ</td>
+                  <td *ngIf="rowData.approve_status === null">-</td>
+                  <td *ngIf="rowData.approve_status === 0">ไม่อนุมัติ</td>
+                  <td *ngIf="rowData.approve_status === 1">รอการอนุมัติ</td>
+                  <td *ngIf="rowData.status_action === 2 ">คืนอุปกรณ์แล้ว</td>
+                  <td *ngIf="rowData.status_action === null">-</td>
+                  <td *ngIf="rowData.status_action === 1">ยังไม่ได้คืนอุปกรณ์</td>
                   <td>
                     <div style="text-align:center">
                       <button pButton type="button" label="แก้ไข" class="ui-button-warning" style="width: 40%;"
                         (click)="editStaff(rowData)"></button>
                       <button pButton type="button" label="ลบ" class="ui-button-danger"
-                        style="width: 40%;margin-left: 5mm" (click)="confirm(rowData.employee_id)"></button>
+                        style="width: 40%;margin-left: 5mm" (click)="confirm(rowData.car_wash_detail_id)"></button>
                     </div>
                   </td>
                 </tr>
@@ -78,7 +92,7 @@
           </p-tabPanel>
           <p-tabPanel header="ช่อง 2">
             <h3>คิวล้าง :</h3>
-            <p-table [paginator]="true" [rows]="10" [responsive]="true" [value]="staff">
+            <p-table [paginator]="true" [rows]="10" [responsive]="true" [value]="staff2">
               <ng-template pTemplate="header" let-columns>
                 <tr>
                   <th pSortableColumn="name">
@@ -109,6 +123,13 @@
                       ariaLabelAsc="Activate to sort in ascending order">
                     </p-sortIcon>
                   </th>
+                  <th pSortableColumn="date">
+                    สถานะการคืนอุปกรณ์
+                    <p-sortIcon field="name" ariaLabel="Activate to sort"
+                      ariaLabelDesc="Activate to sort in descending order"
+                      ariaLabelAsc="Activate to sort in ascending order">
+                    </p-sortIcon>
+                  </th>
                   <th></th>
                 </tr>
               </ng-template>
@@ -117,13 +138,19 @@
                   <td>{{ rowData.employee_fname }} {{ rowData.employee_lname }}</td>
                   <td>{{ rowData.employee_tel }}</td>
                   <td>{{rowData.position_work}}</td>
-                  <td>{{rowData.approve_status}}</td>
+                  <td *ngIf="rowData.approve_status === 2 ">อนุมัติ</td>
+                  <td *ngIf="rowData.approve_status === null">-</td>
+                  <td *ngIf="rowData.approve_status === 0">ไม่อนุมัติ</td>
+                  <td *ngIf="rowData.approve_status === 1">รอการอนุมัติ</td>
+                  <td *ngIf="rowData.status_action === 2 ">คืนอุปกรณ์แล้ว</td>
+                  <td *ngIf="rowData.status_action === null">-</td>
+                  <td *ngIf="rowData.status_action === 1">ยังไม่ได้คืนอุปกรณ์</td>
                   <td>
                     <div style="text-align:center">
                       <button pButton type="button" label="แก้ไข" class="ui-button-warning" style="width: 40%;"
                         (click)="editStaff(rowData)"></button>
                       <button pButton type="button" label="ลบ" class="ui-button-danger"
-                        style="width: 40%;margin-left: 5mm" (click)="confirm(rowData.employee_id)"></button>
+                        style="width: 40%;margin-left: 5mm" (click)="confirm(rowData.car_wash_detail_id)"></button>
                     </div>
                   </td>
                 </tr>
@@ -136,13 +163,13 @@
   </div>
 </div>
 <p-dialog header="จัดการพนักงานล้างรถ" [(visible)]="display" [modal]="true" [style]="{ width: '50vw' }"
-  [maximizable]="true" [baseZIndex]="10000" [draggable]="false" [resizable]="false" >
+  [maximizable]="true" [baseZIndex]="10000" [draggable]="false" [resizable]="false">
   <div class="p-grid" [formGroup]="formStaff">
     <div class="p-col-4" style="text-align: right;">
       <label for="name">ชื่อ: </label>
     </div>
     <div class="p-col-4">
-      <p-dropdown [options]="nameList" formControlName = "name" value="value" optionLabel="label"></p-dropdown>
+      <p-dropdown [options]="nameList" formControlName="name" value="value" optionLabel="label"></p-dropdown>
     </div>
     <div class="p-col-4" style="text-align: left;">
       <div *ngIf="formError.name" class="text-danger text-invalid">{{formError.name }}</div>
@@ -151,7 +178,7 @@
       <label for="channel">ช่องล้าง: </label>
     </div>
     <div class="p-col-4">
-      <p-dropdown [options]="channelList" formControlName = "channel" value="value" optionLabel="label"></p-dropdown>
+      <p-dropdown [options]="channelList" formControlName="channel" value="value" optionLabel="label"></p-dropdown>
     </div>
     <div class="p-col-4" style="text-align: left;">
       <div *ngIf="formError.channel" class="text-danger text-invalid">{{formError.channel }}</div>
@@ -161,3 +188,28 @@
     </div>
   </div>
 </p-dialog>
+
+<p-dialog header="จัดการพนักงานล้างรถ" [(visible)]="displayEdit" [modal]="true" [style]="{ width: '50vw' }"
+  [maximizable]="true" [baseZIndex]="10000" [draggable]="false" [resizable]="false">
+  <div class="p-grid" [formGroup]="formEditStaff">
+    <div class="p-col-4" style="text-align: right;">
+      <label for="channel">ช่องล้าง: </label>
+    </div>
+    <div class="p-col-4">
+      <p-dropdown [options]="channelList" formControlName="editchannel" value="value" optionLabel="label"></p-dropdown>
+    </div>
+    <div class="p-col-4" style="text-align: left;">
+      <div *ngIf="formError.channel" class="text-danger text-invalid">{{formError.channel }}</div>
+    </div>
+    <div class="p-col-12" style="text-align: center;">
+      <button type="button" pButton icon="pi pi-check" label="บันทึก" (click)="updateStaff()"></button>
+    </div>
+  </div>
+</p-dialog>
+
+<p-confirmDialog #cd header="ลบข้อมูล" icon="pi pi-exclamation-triangle">
+  <p-footer>
+    <button type="button" pButton icon="pi pi-check" label="ตกลง" (click)="cd.accept()"></button>
+    <button type="button" pButton icon="pi pi-times" label="ยกเลิก" (click)="cd.reject()"></button>
+  </p-footer>
+</p-confirmDialog>

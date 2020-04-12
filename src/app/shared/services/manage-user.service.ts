@@ -219,7 +219,21 @@ export class ManageUserService {
         })
       );
   }
-
+  deleteEmployeeFormCar_wash(id) {
+    return this.http
+      .delete(`/app/deleteEmployeeFormCar_wash/${id}`, {
+        headers: {
+          Authorization: `${localStorage.getItem('access-token')}`
+        }
+      })
+      .pipe(
+        map(res => {
+          return {
+            status: res['result']
+          };
+        })
+      );
+  }
   updateProfile(data) {
     let formData = new FormData();
     formData.append('editFname', data.editFname);

@@ -26,7 +26,7 @@ export class ToolComponent implements OnInit {
   getAllWashTool() {
     this.washToolService.getWashToolWPosition(localStorage.getItem('position')).subscribe(rs => {
       rs.map(res => {
-        this.washTool.push(res)
+        this.washTool.push(res);
       });
     })
   }

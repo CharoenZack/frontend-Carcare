@@ -151,7 +151,7 @@ export class ManagestaffComponent implements OnInit {
   confirm(id) {
     this.msgs = [];
     this.confirmationService.confirm({
-      message: 'คุณต้องการลบข้อมูลผู้จัดการร้านคนนี้ใช่หรือไม่',
+      message: 'คุณต้องการลบข้อมูลพนักงานคนนี้ใช่หรือไม่',
       accept: () => {
         this.manageStaffService.deleteStaff(id).pipe(switchMap(rs => {
           this.msgs.push({ severity: 'info', summary: 'Delete Success', detail: 'Delete Success' });

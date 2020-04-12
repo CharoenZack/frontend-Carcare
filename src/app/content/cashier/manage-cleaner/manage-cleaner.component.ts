@@ -13,10 +13,13 @@ import { CarWashService } from 'src/app/shared/services/car-wash.service';
   styleUrls: ['./manage-cleaner.component.css']
 })
 export class ManageCleanerComponent implements OnInit {
-  staff: any[];
+  staff1: any[];
+  staff2: any[];
   display = false;
+  displayEdit = false;
   positionList = [];
   formStaff: FormGroup;
+  formEditStaff: FormGroup;
   msgs: Message[] = [];
   nameList: any[] = [{ label: 'โปรดเลือกพนักงาน', value: 0 }];
   channelList: any[] = [{ label: 'โปรดเลือกช่องล้าง', value: 0 }];
@@ -45,7 +48,10 @@ export class ManageCleanerComponent implements OnInit {
     this.loadData2();
     this.getAllcarWash();
     this.getAllcarWashDetail();
-    this.initForm()
+    this.initForm();
+    this.formEditStaff = new FormGroup({
+      editchannel: new FormControl(null, Validators.required)
+    });
   }
 
   initForm() {
@@ -67,13 +73,19 @@ export class ManageCleanerComponent implements OnInit {
 
   loadData() {
     this.manageStaffService.getEmployeeWCar_wash().subscribe(rs => {
-      this.staff = rs;
+      rs.map(res => {
+        this.staff1 = rs;
+      })
+
+      console.log(this.staff1);
+
+
     });
   }
 
   loadData2() {
     this.manageStaffService.getEmployeeWCar_wash2().subscribe(rs => {
-      this.staff = rs;
+      this.staff2 = rs;
     });
   }
 
@@ -119,6 +131,14 @@ export class ManageCleanerComponent implements OnInit {
       });
     });
   }
+
+  editStaff(event) {
+    this.displayEdit = true;
+    this.formEditStaff.patchValue({
+      editchannel: event.car_wash_name
+    });
+  }
+
   submitFormStaff() {
     if (this.formStaff.valid) {
       this.msgs = [];
@@ -129,14 +149,30 @@ export class ManageCleanerComponent implements OnInit {
             this.display = false;
             this.msgs.push({ severity: 'info', summary: 'Insert Employee', detail: 'Insert Success' });
             return this.manageStaffService.getEmployeeWCar_wash().pipe(map(rs => {
-              return this.staff = rs;
+              return this.staff1 = rs;
             }))
           })
         )
         .subscribe();
     } else {
-      this.onValueChange()
+      this.onValueChange();
     }
+  }
+  confirm(id) {
+    this.msgs = [];
+    console.log(id);
+
+    this.confirmationService.confirm({
+      message: 'คุณต้องการลบข้อมูลพนักงานคนนี้ใช่หรือไม่',
+      accept: () => {
+        this.manageStaffService.deleteEmployeeFormCar_wash(id).pipe(switchMap(rs => {
+          this.msgs.push({ severity: 'info', summary: 'Delete Success', detail: 'Delete Success' });
+          return this.manageStaffService.getEmployeeWCar_wash().pipe(map(rs => {
+            return this.staff1 = rs;
+          }))
+        })).subscribe()
+      }
+    });
   }
   private onValueChange() {
     if (!this.formStaff) {

@@ -175,7 +175,7 @@ export class WithdrawComponent implements OnInit {
   }
 
   getAllWashTool() {
-    this.washToolService.getAllWashTool().subscribe(rs => {
+    this.washToolService.getWashToolWPosition(localStorage.getItem('position')).subscribe(rs => {
       rs.map(res => {
         this.washTool = [
           ...this.washTool,
