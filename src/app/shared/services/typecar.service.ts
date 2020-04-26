@@ -74,13 +74,27 @@ export class TypecarService {
       return rs.data;
     }))
   }
+  // insertdetailCar(data) {
+  //   const payload = {
+  //     model_id: data.model.value,
+  //     car_id: data.car.value,
+  //     type_car_id: data.typeCar.value,
+  //   }
+  //   return this.http.post('/app/insertdetailCar', payload, {
+  //     headers: {
+  //       Authorization: `${localStorage.getItem('access-token')}`
+  //     }
+  //   }).pipe(map((rs: any) => {
+  //     return rs.data;
+  //   }))
+  // }
   insertCar(data) {
     const payload = {
       brand: data.car,
     }
     console.log(payload);
 
-    return this.http.post('/app/insertCar', payload, {
+    return this.http.post('/app/insertBrand', payload, {
       headers: {
         Authorization: `${localStorage.getItem('access-token')}`
       }
@@ -90,7 +104,7 @@ export class TypecarService {
   }
   insertModel(data) {
     const payload = {
-      model_name: data.model,
+      model_name: data.model
     }
     console.log(payload);
 

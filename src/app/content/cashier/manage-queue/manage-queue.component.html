@@ -11,15 +11,30 @@
             <label>{{ carWash.label }}</label>
           </div>
           <div class="p-grid-12">
-            <div
-              *ngFor="let reservation of reservationList"
-            >
+            <div *ngFor="let reservation of reservationList">
               <div *ngIf="reservation.car_detail.resultReserve.car_wash_id === carWash.value" class="p-col-12">
-                <div style="width: 100%; background-color: lightblue !important;" (click)="getDetailReservation(reservation)">
-                  <p-card header="{{ 'ชื่อ' + ' ' +reservation.member.members_fname + ' ' + 'นามสกุล ' + ' ' + reservation.member.members_lname}}">
-                    <div>เวลาเริ่ม :{{ reservation.car_detail.resultReserve.start_date + ' น.'}}   -   {{ 'เวลาที่เสร็จสิ้น : ' + reservation.car_detail.resultReserve.end_date + ' น.' }}</div>
+                <div style="width: 100%; background-color: lightblue !important;"
+                  (click)="getDetailReservation(reservation)">
+                  <p-card
+                    header="{{ 'ชื่อ' + ' ' +reservation.member.members_fname + ' ' + 'นามสกุล ' + ' ' + reservation.member.members_lname}}">
+                    <div>เวลาเริ่ม :{{ reservation.car_detail.resultReserve.start_date + ' น.'}} -
+                      {{ 'เวลาที่เสร็จสิ้น : ' + reservation.car_detail.resultReserve.end_date + ' น.' }}</div>
                     <div>เลขทะเบียน :{{ reservation.member.member_license }}</div>
                     <div>จังหวัด :{{ reservation.member.province_name }}</div>
+                    <div style="text-align: right;" [ngSwitch]="reservation.car_detail.resultReserve.reserv_status">
+                      <div *ngSwitchCase="0" style="color: red;">
+                        สถานะ : จองคิว
+                      </div>
+                      <div *ngSwitchCase="1" style="color: orange;">
+                        สถานะ : กำลังล้าง
+                      </div>
+                      <div *ngSwitchCase="2" style="color : green">
+                        สถานะ : เสร็จสิ้นการล้าง
+                      </div>
+                      <div *ngSwitchCase="3" style="color : green">
+                        สถานะ : เสร็จสิ้นบริการล้างรถ
+                      </div>
+                    </div>
                   </p-card>
                 </div>
               </div>
@@ -30,16 +45,8 @@
     </div>
   </div>
 </div>
-<p-dialog
-  header="รายละเอียดของการจอง"
-  [(visible)]="display"
-  [modal]="true"
-  [style]="{ width: '50vw' }"
-  [maximizable]="true"
-  [baseZIndex]="10000"
-  [draggable]="false"
-  [resizable]="false"
->
+<p-dialog header="รายละเอียดของการจอง" [(visible)]="display" [modal]="true" [style]="{ width: '50vw' }"
+  [maximizable]="true" [baseZIndex]="10000" [draggable]="false" [resizable]="false">
   <div class="p-grid">
     <div class="p-col-6" style="text-align: right;">
       <label>ชื่อผู้จอง: </label>

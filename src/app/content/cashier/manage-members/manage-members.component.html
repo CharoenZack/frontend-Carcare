@@ -127,7 +127,7 @@
           <input type="text" pInputText formControlName="license" id="license" placeholder="กรอกป้ายทะเบียน" />
         </div>
         <div class="p-col-4">
-          <p-dropdown [options]="provinceList" formControlName="province" optionLabel="label"></p-dropdown>
+          <p-dropdown [options]="provinceList" formControlName="province" optionLabel="label" placeholder="เลือกจังหวัด" ></p-dropdown>
         </div>
         <button pButton type="button" icon="pi pi-plus" class="ui-button-danger" (click)="addCar()"></button>
         <button pButton type="button" icon="pi pi-minus" class="ui-button-danger" (click)="removeCar(i)"></button>
@@ -195,7 +195,7 @@
           <input type="text" pInputText formControlName="editlicense" id="editlicense" placeholder="กรอกป้ายทะเบียน" />
         </div>
         <div class="p-col-4">
-          <p-dropdown [options]="provinceList" formControlName="editprovince" optionLabel="label"></p-dropdown>
+          <p-dropdown [options]="provinceList" formControlName="editprovince" optionLabel="label" placeholder="เลือกจังหวัด"></p-dropdown>
         </div>
         <button pButton type="button" icon="pi pi-plus" class="ui-button-danger" (click)="addCarEdit()"></button>
         <button pButton type="button" icon="pi pi-minus" class="ui-button-danger" (click)="removeCarEdit(i)"></button>

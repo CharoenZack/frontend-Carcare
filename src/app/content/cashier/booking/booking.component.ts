@@ -44,6 +44,7 @@ export class BookingComponent implements OnInit {
   cleanServiceArray: FormArray;
   cleanServiceGroup: FormGroup;
   formBooking: FormGroup;
+  displayWarningBooking = false;
   public formError = {
     member: '',
     typeCar: '',
@@ -106,9 +107,9 @@ export class BookingComponent implements OnInit {
           ...this.reservation,
           ...rs.map(res => {
             if (res.reserv_status === 0) {
-              status = 'รอการดำเนินการ';
+              status = 'จองคิว';
             } else if (res.reserv_status === 1) {
-              status = 'กำลังดำเนินการ';
+              status = 'กำลังล้าง';
             } else if (res.reserv_status === 2) {
               status = 'เสร็จสิ้นการดำเนินการ';
             }
@@ -136,15 +137,18 @@ export class BookingComponent implements OnInit {
           rs.forEach(res => {
             if (res.queue_date === currentDate) {
               const start = moment.utc(res.start_date, 'HH:mm');
+              console.log('start' + res.start_date)
               const end = moment.utc(res.end_date, 'HH:mm');
               const diffTimeSE = moment.duration(end.diff(start));
+              console.log(end.diff(start) + '1')
               const totalTimeSE =
                 diffTimeSE.get('hours') * 60 + diffTimeSE.get('minutes');
               const diffTimeEC = moment.duration(currentTime.diff(start));
+              console.log(currentTime.diff(start) + '2')
               const totalTimeEC =
                 diffTimeEC.get('hours') * 60 + diffTimeEC.get('minutes');
               if (totalTimeEC > totalTimeSE) {
-                this.formBooking.get('reserveTime').setValue(moment(new Date()).format('HH:mm:ss'));
+                this.formBooking.get('reserveTime').setValue(moment(new Date()).format('HH:mm'));
               } else {
                 this.formBooking.get('reserveTime').setValue(res.end_date);
               }
@@ -154,9 +158,9 @@ export class BookingComponent implements OnInit {
               const totalTimeIC =
                 diffTimeIC.get('hours') * 60 + diffTimeIC.get('minutes');
               if (totalTimeIC > 0) {
-                this.formBooking.get('reserveTime').setValue(moment(new Date()).format('HH:mm:ss'));
+                this.formBooking.get('reserveTime').setValue(moment(new Date()).format('HH:mm'));
               } else {
-                this.formBooking.get('reserveTime').setValue('09:00:00');
+                this.formBooking.get('reserveTime').setValue('09:00');
               }
             }
           });
@@ -170,9 +174,9 @@ export class BookingComponent implements OnInit {
           const totalTimeIC =
             diffTimeIC.get('hours') * 60 + diffTimeIC.get('minutes');
           if (totalTimeIC > 0) {
-            this.formBooking.get('reserveTime').setValue(moment(new Date()).format('HH:mm:ss'));
+            this.formBooking.get('reserveTime').setValue(moment(new Date()).format('HH:mm'));
           } else {
-            this.formBooking.get('reserveTime').setValue('09:00:00');
+            this.formBooking.get('reserveTime').setValue('09:00');
           }
         }
       });
@@ -193,6 +197,7 @@ export class BookingComponent implements OnInit {
     this.carList = [{ label: 'โปรดเลือกรถ', value: 0 }];
     this.carService.getCarByMember(event.value.value).subscribe(rs => {
       rs.map(res => {
+        console.log(res.members_id)
         this.carList = [
           ...this.carList,
           {
@@ -202,6 +207,7 @@ export class BookingComponent implements OnInit {
             value_member: res.members_id,
             type_car: res.type_car_id
           }
+
         ];
       });
       console.log(this.carList);
@@ -237,7 +243,10 @@ export class BookingComponent implements OnInit {
       rs.map(res => {
         this.cleanList = [
           ...this.cleanList,
-          { label: res.service_name + ' ' + 'ราคา' + ' ' + res.service_price + ' ' + 'บาท', value: res.clean_service_detail_id }
+          {
+            label: res.service_name + ' ' + 'ราคา' + ' ' + res.service_price + ' ' + 'บาท' + ' ' + 'ใช้เวลาประมาณ ' + res.service_duration + ' นาที',
+            value: res.clean_service_detail_id
+          }
         ];
       });
     });
@@ -245,6 +254,7 @@ export class BookingComponent implements OnInit {
       console.log(event.value.value_member);
 
       rs.map(res => {
+        console.log(...this.aboutCar)
         this.aboutCar = [
           ...this.aboutCar,
           {
@@ -256,10 +266,12 @@ export class BookingComponent implements OnInit {
 
             type_car: res.type_car_id
           }
+
         ];
       });
       console.log(this.aboutCar);
     });
+
   }
 
   initFormBooking() {
@@ -269,7 +281,7 @@ export class BookingComponent implements OnInit {
       cleanServiceForm: new FormControl(null, Validators.required),
       carWash: new FormControl(null, Validators.required),
       reserveDate: new FormControl(moment(new Date()).format('YYYY-MM-DD')),
-      reserveTime: new FormControl(null, Validators.required),
+      reserveTime: new FormControl(moment(new Date()).format('HH:mm')),
       cashierId: new FormControl(localStorage.getItem('userId'))
     });
     this.formBooking.valueChanges
@@ -298,36 +310,42 @@ export class BookingComponent implements OnInit {
         reserveTime,
         employee_id: cashierId
       };
+      console.log(payload)
       this.bookingService
         .booking(payload)
         .pipe(
           switchMap(rs => {
-            this.display = false;
-            this.msgs.push({
-              severity: 'info',
-              summary: 'Booking Complete',
-              detail: 'Booking Complete'
-            });
+            if (rs.checkBooking === false) {
+              this.displayWarningBooking = true;
+            } else {
+              this.display = false;
+              this.msgs.push({
+                severity: 'info',
+                summary: 'Booking Complete',
+                detail: 'Booking Complete'
+              });
+              this.formBooking.reset();
+              return this.reservationService
+                .getAllReservation(localStorage.getItem('userId'))
+                .pipe(
+                  map(rs => {
+                    this.reservation = [
+                      ...this.reservation,
+                      ...rs.map(res => {
+                        if (res.reserv_status === 0) {
+                          status = 'จองคิว';
+                        } else if (res.reserv_status === 1) {
+                          status = 'กำลังล้าง';
+                        } else if (res.reserv_status === 2) {
+                          status = 'เสร็จสิ้นการล้าง';
+                        }
+                        return { ...res, ...{ status } };
+                      })
+                    ];
+                  })
+                );
+            }
             this.formBooking.reset();
-            return this.reservationService
-              .getAllReservation(localStorage.getItem('userId'))
-              .pipe(
-                map(rs => {
-                  this.reservation = [
-                    ...this.reservation,
-                    ...rs.map(res => {
-                      if (res.reserv_status === 0) {
-                        status = 'รอการดำเนินการ';
-                      } else if (res.reserv_status === 1) {
-                        status = 'กำลังดำเนินการ';
-                      } else if (res.reserv_status === 2) {
-                        status = 'เสร็จสิ้นการดำเนินการ';
-                      }
-                      return { ...res, ...{ status } };
-                    })
-                  ];
-                })
-              );
           })
         )
         .subscribe();
@@ -410,11 +428,11 @@ export class BookingComponent implements OnInit {
                   ...this.reservation,
                   ...rs.map(res => {
                     if (res.reserv_status === 0) {
-                      status = 'รอการดำเนินการ';
+                      status = 'จองคิว';
                     } else if (res.reserv_status === 1) {
-                      status = 'กำลังดำเนินการ';
+                      status = 'กำลังล้าง';
                     } else if (res.reserv_status === 2) {
-                      status = 'เสร็จสิ้นการดำเนินการ';
+                      status = 'เสร็จสิ้นการล้าง';
                     }
                     return { ...res, ...{ status } };
                   })

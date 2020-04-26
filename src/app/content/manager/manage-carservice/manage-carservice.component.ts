@@ -19,6 +19,8 @@ import {
 } from 'rxjs/operators';
 import { CleanService } from 'src/app/shared/services/clean.service';
 import { TypecarService } from 'src/app/shared/services/typecar.service';
+import { PositionService } from 'src/app/shared/services/position.service';
+import { WashtoolService } from 'src/app/shared/services/washtool.service';
 
 @Component({
   selector: 'app-manage-carservice',
@@ -31,6 +33,7 @@ export class ManageCarserviceComponent implements OnInit {
   formClean: FormGroup;
   formEditClean: FormGroup;
   clean: any[];
+  positionList = [];
   typeCarList = [];
   serviceList = [];
   msgs: Message[] = [];
@@ -38,7 +41,8 @@ export class ManageCarserviceComponent implements OnInit {
     service: '',
     price: '',
     timeService: '',
-    typeCar: ''
+    typeCar: '',
+    position: ''
   };
   public validationMassages = {
     service: {
@@ -52,26 +56,45 @@ export class ManageCarserviceComponent implements OnInit {
     },
     typeCar: {
       required: '*โปรดเลือกประเภทของรถ'
+    },
+    position: {
+      required: '*โปรดเลือกการบริการ'
     }
   };
   constructor(
     private cleanService: CleanService,
     private confirmationService: ConfirmationService,
-    private typeCarService: TypecarService
-  ) {}
+    private typeCarService: TypecarService,
+    private positionService: PositionService,
+    private washToolService: WashtoolService,
+  ) { }
 
   ngOnInit() {
     this.loadData();
     this.initForm();
     this.getService();
     this.getAllTypeCar();
+    this.getPosition();
     this.formEditClean = new FormGroup({
       editservice: new FormControl(null),
       editprice: new FormControl(null),
       edittimeService: new FormControl(null),
       editTypeCar: new FormControl(null),
+      editPosition: new FormControl(null),
       id: new FormControl(null)
     });
+  }
+
+  getPosition() {
+    this.positionService.getAllPositionNotAM2().subscribe(rs => {
+      rs.map(res => {
+        console.log(res);
+        this.positionList = [
+          ...this.positionList,
+          { label: res.position_work, value: res.position_id }
+        ];
+      })
+    })
   }
 
   addCleanService() {
@@ -83,7 +106,8 @@ export class ManageCarserviceComponent implements OnInit {
       service: new FormControl(null, Validators.required),
       price: new FormControl(null, Validators.required),
       timeService: new FormControl(null, Validators.required),
-      typeCar: new FormControl(null, Validators.required)
+      typeCar: new FormControl(null, Validators.required),
+      position: new FormControl(null, Validators.required),
     });
     this.formClean.valueChanges
       .pipe(debounceTime(500), distinctUntilChanged())
@@ -145,11 +169,12 @@ export class ManageCarserviceComponent implements OnInit {
                 value: rs.clean_service_id
               };
               this.formEditClean.get('editservice').patchValue(dropdownClean);
+              console.log(this.formEditClean.get('editservice').patchValue(dropdownClean))
               return dropdownClean;
             }
           });
           return this.typeCarService.getAllTypeCar().pipe(
-            map((typeCar: any) => {
+            switchMap((typeCar: any) => {
               typeCar.filter((typeCarRs: any) => {
                 if (typeCarRs.type_car_id === event.type_car_id) {
                   const dropdownTypeCar = {
@@ -162,11 +187,27 @@ export class ManageCarserviceComponent implements OnInit {
                   return typeCarRs;
                 }
               });
-              this.formEditClean.patchValue({
-                editprice: event.service_price,
-                edittimeService: event.service_duration,
-                id: event.clean_service_detail_id
-              });
+              return this.cleanService.getAllCleanServiceDetailFull().pipe(
+                map((rs: any) => {
+                  rs.filter((res: any) => {
+                    if (res.position_id === event.position_id) {
+                      console.log('true');
+                      const dropdownClean = {
+                        label: res.position_work,
+                        value: res.position_id
+                      };
+                      this.formEditClean.get('editPosition').patchValue(dropdownClean);
+                      console.log(dropdownClean);
+                      return res;
+                    }
+                  });
+                  this.formEditClean.patchValue({
+                    editprice: event.service_price,
+                    edittimeService: event.service_duration,
+                    id: event.clean_service_detail_id
+                  });
+                })
+              )
             })
           );
         })

@@ -20,16 +20,16 @@
               </ng-template>
               <ng-template pTemplate="header" let-columns>
                 <tr>
-                  <th pSortableColumn="name">
+                  <th pSortableColumn="member">
                     ชื่อผู้จอง
-                    <p-sortIcon field="name" ariaLabel="Activate to sort"
+                    <p-sortIcon field="member" ariaLabel="Activate to sort"
                       ariaLabelDesc="Activate to sort in descending order"
                       ariaLabelAsc="Activate to sort in ascending order">
                     </p-sortIcon>
                   </th>
-                  <th pSortableColumn="reserv_date">
+                  <th pSortableColumn="queue_date">
                     วันที่จอง
-                    <p-sortIcon field="reserv_date" ariaLabel="Activate to sort"
+                    <p-sortIcon field="queue_date" ariaLabel="Activate to sort"
                       ariaLabelDesc="Activate to sort in descending order"
                       ariaLabelAsc="Activate to sort in ascending order">
                     </p-sortIcon>
@@ -82,10 +82,10 @@
                   <td>
                     <div [ngSwitch]="rowData.reserv_status">
                       <div *ngSwitchCase="0">
-                        <label>กำลังรอการดำเนินงาน</label>
+                        <label>จองคิว</label>
                       </div>
                       <div *ngSwitchCase="1">
-                        <label>กำลังดำเนินงาน</label>
+                        <label>กำลังล้าง</label>
                       </div>
                       <div *ngSwitchCase="2">
                         <label>เสร็จสิ้นการดำเนินงาน</label>
@@ -150,14 +150,14 @@
       <div class="p-col-4" style="text-align: right;">
         <label for="cleanService">บริการ</label>
       </div>
-      <div class="p-col-4">
+      <div class="p-col-6">
         <div class="p-col-12">
           <div *ngFor="let serviceForm of cleanList;let i=index;">
             <p-checkbox [value]="serviceForm.value" [label]="serviceForm.label" [formControl]="formBooking.get('cleanServiceForm')"></p-checkbox>
           </div>
         </div>
       </div>
-      <div class="p-col-4" style="text-align: left;">
+      <div class="p-col-2" style="text-align: left;">
         <div *ngIf="formError.cleanService" class="text-danger text-invalid">{{formError.cleanService }}</div>
       </div>
       <div class="p-col-4" style="text-align: right;">
@@ -182,7 +182,8 @@
         <label for="reserveTime">เวลาจอง</label>
       </div>
       <div class="p-col-4">
-        <input type="text" formControlName="reserveTime" pInputText readonly/>
+        <!-- <input type="text" formControlName="reserveTime" pInputText readonly/> -->
+        <p-calendar dataType="string" formControlName="reserveTime" [timeOnly]="true" ></p-calendar>
       </div>
       <div class="p-col-4" style="text-align: left;">
         <div *ngIf="formError.reserveDateTime" class="text-danger text-invalid">{{formError.reserveDateTime }}</div>
@@ -198,4 +199,8 @@
     ></button>
       </div>
   </div>
+</p-dialog>
+<p-dialog header="แจ้งเตือนรหัสผู้ใช้" [(visible)]="displayWarningBooking" [modal]="true" [style]="{width: '50vw'}"
+  [baseZIndex]="10000" [draggable]="false" [resizable]="false">
+  <p style="color : red">เวลาที่เลือกเลือกมีคิวจองแล้ว กรุณาเลือกเวลาอื่นค่ะ</p>
 </p-dialog>

@@ -1,3 +1,4 @@
+import { CleanService } from 'src/app/shared/services/clean.service';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ConfirmationService, Message } from 'primeng/api';
@@ -17,11 +18,13 @@ export class ManageToolsComponent implements OnInit {
   formEditTool: FormGroup;
   tool: any[];
   positionList = [];
+  cleanList = [];
+  position = [];
   msgs: Message[] = [];
   public formError = {
     tool: '',
     amount: '',
-    position: '',
+    cleanService: '',
   };
   public validationMassages = {
     username: {
@@ -30,23 +33,25 @@ export class ManageToolsComponent implements OnInit {
     password: {
       required: '*กรุณากรอกจำนวน'
     },
-    position: {
-      required: '*กรุณาเลือกตำแหน่ง'
+    cleanService: {
+      required: '*กรุณาเลือกการบริการ'
     }
   };
   constructor(private washToolService: WashtoolService,
     private confirmationService: ConfirmationService,
-    private positionService: PositionService) { }
+    private positionService: PositionService,
+    private cleanService: CleanService
+  ) { }
 
   ngOnInit() {
     this.loadData();
     this.initForm();
-    this.getPosition();
-    //this.getPosition();
+    this.getCleanService();
+    //this.getCleanService();
     this.formEditTool = new FormGroup({
       editTool: new FormControl(null, Validators.required),
       editAmount: new FormControl(null, Validators.required),
-      editStatus: new FormControl(null, Validators.required),
+      editCleanService: new FormControl(null, Validators.required),
       id: new FormControl(null)
     });
   }
@@ -55,13 +60,13 @@ export class ManageToolsComponent implements OnInit {
     this.display = true;
   }
 
-  getPosition() {
-    this.positionService.getAllPositionNotAM().subscribe(rs => {
+  getCleanService() {
+    this.cleanService.getService().subscribe(rs => {
       rs.map(res => {
         console.log(res);
-        this.positionList = [
-          ...this.positionList,
-          { label: res.position_role + ' ' + res.position_work, value: res.position_id }
+        this.cleanList = [
+          ...this.cleanList,
+          { label: res.service_name, value: res.clean_service_id }
         ];
       })
     })
@@ -71,9 +76,9 @@ export class ManageToolsComponent implements OnInit {
     this.formTool = new FormGroup({
       tool: new FormControl(null, Validators.required),
       amount: new FormControl(null, Validators.required),
-      status: new FormControl(null),
+      // status: new FormControl(null),
       employeeId: new FormControl(localStorage.getItem('userId')),
-      position: new FormControl(null, Validators.required),
+      cleanService: new FormControl(null, Validators.required),
     });
     this.formTool
       .valueChanges
@@ -93,9 +98,10 @@ export class ManageToolsComponent implements OnInit {
           switchMap(rs => {
             this.display = false;
             this.msgs.push({ severity: 'info', summary: 'Insert Tool', detail: 'Insert Success' });
-            return this.washToolService.getAllWashTool().pipe(map(rs => {
+            return this.washToolService.getWashTool().pipe(map(rs => {
               return this.tool = rs;
-            }))
+            }));
+
           })
         )
         .subscribe();
@@ -122,23 +128,40 @@ export class ManageToolsComponent implements OnInit {
 
   editTool(event) {
     this.displayEdit = true;
-    this.formEditTool.patchValue({
-      editTool: event.tool_name,
-      editAmount: event.amount,
-      editStatus: event.tool_status,
-      id: event.wash_tool_id
-    });
+    this.washToolService.getWashTool().pipe(
+      map((rs: any) => {
+        rs.filter((res: any) => {
+          if (res.clean_service_id === event.clean_service_id) {
+            console.log('true');
+            const dropdownWashTool = {
+              label: res.service_name,
+              value: res.clean_service_id
+            };
+            this.formEditTool.get('editCleanService').patchValue(dropdownWashTool);
+            console.log(dropdownWashTool);
+            return dropdownWashTool;
+          }
+        });
+        this.formEditTool.patchValue({
+          editTool: event.tool_name,
+          editAmount: event.amount,
+          id: event.wash_tool_id
+        });
+        console.log(this.formEditTool);
+      })
+    ).subscribe();
   }
 
   updateTool() {
     this.msgs = [];
+    console.log(this.formEditTool)
     this.washToolService
       .updateWashTool(this.formEditTool.getRawValue())
       .pipe(
         switchMap(rs => {
           this.displayEdit = false;
           this.msgs.push({ severity: 'info', summary: 'Update Tool', detail: 'Update Success' });
-          return this.washToolService.getAllWashTool().pipe(map(rs => {
+          return this.washToolService.getWashTool().pipe(map(rs => {
             return this.tool = rs;
           }))
         })
@@ -153,7 +176,7 @@ export class ManageToolsComponent implements OnInit {
       accept: () => {
         this.washToolService.deleteWashTool(id).pipe(switchMap(rs => {
           this.msgs.push({ severity: 'info', summary: 'Delete Success', detail: 'Delete Success' });
-          return this.washToolService.getAllWashTool().pipe(map(rs => {
+          return this.washToolService.getWashTool().pipe(map(rs => {
             return this.tool = rs;
           }))
         })).subscribe()

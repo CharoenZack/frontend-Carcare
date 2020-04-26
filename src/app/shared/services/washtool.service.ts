@@ -41,9 +41,9 @@ export class WashtoolService {
     const payload = {
       tool_name: data.tool,
       amount: data.amount,
-      tool_status: data.status,
+      // tool_status: data.status,
       employee_id: data.employeeId,
-      position: data.position.value
+      clean_service: data.cleanService.value
     }
     return this.http.post('/app/insertWash_tool', payload, {
       headers: {
@@ -58,7 +58,7 @@ export class WashtoolService {
     const payload = {
       tool_name: data.editTool,
       amount: data.editAmount,
-      tool_status: data.editStatus,
+      clean_service: data.editCleanService.value,
       wash_tool_id: data.id
     }
     return this.http.patch('/app/updateWash_toolStn_am_tsWwtid', payload, {

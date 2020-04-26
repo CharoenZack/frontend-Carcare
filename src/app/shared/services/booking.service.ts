@@ -53,7 +53,7 @@ export class BookingService {
     })
       .pipe(
         map((res :any) => {
-          return res.data
+          return res.result
         })
       );
   }

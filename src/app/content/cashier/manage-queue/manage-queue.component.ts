@@ -61,7 +61,6 @@ export class ManageQueueComponent implements OnInit {
         });
       });
   }
-
   getDetailReservation(data) {
     this.display = true;
     let service = '';

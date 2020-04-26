@@ -6,6 +6,7 @@ import { CarService } from 'src/app/shared/services/car.service';
 import { ModelService } from 'src/app/shared/services/model.service';
 import { TypecarService } from 'src/app/shared/services/typecar.service';
 
+
 @Component({
   selector: 'app-manage-typecar',
   templateUrl: './manage-typecar.component.html',
@@ -27,17 +28,19 @@ export class ManageTypecarComponent implements OnInit {
   typeCarList = [];
   modelList = [];
   msgs: Message[] = [];
+  value: boolean = false;
+  values: boolean = false;
   public formError = {
     model: '',
     car: '',
-    typeCar: ''
+    typeCar: '',
   };
   public validationMassages = {
     model: {
-      required: '*โปรดกรอกยี่ห้อรถ'
+      required: '*โปรดระบุยี่ห้อรถ'
     },
     car: {
-      required: '*โปรดเลือกรุ่นรถ'
+      required: '*โปรดระบุรุ่นรถ'
     },
     typeCar: {
       required: '*โปรดเลือกประเภทรถ'
@@ -89,6 +92,8 @@ export class ManageTypecarComponent implements OnInit {
     this.formTypeCar = new FormGroup({
       model: new FormControl(null, Validators.required),
       car: new FormControl(null, Validators.required),
+      addBrand: new FormControl(null),
+      addModel: new FormControl(null),
       typeCar: new FormControl(null, Validators.required),
     });
     this.formTypeCar.valueChanges
@@ -96,6 +101,7 @@ export class ManageTypecarComponent implements OnInit {
       .subscribe(() => this.onValueChange());
   }
   submitAddCar() {
+    console.log(this.formAddCar)
     if (this.formAddCar.valid) {
       this.msgs = [];
       this.typeCarService
@@ -121,6 +127,7 @@ export class ManageTypecarComponent implements OnInit {
     }
   }
   submitAddModel() {
+    console.log(this.formAddModel)
     if (this.formAddModel.valid) {
       this.msgs = [];
       this.typeCarService
@@ -146,6 +153,7 @@ export class ManageTypecarComponent implements OnInit {
     }
   }
   submitFormTypeCar() {
+    console.log(this.formTypeCar)
     if (this.formTypeCar.valid) {
       this.msgs = [];
       this.typeCarService

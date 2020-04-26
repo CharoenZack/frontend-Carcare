@@ -78,7 +78,6 @@ export class CheckQueueComponent implements OnInit {
   }
 
   updateStatus(queue) {
-
     const payload = {
       status: queue.reservStatus,
       queue_id: queue.queueId

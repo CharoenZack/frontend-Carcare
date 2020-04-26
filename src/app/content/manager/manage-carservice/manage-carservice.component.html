@@ -3,115 +3,80 @@
     <div style="text-align:center">
       <h1>จัดการบริการล้างรถ</h1>
     </div>
-      <hr />
-      <p-messages [(value)]="msgs"></p-messages>
-            <p-table [paginator]="true" [rows]="10" [responsive]="true" [value]="clean">
-              <ng-template pTemplate="caption">
-                <div style="text-align:left">
-                  <!-- <button pButton type="button" id="btn-Increase" label="เพิ่ม" class="ui-button-temple"
+    <hr />
+    <p-messages [(value)]="msgs"></p-messages>
+    <p-table [paginator]="true" [rows]="10" [responsive]="true" [value]="clean">
+      <ng-template pTemplate="caption">
+        <div style="text-align:left">
+          <!-- <button pButton type="button" id="btn-Increase" label="เพิ่ม" class="ui-button-temple"
                     style="width: 20%"></button> -->
-                  <button
-                    pButton
-                    type="button"
-                    label="เพิ่ม"
-                    class="ui-button-rounded ui-button-success"
-                    style="font-size: 15px; width: 10%;"
-                    (click)="addCleanService()"
-                  ></button>
-                </div>
-              </ng-template>
-              <ng-template pTemplate="header" let-columns>
-                <tr>
-                  <th pSortableColumn="name">
-                    บริการล้างรถ
-                    <p-sortIcon
-                      field="nameAbbr"
-                      ariaLabel="Activate to sort"
-                      ariaLabelDesc="Activate to sort in descending order"
-                      ariaLabelAsc="Activate to sort in ascending order"
-                    >
-                    </p-sortIcon>
-                  </th>
-                  <th pSortableColumn="tel">
-                    ราคา
-                    <p-sortIcon
-                      field="name"
-                      ariaLabel="Activate to sort"
-                      ariaLabelDesc="Activate to sort in descending order"
-                      ariaLabelAsc="Activate to sort in ascending order"
-                    >
-                    </p-sortIcon>
-                  </th>
-                  <th pSortableColumn="date">
-                    ระยะเวลาล้าง
-                    <p-sortIcon
-                      field="name"
-                      ariaLabel="Activate to sort"
-                      ariaLabelDesc="Activate to sort in descending order"
-                      ariaLabelAsc="Activate to sort in ascending order"
-                    >
-                    </p-sortIcon>
-                  </th>
-                  <th pSortableColumn="date"> 
-                    ขนาดรถ
-                    <p-sortIcon
-                      field="name"
-                      ariaLabel="Activate to sort"
-                      ariaLabelDesc="Activate to sort in descending order"
-                      ariaLabelAsc="Activate to sort in ascending order"
-                    >
-                    </p-sortIcon>
-                  </th>
-                  <th>ตัวดำเนินการ</th>
-                </tr>
-              </ng-template>
-              <ng-template pTemplate="body" let-rowData let-columns="columns">
-                <tr>
-                <td>{{ rowData.service_name }}</td>
-                <td>{{ rowData.service_price }}</td>
-                <td>{{ rowData.service_duration }}</td>
-                <td>{{ rowData.size }}</td>
-                  <td>
-                    <div style="text-align:center">
-                      <button
-                        pButton
-                        type="button"
-                        label="แก้ไข"
-                        class="ui-button-warning"
-                        style="width: 40%;"
-                        (click) = "editCleanService(rowData)"
-                      ></button>
-                      <button
-                        pButton
-                        type="button"
-                        label="ลบ"
-                        class="ui-button-danger"
-                        style="width: 40%;margin-left: 5mm"
-                        (click)="confirm(rowData.clean_service_detail_id)"
-                      ></button>
-                    </div>
-                  </td>
-                </tr>
-              </ng-template>
-            </p-table>
-          </div>
+          <button pButton type="button" label="เพิ่ม" class="ui-button-rounded ui-button-success"
+            style="font-size: 15px; width: 10%;" (click)="addCleanService()"></button>
         </div>
-<p-dialog
-  header="เพื่มบริการล้างรถ"
-  [(visible)]="display"
-  [modal]="true"
-  [style]="{ width: '50vw' }"
-  [maximizable]="true"
-  [baseZIndex]="10000"
-  [draggable]="false"
-  [resizable]="false"
->
+      </ng-template>
+      <ng-template pTemplate="header" let-columns>
+        <tr>
+          <th pSortableColumn="service">
+            บริการล้างรถ
+            <p-sortIcon field="service" ariaLabel="Activate to sort"
+              ariaLabelDesc="Activate to sort in descending order" ariaLabelAsc="Activate to sort in ascending order">
+            </p-sortIcon>
+          </th>
+          <th pSortableColumn="price">
+            ราคา
+            <p-sortIcon field="price" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order"
+              ariaLabelAsc="Activate to sort in ascending order">
+            </p-sortIcon>
+          </th>
+          <th pSortableColumn="date">
+            ระยะเวลาล้าง
+            <p-sortIcon field="date" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order"
+              ariaLabelAsc="Activate to sort in ascending order">
+            </p-sortIcon>
+          </th>
+          <th pSortableColumn="size">
+            ขนาดรถ
+            <p-sortIcon field="size" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order"
+              ariaLabelAsc="Activate to sort in ascending order">
+            </p-sortIcon>
+          </th>
+          <th pSortableColumn="position">
+            ด้านการบริการ
+            <p-sortIcon field="position" ariaLabel="Activate to sort"
+              ariaLabelDesc="Activate to sort in descending order" ariaLabelAsc="Activate to sort in ascending order">
+            </p-sortIcon>
+          </th>
+          <th>ตัวดำเนินการ</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-rowData let-columns="columns">
+        <tr>
+          <td>{{ rowData.service_name }}</td>
+          <td>{{ rowData.service_price }}</td>
+          <td>{{ rowData.service_duration }}</td>
+          <td>{{ rowData.size }}</td>
+          <td>{{ rowData.position_work }}</td>
+          <td>
+            <div style="text-align:center">
+              <button pButton type="button" label="แก้ไข" class="ui-button-warning" style="width: 40%;"
+                (click)="editCleanService(rowData)"></button>
+              <button pButton type="button" label="ลบ" class="ui-button-danger" style="width: 40%;margin-left: 5mm"
+                (click)="confirm(rowData.clean_service_detail_id)"></button>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+</div>
+<p-dialog header="เพื่มบริการล้างรถ" [(visible)]="display" [modal]="true" [style]="{ width: '50vw' }"
+  [maximizable]="true" [baseZIndex]="10000" [draggable]="false" [resizable]="false">
   <div class="p-grid" [formGroup]="formClean">
     <div class="p-col-4" style="text-align: right;">
       <label for="service">บริการล้างรถ</label>
     </div>
     <div class="p-col-4">
-      <p-dropdown [options]="serviceList" formControlName = "service" optionLabel="label"></p-dropdown>
+      <p-dropdown [options]="serviceList" formControlName="service" optionLabel="label"></p-dropdown>
     </div>
     <div class="p-col-4" style="text-align: left;">
       <div *ngIf="formError.service" class="text-danger text-invalid">{{formError.service }}</div>
@@ -120,93 +85,89 @@
       <label for="price">ราคา</label>
     </div>
     <div class="p-col-4">
-      <input type="text" pInputText formControlName="price" id ="price"/>
+      <input type="text" pInputText formControlName="price" id="price" />
     </div>
     <div class="p-col-4" style="text-align: left;">
       <div *ngIf="formError.price" class="text-danger text-invalid">{{formError.price }}</div>
     </div>
-      <div class="p-col-4" style="text-align: right;">
-        <label for="timeService">ระยะเวลาล้าง</label>
-      </div>
-      <div class="p-col-4">
-        <input type = "text" formControlName="timeService" pInputText/>
-      </div>
-      <div class="p-col-4" style="text-align: left;">
-        <div *ngIf="formError.timeService" class="text-danger text-invalid">{{formError.timeService }}</div>
-      </div>
-      <div class="p-col-4" style="text-align: right;">
-        <label for="typeCar">ขนาดรถ</label>
-      </div>
-      <div class="p-col-4">
-        <p-dropdown [options]="typeCarList" formControlName = "typeCar" optionLabel="label"></p-dropdown>
-      </div>
-      <div class="p-col-4" style="text-align: left;">
-        <div *ngIf="formError.typeCar" class="text-danger text-invalid">{{formError.typeCar }}</div>
-      </div>
-      <div class="p-col-12" style="text-align: center;">
-        <button
-      type="button"
-      pButton
-      icon="pi pi-check"
-      label="บันทึก"
-      (click)="submitFormCleanService()"
-    ></button>
-      </div>
+    <div class="p-col-4" style="text-align: right;">
+      <label for="timeService">ระยะเวลาล้าง</label>
+    </div>
+    <div class="p-col-4">
+      <input type="text" formControlName="timeService" pInputText />
+    </div>
+    <div class="p-col-4" style="text-align: left;">
+      <div *ngIf="formError.timeService" class="text-danger text-invalid">{{formError.timeService }}</div>
+    </div>
+    <div class="p-col-4" style="text-align: right;">
+      <label for="typeCar">ขนาดรถ</label>
+    </div>
+    <div class="p-col-4">
+      <p-dropdown [options]="typeCarList" formControlName="typeCar" optionLabel="label"></p-dropdown>
+    </div>
+    <div class="p-col-4" style="text-align: left;">
+      <div *ngIf="formError.typeCar" class="text-danger text-invalid">{{formError.typeCar }}</div>
+    </div>
+    <div class="p-col-4" style="text-align: right;">
+      <label for="position">ด้านการบริการ</label>
+    </div>
+    <div class="p-col-4">
+      <p-dropdown [options]="positionList" formControlName="position" optionLabel="label"
+        placeholder="กรุณาเลือกตำแหน่งงาน"></p-dropdown>
+    </div>
+    <div class="p-col-4" style="text-align: left;">
+      <div *ngIf="formError.position" class="text-danger text-invalid">{{formError.position }}</div>
+    </div>
+    <div class="p-col-12" style="text-align: center;">
+      <button type="button" pButton icon="pi pi-check" label="บันทึก" (click)="submitFormCleanService()"></button>
+    </div>
   </div>
 </p-dialog>
 
-<p-dialog
-  header="แก้ไขบริการล้างรถ"
-  [(visible)]="displayEdit"
-  [modal]="true"
-  [style]="{ width: '50vw' }"
-  [maximizable]="true"
-  [baseZIndex]="10000"
-  [draggable]="false"
-  [resizable]="false"
->
+<p-dialog header="แก้ไขบริการล้างรถ" [(visible)]="displayEdit" [modal]="true" [style]="{ width: '50vw' }"
+  [maximizable]="true" [baseZIndex]="10000" [draggable]="false" [resizable]="false">
   <div class="p-grid" [formGroup]="formEditClean">
-      <div class="p-col-4" style="text-align: right;">
-        <label for="editservice">บริการล้างรถ</label>
-      </div>
-      <div class="p-col-8">
-        <p-dropdown [options]="serviceList" formControlName = "editservice" optionLabel="label"></p-dropdown>
-      </div>
-      <div class="p-col-4" style="text-align: right;">
-        <label for="editprice">ราคา</label>
-      </div>
-      <div class="p-col-8">
-        <input type="text" pInputText formControlName="editprice" id="editprice"/>
-      </div>
-      <div class="p-col-4" style="text-align: right;">
-        <label for="edittimeService">ระยะเวลาล้าง</label>
-      </div>
-      <div class="p-col-8">
-        <input type="text" pInputText formControlName="edittimeService" id ="edittimeService"/>
-      </div>
-      <div class="p-col-4" style="text-align: right;">
-        <label for="editTypeCar">ขนาดรถ</label>
-      </div>
-      <div class="p-col-8">
-        <p-dropdown [options]="typeCarList" formControlName = "editTypeCar" optionLabel="label"></p-dropdown>
-      </div>
-      <input type="hidden" formControlName="id"/>
-      <div class="p-col-12" style="text-align: center;">
-        <button
-      type="button"
-      pButton
-      icon="pi pi-check"
-      (click)="display = false"
-      label="บันทึก"
-      (click)="updateCleanService()"
-    ></button>
-      </div>
+    <div class="p-col-4" style="text-align: right;">
+      <label for="editservice">บริการล้างรถ</label>
+    </div>
+    <div class="p-col-8">
+      <p-dropdown [options]="serviceList" formControlName="editservice" optionLabel="label"></p-dropdown>
+    </div>
+    <div class="p-col-4" style="text-align: right;">
+      <label for="editprice">ราคา</label>
+    </div>
+    <div class="p-col-8">
+      <input type="text" pInputText formControlName="editprice" id="editprice" />
+    </div>
+    <div class="p-col-4" style="text-align: right;">
+      <label for="edittimeService">ระยะเวลาล้าง</label>
+    </div>
+    <div class="p-col-8">
+      <input type="text" pInputText formControlName="edittimeService" id="edittimeService" />
+    </div>
+    <div class="p-col-4" style="text-align: right;">
+      <label for="editTypeCar">ขนาดรถ</label>
+    </div>
+    <div class="p-col-8">
+      <p-dropdown [options]="typeCarList" formControlName="editTypeCar" optionLabel="label"></p-dropdown>
+    </div>
+    <div class="p-col-4" style="text-align: right;">
+      <label for="editPosition">ด้านการบริการ</label>
+    </div>
+    <div class="p-col-4">
+      <p-dropdown [options]="positionList" formControlName="editPosition" optionLabel='label'></p-dropdown>
+    </div>
+    <input type="hidden" formControlName="id" />
+    <div class="p-col-12" style="text-align: center;">
+      <button type="button" pButton icon="pi pi-check" (click)="display = false" label="บันทึก"
+        (click)="updateCleanService()"></button>
+    </div>
   </div>
 </p-dialog>
 
 <p-confirmDialog #cd header="ลบข้อมูล" icon="pi pi-exclamation-triangle">
   <p-footer>
-    <button type="button" pButton icon="pi pi-check" label="คกลง" (click)="cd.accept()"></button>
-      <button type="button" pButton icon="pi pi-times" label="ยกเลิก" (click)="cd.reject()"></button>
+    <button type="button" pButton icon="pi pi-check" label="ตกลง" (click)="cd.accept()"></button>
+    <button type="button" pButton icon="pi pi-times" label="ยกเลิก" (click)="cd.reject()"></button>
   </p-footer>
 </p-confirmDialog>

@@ -34,7 +34,8 @@ export class CleanService {
       clean_service_id: data.service.value,
       service_price: data.price,
       service_duration: data.timeService,
-      type_car_id: data.typeCar.value
+      type_car_id: data.typeCar.value,
+      position: data.position.value
     }
     return this.http.post('/app/insertClean_service_detail', payload, {
       headers: {
@@ -61,6 +62,7 @@ export class CleanService {
       service_price: data.editprice,
       service_duration: data.edittimeService,
       type_car_id: data.editTypeCar.value,
+      position: data.editPosition.value,
       clean_service_detail_id: data.id
     }
     return this.http.patch('/app/updateClean_service_detailSsp_esd_csid_tcidWcsdid', payload, {

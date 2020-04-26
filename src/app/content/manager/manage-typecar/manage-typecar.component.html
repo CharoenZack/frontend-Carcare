@@ -64,36 +64,59 @@
   [maximizable]="true" [baseZIndex]="10000" [draggable]="false" [resizable]="false">
   <div class="p-grid" [formGroup]="formTypeCar">
     <div class="p-col-4" style="text-align: right;">
+      <label for="car">ยี่ห้อของรถ</label>
+    </div>
+    <div class="p-col-4" [hidden]="value === true">
+      <p-dropdown [options]="carList" formControlName="car" optionLabel="label" placeholder="เลือกยี่ห้อรถ">
+      </p-dropdown>
+      <div class="p-col-4" style="text-align: left;">
+        <div *ngIf="formError.car" class="text-danger text-invalid">{{formError.car }}</div>
+      </div>
+    </div>
+    <div class="p-col-4" [hidden]="value === false">
+      <input type="text" pInputText formControlName="car" id="car" placeholder="กรอกยี่ห้อรถ"/>
+      <div class="p-col-4" style="text-align: left;">
+        <div *ngIf="formError.car" class="text-danger text-invalid">{{formError.car }}</div>
+      </div>
+    </div>
+    <div>
+      <p-checkbox [(ngModel)]="value" [binary]="true" label="ยี่ห้อใหม่" [ngModelOptions]="{standalone: true}">
+      </p-checkbox>
+    </div>
+
+
+    <div class="p-col-4" style="text-align: right;">
       <label for="model">รุ่นของรถ</label>
     </div>
-    <div class="p-col-4">
-      <p-dropdown [options]="modelList" formControlName="model" optionLabel="label"></p-dropdown>
+    <div class="p-col-4" [hidden]="values === true">
+      <p-dropdown [options]="modelList" formControlName="model" optionLabel="label" placeholder="เลือกรุ่นรถ">
+      </p-dropdown>
+      <div class="p-col-4" style="text-align: left;">
+        <div *ngIf="formError.model" class="text-danger text-invalid">{{formError.model }}</div>
+      </div>
+    </div>
+    <div class="p-col-4" [hidden]="values === false">
+      <input type="text" pInputText formControlName="model" id="car" placeholder="กรอกรุ่นรถ"/>
+      <div class="p-col-4" style="text-align: left;">
+        <div *ngIf="formError.model" class="text-danger text-invalid">{{formError.model }}</div>
+      </div>
+    </div>
+    <div>
+      <p-checkbox [(ngModel)]="values" [binary]="true" label="รุ่นรถใหม่" [ngModelOptions]="{standalone: true}">
+      </p-checkbox>
+    </div>
 
-    </div>
-    <div class="p-col-4" style="text-align: left;">
-      <div *ngIf="formError.model" class="text-danger text-invalid">{{formError.model }}</div>
-    </div>
     <div class="p-col-4" style="text-align: right;">
-      <label for="car">ยี่ห้อรถ</label>
+      <label for="typeCar">ไซซ์รถ</label>
     </div>
     <div class="p-col-4">
-      <p-dropdown [options]="carList" formControlName="car" optionLabel="label"></p-dropdown>
-      <!-- <p-autoComplete optionLabel="brand" [suggestions]="carList" formControlName="car"
-        (completeMethod)="filterBrands($event)" [minLength]="1" placeholder="โปรดเลือกยี่ห้อรถ" [dropdown]="true">
-      </p-autoComplete> -->
+      <p-dropdown [options]="typeCarList" formControlName="typeCar" optionLabel="label" placeholder="เลือกประเภทรถ">
+      </p-dropdown>
+      <div class="p-col-4" style="text-align: left;">
+        <div *ngIf="formError.typeCar" class="text-danger text-invalid">{{formError.typeCar }}</div>
+      </div>
     </div>
-    <div class="p-col-4" style="text-align: left;">
-      <div *ngIf="formError.car" class="text-danger text-invalid">{{formError.car }}</div>
-    </div>
-    <div class="p-col-4" style="text-align: right;">
-      <label for="typeCar">ประเภทรถ</label>
-    </div>
-    <div class="p-col-4">
-      <p-dropdown [options]="typeCarList" formControlName="typeCar" optionLabel="label"></p-dropdown>
-    </div>
-    <div class="p-col-4" style="text-align: left;">
-      <div *ngIf="formError.typeCar" class="text-danger text-invalid">{{formError.typeCar }}</div>
-    </div>
+
     <div class="p-col-12" style="text-align: center;">
       <button type="button" pButton icon="pi pi-check" label="บันทึก" (click)="submitFormTypeCar()"></button>
     </div>
@@ -104,16 +127,16 @@
   [maximizable]="true" [baseZIndex]="10000" [draggable]="false" [resizable]="false">
   <div class="p-grid" [formGroup]="formEditTypeCar">
     <div class="p-col-4" style="text-align: right;">
-      <label for="editModel">รุ่นของรถ</label>
-    </div>
-    <div class="p-col-8">
-      <p-dropdown [options]="modelList" formControlName="editModel" optionLabel="label"></p-dropdown>
-    </div>
-    <div class="p-col-4" style="text-align: right;">
       <label for="editCar">ยี่ห้อของรถ</label>
     </div>
     <div class="p-col-8">
       <p-dropdown [options]="carList" formControlName="editCar" optionLabel="label"></p-dropdown>
+    </div>
+    <div class="p-col-4" style="text-align: right;">
+      <label for="editModel">รุ่นของรถ</label>
+    </div>
+    <div class="p-col-8">
+      <p-dropdown [options]="modelList" formControlName="editModel" optionLabel="label"></p-dropdown>
     </div>
     <div class="p-col-4" style="text-align: right;">
       <label for="editTypeCar">ประเภทของรถ</label>
@@ -170,7 +193,7 @@
 
 <p-confirmDialog #cd header="ลบข้อมูล" icon="pi pi-exclamation-triangle">
   <p-footer>
-    <button type="button" pButton icon="pi pi-check" label="คกลง" (click)="cd.accept()"></button>
+    <button type="button" pButton icon="pi pi-check" label="ตกลง" (click)="cd.accept()"></button>
     <button type="button" pButton icon="pi pi-times" label="ยกเลิก" (click)="cd.reject()"></button>
   </p-footer>
 </p-confirmDialog>

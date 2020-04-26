@@ -52,8 +52,9 @@ export class PaymentComponent implements OnInit {
             if (service === '') {
               service += res.service_name;
             } else {
-              service += "," + res.service_name;
+              service += ',' + res.service_name;
             }
+
             this.payment = [{
               license: res.member_license,
               car: res.model_name + ' ' + res.brand + ' ' + res.size,
@@ -65,6 +66,7 @@ export class PaymentComponent implements OnInit {
               reserv_id: res.reserv_id,
               queue_id: res.queue_id
             }]
+
           })
         }))
       })

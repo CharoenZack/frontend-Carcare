@@ -27,4 +27,14 @@ export class PositionService {
       return rs.data;
     }))
   }
+
+  getAllPositionNotAM2(){
+    return this.http.get('/app/getPositionWN1A3' , {
+      headers: {
+        Authorization: `${localStorage.getItem('access-token')}`
+      }
+    }).pipe(map((rs:any)=>{
+      return rs.data;
+    }))
+  }
 }
