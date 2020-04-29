@@ -64,14 +64,17 @@ export class TypecarService {
     const payload = {
       model_id: data.model.value,
       car_id: data.car.value,
+      addBrand: data.addBrand.toUpperCase(),
+      addModel: data.addModel.toUpperCase(),
       type_car_id: data.typeCar.value,
-    }
+    };
+    console.log(payload)
     return this.http.post('/app/insertCar_detail', payload, {
       headers: {
         Authorization: `${localStorage.getItem('access-token')}`
       }
     }).pipe(map((rs: any) => {
-      return rs.data;
+      return rs.result;
     }))
   }
   // insertdetailCar(data) {

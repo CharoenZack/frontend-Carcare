@@ -5,37 +5,35 @@
     </div>
     <hr />
     <p-messages [(value)]="msgs"></p-messages>
-    <p-table [paginator]="true" [rows]="10" [responsive]="true" [value]="carDetail">
+    <p-table #dt [paginator]="true" [rows]="10" [responsive]="true" [value]="carDetail" styleClass="ui-table-customers"
+      [globalFilterFields]="['brand','model_name','size']">
       <ng-template pTemplate="caption">
         <div style="text-align:left">
-          <!-- <button pButton type="button" id="btn-Increase" label="เพิ่ม" class="ui-button-temple"
-                    style="width: 20%"></button> -->
           <button pButton type="button" label="เพิ่ม" class="ui-button-rounded ui-button-success"
             style="font-size: 15px; width: 10%;" (click)="addTypeCar()"></button>
-
-          <button pButton type="button" label="เพิ่มยี่ห้อรถ" class="ui-button-rounded ui-button-warning"
-            style="font-size: 15px; width: 15%;" (click)="addCar()"></button>
-          <button pButton type="button" label="เพิ่มรุ่นรถ" class="ui-button-rounded ui-button-warning"
-            style="font-size: 15px; width: 15%;" (click)="addModel()"></button>
+          <div class="ui-table-globalfilter-container">
+            <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')"
+              placeholder="Search" />
+          </div>
         </div>
       </ng-template>
       <ng-template pTemplate="header" let-columns>
         <tr>
-          <th pSortableColumn="name">
+          <th pSortableColumn="brand">
             ยี่ห้อของรถ
-            <p-sortIcon field="nameAbbr" ariaLabel="Activate to sort"
-              ariaLabelDesc="Activate to sort in descending order" ariaLabelAsc="Activate to sort in ascending order">
-            </p-sortIcon>
-          </th>
-          <th pSortableColumn="tel">
-            รุ่นของรถ
-            <p-sortIcon field="name" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order"
+            <p-sortIcon field="brand" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order"
               ariaLabelAsc="Activate to sort in ascending order">
             </p-sortIcon>
           </th>
-          <th pSortableColumn="date">
+          <th pSortableColumn="model_name">
+            รุ่นของรถ
+            <p-sortIcon field="model_name" ariaLabel="Activate to sort"
+              ariaLabelDesc="Activate to sort in descending order" ariaLabelAsc="Activate to sort in ascending order">
+            </p-sortIcon>
+          </th>
+          <th pSortableColumn="size">
             ประเภทของรถ
-            <p-sortIcon field="name" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order"
+            <p-sortIcon field="size" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order"
               ariaLabelAsc="Activate to sort in ascending order">
             </p-sortIcon>
           </th>
@@ -67,38 +65,36 @@
       <label for="car">ยี่ห้อของรถ</label>
     </div>
     <div class="p-col-4" [hidden]="value === true">
-      <p-dropdown [options]="carList" formControlName="car" optionLabel="label" placeholder="เลือกยี่ห้อรถ">
+      <p-dropdown [options]="carList" formControlName="car" optionLabel="label">
       </p-dropdown>
       <div class="p-col-4" style="text-align: left;">
         <div *ngIf="formError.car" class="text-danger text-invalid">{{formError.car }}</div>
       </div>
     </div>
     <div class="p-col-4" [hidden]="value === false">
-      <input type="text" pInputText formControlName="car" id="car" placeholder="กรอกยี่ห้อรถ"/>
+      <input type="text" pInputText formControlName="addBrand" placeholder="กรอกยี่ห้อรถ" />
       <div class="p-col-4" style="text-align: left;">
-        <div *ngIf="formError.car" class="text-danger text-invalid">{{formError.car }}</div>
+        <div *ngIf="formError.addBrand" class="text-danger text-invalid">{{formError.addBrand }}</div>
       </div>
     </div>
     <div>
       <p-checkbox [(ngModel)]="value" [binary]="true" label="ยี่ห้อใหม่" [ngModelOptions]="{standalone: true}">
       </p-checkbox>
     </div>
-
-
     <div class="p-col-4" style="text-align: right;">
       <label for="model">รุ่นของรถ</label>
     </div>
     <div class="p-col-4" [hidden]="values === true">
-      <p-dropdown [options]="modelList" formControlName="model" optionLabel="label" placeholder="เลือกรุ่นรถ">
+      <p-dropdown [options]="modelList" formControlName="model" optionLabel="label">
       </p-dropdown>
       <div class="p-col-4" style="text-align: left;">
         <div *ngIf="formError.model" class="text-danger text-invalid">{{formError.model }}</div>
       </div>
     </div>
     <div class="p-col-4" [hidden]="values === false">
-      <input type="text" pInputText formControlName="model" id="car" placeholder="กรอกรุ่นรถ"/>
+      <input type="text" pInputText formControlName="addModel" placeholder="กรอกรุ่นรถ" />
       <div class="p-col-4" style="text-align: left;">
-        <div *ngIf="formError.model" class="text-danger text-invalid">{{formError.model }}</div>
+        <div *ngIf="formError.addModel" class="text-danger text-invalid">{{formError.addModel }}</div>
       </div>
     </div>
     <div>
@@ -152,48 +148,17 @@
   </div>
 </p-dialog>
 
-<p-dialog header="เพิ่มยี่ห้อรถ" [(visible)]="displayCar" [modal]="true" [style]="{ width: '50vw' }"
-  [maximizable]="true" [baseZIndex]="10000" [draggable]="false" [resizable]="false">
-  <div class="p-grid" [formGroup]="formAddCar">
-    <div class="p-col-4" style="text-align: right;">
-      <label for="car">ยี่ห้อรถ</label>
-    </div>
-    <div class="p-col-8">
-      <input type="text" pInputText formControlName="car" id="car" />
-    </div>
-    <!-- <div class="p-col-4" style="text-align: left;">
-      <div *ngIf="formError.car" class="text-danger text-invalid">{{formError.car }}</div>
-    </div> -->
-    <div class="p-col-12" style="text-align: center;">
-      <button type="button" pButton icon="pi pi-check" (click)="displayCar = false" label="บันทึก"
-        (click)="submitAddCar()"></button>
-    </div>
-  </div>
-</p-dialog>
-
-
-<p-dialog header="เพิ่มรุ่นรถ" [(visible)]="displayModel" [modal]="true" [style]="{ width: '50vw' }"
-  [maximizable]="true" [baseZIndex]="10000" [draggable]="false" [resizable]="false">
-  <div class="p-grid" [formGroup]="formAddModel">
-    <div class="p-col-4" style="text-align: right;">
-      <label for="model">รุ่นรถ</label>
-    </div>
-    <div class="p-col-8">
-      <input type="text" pInputText formControlName="model" id="model" />
-    </div>
-    <!-- <div class="p-col-4" style="text-align: left;">
-      <div *ngIf="formError.model" class="text-danger text-invalid">{{formError.model }}</div>
-    </div> -->
-    <div class="p-col-12" style="text-align: center;">
-      <button type="button" pButton icon="pi pi-check" (click)="displayModel = false" label="บันทึก"
-        (click)="submitAddModel()"></button>
-    </div>
-  </div>
-</p-dialog>
-
 <p-confirmDialog #cd header="ลบข้อมูล" icon="pi pi-exclamation-triangle">
   <p-footer>
     <button type="button" pButton icon="pi pi-check" label="ตกลง" (click)="cd.accept()"></button>
     <button type="button" pButton icon="pi pi-times" label="ยกเลิก" (click)="cd.reject()"></button>
   </p-footer>
 </p-confirmDialog>
+<p-dialog header="แจ้งเตือนรหัสผู้ใช้" [(visible)]="displayWarningBrand" [modal]="true" [style]="{width: '50vw'}"
+  [baseZIndex]="10000" [draggable]="false" [resizable]="false">
+  <p style="color : red">มียี่ห้อรถนี้ในระบบแล้ว!!!</p>
+</p-dialog>
+<p-dialog header="แจ้งเตือนรหัสผู้ใช้" [(visible)]="displayWarningModel" [modal]="true" [style]="{width: '50vw'}"
+  [baseZIndex]="10000" [draggable]="false" [resizable]="false">
+  <p style="color : red">มีรุ่นรถนี้ในระบบแล้ว!!!</p>
+</p-dialog>

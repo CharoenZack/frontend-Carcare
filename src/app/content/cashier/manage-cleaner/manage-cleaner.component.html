@@ -24,7 +24,7 @@
         </ng-template> -->
         <p-tabView (onChange)="getTabViewStatus($event)">
           <p-tabPanel header="ช่อง 1">
-            <h3>คิวล้าง : วันที่ 1-04-2563 รอบเวลา : </h3>
+            <!-- <h3>คิวล้าง : วันที่ 1-04-2563 รอบเวลา : </h3> -->
             <p-table [paginator]="true" [rows]="10" [responsive]="true" [value]="staff1">
               <ng-template pTemplate="header" let-columns>
                 <tr>
@@ -91,7 +91,7 @@
             </p-table>
           </p-tabPanel>
           <p-tabPanel header="ช่อง 2">
-            <h3>คิวล้าง :</h3>
+            <!-- <h3>คิวล้าง :</h3> -->
             <p-table [paginator]="true" [rows]="10" [responsive]="true" [value]="staff2">
               <ng-template pTemplate="header" let-columns>
                 <tr>

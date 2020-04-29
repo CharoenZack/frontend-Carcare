@@ -8,3 +8,6 @@
   border-radius: 5px;
   font-size: 1em;
 }
+.ui-table-globalfilter-container {
+  float: right;
+}

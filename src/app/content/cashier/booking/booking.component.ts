@@ -345,7 +345,6 @@ export class BookingComponent implements OnInit {
                   })
                 );
             }
-            this.formBooking.reset();
           })
         )
         .subscribe();

@@ -7,6 +7,7 @@ import { ModelService } from 'src/app/shared/services/model.service';
 import { TypecarService } from 'src/app/shared/services/typecar.service';
 
 
+
 @Component({
   selector: 'app-manage-typecar',
   templateUrl: './manage-typecar.component.html',
@@ -23,23 +24,43 @@ export class ManageTypecarComponent implements OnInit {
   formAddModel: FormGroup;
   formEditTypeCar: FormGroup;
   carDetail: any[];
-  carList = [];
+  carList: any[] = [
+    {
+      label: 'เลือกยี่ห้อรถ',
+      value: 0,
+    },
+  ];
   brand = [];
   typeCarList = [];
-  modelList = [];
+  modelList: any[] = [
+    {
+      label: 'เลือกรุ่นรถ',
+      value: 0,
+    },
+  ];
   msgs: Message[] = [];
   value: boolean = false;
   values: boolean = false;
+  displayWarningBrand = false;
+  displayWarningModel = false;
   public formError = {
     model: '',
     car: '',
     typeCar: '',
+    addBrand: '',
+    addModel: '',
   };
   public validationMassages = {
     model: {
       required: '*โปรดระบุยี่ห้อรถ'
     },
     car: {
+      required: '*โปรดระบุรุ่นรถ'
+    },
+    addModel: {
+      required: '*โปรดระบุยี่ห้อรถ'
+    },
+    addBrand: {
       required: '*โปรดระบุรุ่นรถ'
     },
     typeCar: {
@@ -90,87 +111,41 @@ export class ManageTypecarComponent implements OnInit {
   }
   initForm() {
     this.formTypeCar = new FormGroup({
-      model: new FormControl(null, Validators.required),
-      car: new FormControl(null, Validators.required),
-      addBrand: new FormControl(null),
-      addModel: new FormControl(null),
+      model: new FormControl(0, Validators.required),
+      car: new FormControl(0, Validators.required),
+      addBrand: new FormControl(''),
+      addModel: new FormControl(''),
       typeCar: new FormControl(null, Validators.required),
     });
     this.formTypeCar.valueChanges
       .pipe(debounceTime(500), distinctUntilChanged())
       .subscribe(() => this.onValueChange());
   }
-  submitAddCar() {
-    console.log(this.formAddCar)
-    if (this.formAddCar.valid) {
-      this.msgs = [];
-      this.typeCarService
-        .insertCar(this.formAddCar.getRawValue())
-        .pipe(
-          switchMap(rs => {
-            this.displayCar = false;
-            this.msgs.push({
-              severity: 'info',
-              summary: 'Insert Car',
-              detail: 'Insert Success'
-            });
-            return this.typeCarService.getAllCarDetail().pipe(
-              map(rs => {
-                return this.carDetail = rs;
-              })
-            );
-          })
-        )
-        .subscribe();
-    } else {
-      this.onValueChange();
-    }
-  }
-  submitAddModel() {
-    console.log(this.formAddModel)
-    if (this.formAddModel.valid) {
-      this.msgs = [];
-      this.typeCarService
-        .insertModel(this.formAddModel.getRawValue())
-        .pipe(
-          switchMap(rs => {
-            this.displayModel = false;
-            this.msgs.push({
-              severity: 'info',
-              summary: 'Insert Model',
-              detail: 'Insert Success'
-            });
-            return this.typeCarService.getAllCarDetail().pipe(
-              map(rs => {
-                return this.carDetail = rs;
-              })
-            );
-          })
-        )
-        .subscribe();
-    } else {
-      this.onValueChange();
-    }
-  }
   submitFormTypeCar() {
-    console.log(this.formTypeCar)
+    console.log(this.formTypeCar.value)
     if (this.formTypeCar.valid) {
       this.msgs = [];
       this.typeCarService
         .insertTypeCar(this.formTypeCar.getRawValue())
         .pipe(
           switchMap(rs => {
-            this.display = false;
-            this.msgs.push({
-              severity: 'info',
-              summary: 'Insert Typecar',
-              detail: 'Insert Success'
-            });
-            return this.typeCarService.getAllCarDetail().pipe(
-              map(rs => {
-                return this.carDetail = rs;
-              })
-            );
+            if (rs.brandCar === false) {
+              this.displayWarningBrand = true;
+            } else if (rs.modelCar === false) {
+              this.displayWarningModel = true;
+            } else {
+              this.display = false;
+              this.msgs.push({
+                severity: 'info',
+                summary: 'Insert Typecar',
+                detail: 'Insert Success'
+              });
+              return this.typeCarService.getAllCarDetail().pipe(
+                map(rs => {
+                  return this.carDetail = rs;
+                })
+              );
+            }
           })
         )
         .subscribe();
