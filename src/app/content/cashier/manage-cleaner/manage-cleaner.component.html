@@ -8,57 +8,39 @@
       <br>
       <p-messages [(value)]="msgs"></p-messages>
       <div style="text-align:left">
-        <!-- <button pButton type="button" id="btn-Increase" label="เพิ่ม" class="ui-button-temple"
-          style="width: 20%"></button> -->
         <button pButton type="button" label="เพิ่ม" class="ui-button-rounded ui-button-success"
           style="font-size: 15px; width: 10%;" (click)="addStaff()"></button>
       </div>
       <div class="p-gird-12">
-        <!-- <ng-template pTemplate="caption">
-          <div style="text-align:left">
-            <button pButton type="button" id="btn-Increase" label="เพิ่ม" class="ui-button-temple"
-              style="width: 20%"></button>
-            <button pButton type="button" label="เพิ่ม" class="ui-button-rounded ui-button-success"
-              style="font-size: 15px; width: 10%;" (click)="addStaff()"></button>
-          </div>
-        </ng-template> -->
         <p-tabView (onChange)="getTabViewStatus($event)">
           <p-tabPanel header="ช่อง 1">
-            <!-- <h3>คิวล้าง : วันที่ 1-04-2563 รอบเวลา : </h3> -->
             <p-table [paginator]="true" [rows]="10" [responsive]="true" [value]="staff1">
               <ng-template pTemplate="header" let-columns>
                 <tr>
-                  <th pSortableColumn="name">
+                  <th pSortableColumn="employee_fname">
                     ชื่อ-นามสุกล
-                    <p-sortIcon field="nameAbbr" ariaLabel="Activate to sort"
+                    <p-sortIcon field="employee_fname" ariaLabel="Activate to sort"
                       ariaLabelDesc="Activate to sort in descending order"
                       ariaLabelAsc="Activate to sort in ascending order">
                     </p-sortIcon>
                   </th>
-                  <th pSortableColumn="tel">
+                  <th pSortableColumn="employee_tel">
                     เบอร์โทร
-                    <p-sortIcon field="name" ariaLabel="Activate to sort"
+                    <p-sortIcon field="employee_tel" ariaLabel="Activate to sort"
                       ariaLabelDesc="Activate to sort in descending order"
                       ariaLabelAsc="Activate to sort in ascending order">
                     </p-sortIcon>
                   </th>
-                  <th pSortableColumn="date">
+                  <th pSortableColumn="position_work">
                     ตำแหน่ง
-                    <p-sortIcon field="name" ariaLabel="Activate to sort"
+                    <p-sortIcon field="position_work" ariaLabel="Activate to sort"
                       ariaLabelDesc="Activate to sort in descending order"
                       ariaLabelAsc="Activate to sort in ascending order">
                     </p-sortIcon>
                   </th>
-                  <th pSortableColumn="date">
-                    สถานะการยืมอุปกรณ์
-                    <p-sortIcon field="name" ariaLabel="Activate to sort"
-                      ariaLabelDesc="Activate to sort in descending order"
-                      ariaLabelAsc="Activate to sort in ascending order">
-                    </p-sortIcon>
-                  </th>
-                  <th pSortableColumn="date">
-                    สถานะการคืนอุปกรณ์
-                    <p-sortIcon field="name" ariaLabel="Activate to sort"
+                  <th pSortableColumn="status">
+                    เช็คชื่อ
+                    <p-sortIcon field="status" ariaLabel="Activate to sort"
                       ariaLabelDesc="Activate to sort in descending order"
                       ariaLabelAsc="Activate to sort in ascending order">
                     </p-sortIcon>
@@ -68,22 +50,25 @@
               </ng-template>
               <ng-template pTemplate="body" let-rowData let-columns="columns">
                 <tr>
-                  <td>{{ rowData.employee_fname }} {{ rowData.employee_lname }}</td>
+                  <td>{{ rowData.employee_fname }} {{ rowData.employee_lname }} </td>
                   <td>{{ rowData.employee_tel }}</td>
                   <td>{{rowData.position_work}}</td>
-                  <td *ngIf="rowData.approve_status === 2 ">อนุมัติ</td>
-                  <td *ngIf="rowData.approve_status === null">-</td>
-                  <td *ngIf="rowData.approve_status === 0">ไม่อนุมัติ</td>
-                  <td *ngIf="rowData.approve_status === 1">รอการอนุมัติ</td>
-                  <td *ngIf="rowData.status_action === 2 ">คืนอุปกรณ์แล้ว</td>
-                  <td *ngIf="rowData.status_action === null">-</td>
-                  <td *ngIf="rowData.status_action === 1">ยังไม่ได้คืนอุปกรณ์</td>
+                  <td *ngIf="rowData.status === 0">ยังไม่ได้ลงชื่อ</td>
+                  <td *ngIf="rowData.status === 1">ลงชื่อแล้ว</td>
                   <td>
-                    <div style="text-align:center">
+                    <div style="text-align:center" *ngIf="usedId == '3'">
                       <button pButton type="button" label="แก้ไข" class="ui-button-warning" style="width: 40%;"
                         (click)="editStaff(rowData)"></button>
                       <button pButton type="button" label="ลบ" class="ui-button-danger"
                         style="width: 40%;margin-left: 5mm" (click)="confirm(rowData.car_wash_detail_id)"></button>
+                    </div>
+                    <div style="text-align:center" *ngIf="usedId == rowData.employee_id && rowData.status == 0">
+                      <button pButton type="button" label="ลงชื่อ" class="btn btn-info" style="width: 60%;"
+                        (click)="updateStatus(rowData)"></button>
+                    </div>
+                    <div style="text-align:center" *ngIf="usedId  == rowData.employee_id && rowData.status == 1">
+                      <button pButton type="button" label="ลงชื่อแล้ว" class="btn btn-info" style="width: 60%;"
+                        disabled></button>
                     </div>
                   </td>
                 </tr>
@@ -91,41 +76,33 @@
             </p-table>
           </p-tabPanel>
           <p-tabPanel header="ช่อง 2">
-            <!-- <h3>คิวล้าง :</h3> -->
             <p-table [paginator]="true" [rows]="10" [responsive]="true" [value]="staff2">
               <ng-template pTemplate="header" let-columns>
                 <tr>
-                  <th pSortableColumn="name">
+                  <th pSortableColumn="employee_fname">
                     ชื่อ-นามสุกล
-                    <p-sortIcon field="nameAbbr" ariaLabel="Activate to sort"
+                    <p-sortIcon field="employee_fname" ariaLabel="Activate to sort"
                       ariaLabelDesc="Activate to sort in descending order"
                       ariaLabelAsc="Activate to sort in ascending order">
                     </p-sortIcon>
                   </th>
-                  <th pSortableColumn="tel">
+                  <th pSortableColumn="employee_tel">
                     เบอร์โทร
-                    <p-sortIcon field="name" ariaLabel="Activate to sort"
+                    <p-sortIcon field="employee_tel" ariaLabel="Activate to sort"
                       ariaLabelDesc="Activate to sort in descending order"
                       ariaLabelAsc="Activate to sort in ascending order">
                     </p-sortIcon>
                   </th>
-                  <th pSortableColumn="date">
+                  <th pSortableColumn="position_work">
                     ตำแหน่ง
-                    <p-sortIcon field="name" ariaLabel="Activate to sort"
+                    <p-sortIcon field="position_work" ariaLabel="Activate to sort"
                       ariaLabelDesc="Activate to sort in descending order"
                       ariaLabelAsc="Activate to sort in ascending order">
                     </p-sortIcon>
                   </th>
-                  <th pSortableColumn="date">
-                    สถานะการยืมอุปกรณ์
-                    <p-sortIcon field="name" ariaLabel="Activate to sort"
-                      ariaLabelDesc="Activate to sort in descending order"
-                      ariaLabelAsc="Activate to sort in ascending order">
-                    </p-sortIcon>
-                  </th>
-                  <th pSortableColumn="date">
-                    สถานะการคืนอุปกรณ์
-                    <p-sortIcon field="name" ariaLabel="Activate to sort"
+                  <th pSortableColumn="status">
+                    เช็คชื่อ
+                    <p-sortIcon field="status" ariaLabel="Activate to sort"
                       ariaLabelDesc="Activate to sort in descending order"
                       ariaLabelAsc="Activate to sort in ascending order">
                     </p-sortIcon>
@@ -138,19 +115,22 @@
                   <td>{{ rowData.employee_fname }} {{ rowData.employee_lname }}</td>
                   <td>{{ rowData.employee_tel }}</td>
                   <td>{{rowData.position_work}}</td>
-                  <td *ngIf="rowData.approve_status === 2 ">อนุมัติ</td>
-                  <td *ngIf="rowData.approve_status === null">-</td>
-                  <td *ngIf="rowData.approve_status === 0">ไม่อนุมัติ</td>
-                  <td *ngIf="rowData.approve_status === 1">รอการอนุมัติ</td>
-                  <td *ngIf="rowData.status_action === 2 ">คืนอุปกรณ์แล้ว</td>
-                  <td *ngIf="rowData.status_action === null">-</td>
-                  <td *ngIf="rowData.status_action === 1">ยังไม่ได้คืนอุปกรณ์</td>
+                  <td *ngIf="rowData.status === 0">ยังไม่ได้ลงชื่อ</td>
+                  <td *ngIf="rowData.status === 1">ลงชื่อแล้ว</td>
                   <td>
-                    <div style="text-align:center">
+                    <div style="text-align:center" *ngIf="usedId == '3'">
                       <button pButton type="button" label="แก้ไข" class="ui-button-warning" style="width: 40%;"
                         (click)="editStaff(rowData)"></button>
                       <button pButton type="button" label="ลบ" class="ui-button-danger"
                         style="width: 40%;margin-left: 5mm" (click)="confirm(rowData.car_wash_detail_id)"></button>
+                    </div>
+                    <div style="text-align:center" *ngIf="usedId == rowData.employee_id && rowData.status == 0">
+                      <button pButton type="button" label="ลงชื่อ" class="btn btn-info" style="width: 60%;"
+                        (click)="updateStatus(rowData.employee_id)"></button>
+                    </div>
+                    <div style="text-align:center" *ngIf="usedId  == rowData.employee_id && rowData.status == 1">
+                      <button pButton type="button" label="ลงชื่อแล้ว" class="btn btn-info" style="width: 60%;"
+                        disabled></button>
                     </div>
                   </td>
                 </tr>

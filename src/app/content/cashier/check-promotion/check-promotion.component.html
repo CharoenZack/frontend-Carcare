@@ -4,52 +4,31 @@
       <h1>ตรวจสอบโปรโมชั่น</h1>
     </div>
     <hr />
-    <p-table
-      [paginator]="true"
-      [rows]="10"
-      [responsive]="true"
-      [value]="promotion"
-    >
+    <p-table [paginator]="true" [rows]="10" [responsive]="true" [value]="promotion">
       <ng-template pTemplate="header" let-columns>
         <tr>
           <th pSortableColumn="name">
             รายละเอียดโปรโมชั่น
-            <p-sortIcon
-              field="nameAbbr"
-              ariaLabel="Activate to sort"
-              ariaLabelDesc="Activate to sort in descending order"
-              ariaLabelAsc="Activate to sort in ascending order"
-            >
+            <p-sortIcon field="nameAbbr" ariaLabel="Activate to sort"
+              ariaLabelDesc="Activate to sort in descending order" ariaLabelAsc="Activate to sort in ascending order">
             </p-sortIcon>
           </th>
           <th pSortableColumn="tel">
             วันที่เริ่มใช้
-            <p-sortIcon
-              field="name"
-              ariaLabel="Activate to sort"
-              ariaLabelDesc="Activate to sort in descending order"
-              ariaLabelAsc="Activate to sort in ascending order"
-            >
+            <p-sortIcon field="name" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order"
+              ariaLabelAsc="Activate to sort in ascending order">
             </p-sortIcon>
           </th>
           <th pSortableColumn="date">
             วันที่สิ้นสุดโปรโมชั่น
-            <p-sortIcon
-              field="name"
-              ariaLabel="Activate to sort"
-              ariaLabelDesc="Activate to sort in descending order"
-              ariaLabelAsc="Activate to sort in ascending order"
-            >
+            <p-sortIcon field="name" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order"
+              ariaLabelAsc="Activate to sort in ascending order">
             </p-sortIcon>
           </th>
           <th pSortableColumn="date">
             เปอร์เซ็นต์ลด
-            <p-sortIcon
-              field="name"
-              ariaLabel="Activate to sort"
-              ariaLabelDesc="Activate to sort in descending order"
-              ariaLabelAsc="Activate to sort in ascending order"
-            >
+            <p-sortIcon field="name" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order"
+              ariaLabelAsc="Activate to sort in ascending order">
             </p-sortIcon>
           </th>
           <th>ดำเนินการ</th>
@@ -63,13 +42,7 @@
           <td>{{ rowData.discount_percent }}</td>
           <td>
             <div style="text-align:center">
-              <button
-                pButton
-                type="button"
-                label="ตรวจสอบ"
-                class="ui-button-warning"
-                style="width: 100%;"
-              ></button>
+              <button pButton type="button" label="ตรวจสอบ" class="ui-button-warning" style="width: 100%;"></button>
             </div>
           </td>
         </tr>

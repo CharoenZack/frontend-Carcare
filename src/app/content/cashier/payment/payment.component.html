@@ -1,96 +1,72 @@
 <div class="p-grid">
-    <div class="p-col-12">
-      <div style="text-align:center">
-        <h1>ชำระเงิน</h1>
-      </div>
-        <hr />
-        <p-messages ></p-messages>
-              <p-table [paginator]="true" [rows]="10" [responsive]="true" [value]="payment">
-                <ng-template pTemplate="header" let-columns>
-                  <tr>
-                    <th pSortableColumn="name">
-                      ชื่อสมาชิก
-                      <p-sortIcon
-                        field="nameAbbr"
-                        ariaLabel="Activate to sort"
-                        ariaLabelDesc="Activate to sort in descending order"
-                        ariaLabelAsc="Activate to sort in ascending order"
-                      >
-                      </p-sortIcon>
-                    </th>
-                    <th pSortableColumn="tel">
-                       ประเภทรถ
-                      <p-sortIcon
-                        field="name"
-                        ariaLabel="Activate to sort"
-                        ariaLabelDesc="Activate to sort in descending order"
-                        ariaLabelAsc="Activate to sort in ascending order"
-                      >
-                      </p-sortIcon>
-                    </th>
-                    <th pSortableColumn="tel">
-                      เลขทะเบียน
-                      <p-sortIcon
-                        field="name"
-                        ariaLabel="Activate to sort"
-                        ariaLabelDesc="Activate to sort in descending order"
-                        ariaLabelAsc="Activate to sort in ascending order"
-                      >
-                      </p-sortIcon>
-                    </th>
-                    <th pSortableColumn="date">
-                      บริการ
-                      <p-sortIcon
-                        field="name"
-                        ariaLabel="Activate to sort"
-                        ariaLabelDesc="Activate to sort in descending order"
-                        ariaLabelAsc="Activate to sort in ascending order"
-                      >
-                      </p-sortIcon>
-                    </th>
-                    <th pSortableColumn="date">
-                      เวลาที่เสร็จสิ้น
-                      <p-sortIcon
-                        field="name"
-                        ariaLabel="Activate to sort"
-                        ariaLabelDesc="Activate to sort in descending order"
-                        ariaLabelAsc="Activate to sort in ascending order"
-                      >
-                      </p-sortIcon>
-                    </th>
-                    <th pSortableColumn="date">
-                      ยอดเงินที่ต้องชำระ
-                      <p-sortIcon
-                        field="name"
-                        ariaLabel="Activate to sort"
-                        ariaLabelDesc="Activate to sort in descending order"
-                        ariaLabelAsc="Activate to sort in ascending order"
-                      >
-                      </p-sortIcon>
-                    </th>
-                    <th>
-                      ดำเนินการ
-                    </th>
-                  </tr>
-                </ng-template>
-                <ng-template pTemplate="body" let-rowData let-columns="columns">
-                  <tr>
-                  <td>{{ rowData.members_name }}</td>
-                  <td>{{ rowData.car }}</td>
-                  <td>{{ rowData.license }}</td>
-                  <td>{{ rowData.service }}</td>
-                  <td>{{ rowData.end_date }}</td>
-                  <td>{{ rowData.total_price }}</td>
-                  <td>
-                    <div *ngIf="rowData.reserv_status === 2; then cash else complete"></div>
-                    <ng-template #cash>
-                      <button pButton label="อัพเดตการชำระเงิน" (click)="updateStatusPayment(rowData)"></button>
-                    </ng-template>
-                    <ng-template #complete>เสร็จสิ้นการชำระเงิน</ng-template>
-                    
-                  </td>
-                  </tr>
-                </ng-template>
-              </p-table>
-            </div>
-          </div>
+  <div class="p-col-12">
+    <div style="text-align:center">
+      <h1>ชำระเงิน</h1>
+    </div>
+    <hr />
+    <p-messages></p-messages>
+    <p-table [paginator]="true" [rows]="10" [responsive]="true" [value]="payment">
+      <ng-template pTemplate="header" let-columns>
+        <tr>
+          <th pSortableColumn="members_name">
+            ชื่อสมาชิก
+            <p-sortIcon field="members_name" ariaLabel="Activate to sort"
+              ariaLabelDesc="Activate to sort in descending order" ariaLabelAsc="Activate to sort in ascending order">
+            </p-sortIcon>
+          </th>
+          <th pSortableColumn="car">
+            ประเภทรถ
+            <p-sortIcon field="car" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order"
+              ariaLabelAsc="Activate to sort in ascending order">
+            </p-sortIcon>
+          </th>
+          <th pSortableColumn="license">
+            เลขทะเบียน
+            <p-sortIcon field="license" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order"
+              ariaLabelAsc="Activate to sort in ascending order">
+            </p-sortIcon>
+          </th>
+          <th pSortableColumn="service">
+            บริการ
+            <p-sortIcon field="service" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order"
+              ariaLabelAsc="Activate to sort in ascending order">
+            </p-sortIcon>
+          </th>
+          <th pSortableColumn="end_date">
+            เวลาที่เสร็จสิ้น
+            <p-sortIcon field="end_date" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order"
+              ariaLabelAsc="Activate to sort in ascending order">
+            </p-sortIcon>
+          </th>
+          <th pSortableColumn="total_price">
+            ยอดเงินที่ต้องชำระ
+            <p-sortIcon field="total_price" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order"
+              ariaLabelAsc="Activate to sort in ascending order">
+            </p-sortIcon>
+          </th>
+          <th>
+            ดำเนินการ
+          </th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-rowData let-columns="columns">
+        <tr>
+          <td>{{ rowData.members_name }}</td>
+          <td>{{ rowData.car }}</td>
+          <td>{{ rowData.license }}</td>
+          <td>{{ rowData.service }}</td>
+          <td>{{ rowData.end_date }}</td>
+          <td>{{ rowData.total_price }}</td>
+          <td>
+            <div *ngIf="rowData.reserv_status === 4; then cash else complete"></div>
+            <ng-template #cash>
+              <button pButton label="อัพเดตการชำระเงิน" (click)="updateStatusPayment(rowData)"></button>
+            </ng-template>
+            <ng-template #complete>เสร็จสิ้นการชำระเงิน</ng-template>
+
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+</div>

@@ -20,7 +20,7 @@ export class ManageWithdrawComponent implements OnInit {
   loadData() {
     this.withDrawReturnService.getAllWithDrawReturn().subscribe(rs => {
       this.withdraw = rs.filter(res => {
-        if (res.approve_status === 1 && res.status_action === 1) {
+        if (res.approve_status === 1) {
           return res;
         }
       });
@@ -46,7 +46,7 @@ export class ManageWithdrawComponent implements OnInit {
           return this.withDrawReturnService.getAllWithDrawReturn().pipe(
             map(res => {
               this.withdraw = res.filter(result => {
-                if (result.approve_status === 1 && result.status_action === 1) {
+                if (result.approve_status === 1 ) {
                   return result;
                 }
               });

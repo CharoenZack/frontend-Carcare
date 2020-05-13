@@ -13,22 +13,33 @@
           <div *ngFor="let reservation of reservationList" class="p-col-4">
             <div *ngIf="reservation.car_detail.resultReserve.car_wash_id === carWash.value">
               <div (click)="getDerailReservation(reservation)">
-                <p-card header="{{ 'ชื่อ' + ' ' +reservation.member.members_fname + ' ' + 'นามสกุล ' + ' ' + reservation.member.members_lname}}">
-                  <div>เวลาเริ่ม :{{ reservation.car_detail.resultReserve.start_date + ' น.'}}   -   {{ 'เวลาที่เสร็จสิ้น : ' + reservation.car_detail.resultReserve.end_date + ' น.' }}</div>
+                <p-card
+                  header="{{ 'ชื่อ' + ' ' +reservation.member.members_fname + ' ' + 'นามสกุล ' + ' ' + reservation.member.members_lname}}">
+                  <div>เวลาเริ่ม :{{ reservation.car_detail.resultReserve.start_date + ' น.'}} -
+                    {{ 'เวลาที่เสร็จสิ้น : ' + reservation.car_detail.resultReserve.end_date + ' น.' }}</div>
                   <div>เลขทะเบียน :{{ reservation.member.member_license }}</div>
                   <div>จังหวัด :{{ reservation.member.province_name }}</div>
                   <div style="text-align: right;" [ngSwitch]="reservation.car_detail.resultReserve.reserv_status">
-                    <div *ngSwitchCase="0" style="color: red;">
+                    <div *ngSwitchCase="0" style="color: #2E86C1;">
                       สถานะ : จองคิว
                     </div>
-                    <div *ngSwitchCase="1" style="color: orange;">
+                    <div *ngSwitchCase="1" style="color: #F39C12;">
                       สถานะ : กำลังล้าง
                     </div>
-                    <div *ngSwitchCase="2" style="color : green">
+                    <div *ngSwitchCase="2" style="color : #2E86C1">
                       สถานะ : เสร็จสิ้นการล้าง
                     </div>
-                    <div *ngSwitchCase="3" style="color : green">
-                      สถานะ : เสร็จสิ้นบริการล้างรถ
+                    <div *ngSwitchCase="3" style="color : #F39C12;">
+                      สถานะ : กำลังดูดฝุ่น
+                    </div>
+                    <div *ngSwitchCase="4" style="color : #1E8449">
+                      สถานะ : รอการชำระเงิน
+                    </div>
+                    <div *ngSwitchCase="5" style="color : #145A32">
+                      สถานะ : เสร็จสิ้นการชำระเงิน
+                    </div>
+                    <div *ngSwitchCase="6" style="color : red">
+                      สถานะ : ยกเลิกบริการ
                     </div>
                   </div>
                 </p-card>
@@ -90,14 +101,18 @@
       <div class="p-col-6">
         <div>{{ queueDetail.service }}</div>
       </div>
-      <div class="p-col-12" style="text-align: right;"
-        *ngIf="queueDetail.reservStatus == 0">
-        <button (click)="updateStatus(queueDetail)" label="รับคิว" pButton></button>
+      <div class="p-col-12" style="text-align: right;" *ngIf="queueDetail.reservStatus == 0 && emp == 4">
+        <button (click)="updateStatus(queueDetail)" label="รับคิวล้างรถ" pButton></button>
       </div>
-      <div class="p-col-12" style="text-align: right;"
-      *ngIf=" queueDetail.reservStatus == 1" >
-      <button (click)="updateStatus(queueDetail)" class="ui-button-success" label="เสร็จสิ้นการล้าง" pButton></button>
-    </div>
+      <div class="p-col-12" style="text-align: right;" *ngIf=" queueDetail.reservStatus == 1 && emp == 4">
+        <button (click)="updateStatus(queueDetail)" class="ui-button-success" label="เสร็จสิ้นการล้าง" pButton></button>
+      </div>
+      <div class="p-col-12" style="text-align: right;" *ngIf=" queueDetail.reservStatus == 2 && emp == 5">
+        <button (click)="updateStatus(queueDetail)" class="ui-button-success" label="รับคิวดูดฝุ่น" pButton></button>
+      </div>
+      <div class="p-col-12" style="text-align: right;" *ngIf=" queueDetail.reservStatus == 3 && emp == 5">
+        <button (click)="updateStatus(queueDetail)" class="ui-button-success" label="เสร็จสิ้นการดูดฝุ่น" pButton></button>
+      </div>
     </div>
   </p-dialog>
 </div>

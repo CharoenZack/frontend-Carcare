@@ -111,7 +111,15 @@ export class BookingComponent implements OnInit {
             } else if (res.reserv_status === 1) {
               status = 'กำลังล้าง';
             } else if (res.reserv_status === 2) {
-              status = 'เสร็จสิ้นการดำเนินการ';
+              status = 'เสร็จสิ้นการล้าง';
+            } else if (res.reserv_status === 3) {
+              status = 'กำลังดูดฝุ่น';
+            } else if (res.reserv_status === 4) {
+              status = 'รอการชำระเงิน';
+            } else if (res.reserv_status === 5) {
+              status = 'เสร็จสิ้นการชำระเงิน';
+            } else if (res.reserv_status === 6) {
+              status = 'ยกเลิกบริการ';
             }
             return { ...res, ...{ status } };
           })
@@ -202,7 +210,6 @@ export class BookingComponent implements OnInit {
           ...this.carList,
           {
             label: res.model_name,
-            // label: res.model_name + ' ' + res.brand + ' ' + res.size,
             value: res.car_detail_id,
             value_member: res.members_id,
             type_car: res.type_car_id
@@ -338,6 +345,14 @@ export class BookingComponent implements OnInit {
                           status = 'กำลังล้าง';
                         } else if (res.reserv_status === 2) {
                           status = 'เสร็จสิ้นการล้าง';
+                        } else if (res.reserv_status === 3) {
+                          status = 'กำลังดูดฝุ่น';
+                        } else if (res.reserv_status === 4) {
+                          status = 'รอการชำระเงิน';
+                        } else if (res.reserv_status === 5) {
+                          status = 'เสร็จสิ้นการชำระเงิน';
+                        } else if (res.reserv_status === 6) {
+                          status = 'ยกเลิกบริการ';
                         }
                         return { ...res, ...{ status } };
                       })
@@ -432,6 +447,14 @@ export class BookingComponent implements OnInit {
                       status = 'กำลังล้าง';
                     } else if (res.reserv_status === 2) {
                       status = 'เสร็จสิ้นการล้าง';
+                    } else if (res.reserv_status === 3) {
+                      status = 'กำลังดูดฝุ่น';
+                    } else if (res.reserv_status === 4) {
+                      status = 'รอการชำระเงิน';
+                    } else if (res.reserv_status === 5) {
+                      status = 'เสร็จสิ้นการชำระเงิน';
+                    } else if (res.reserv_status === 6) {
+                      status = 'ยกเลิกบริการ';
                     }
                     return { ...res, ...{ status } };
                   })

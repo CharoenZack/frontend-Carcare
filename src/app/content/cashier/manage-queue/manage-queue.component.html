@@ -22,17 +22,26 @@
                     <div>เลขทะเบียน :{{ reservation.member.member_license }}</div>
                     <div>จังหวัด :{{ reservation.member.province_name }}</div>
                     <div style="text-align: right;" [ngSwitch]="reservation.car_detail.resultReserve.reserv_status">
-                      <div *ngSwitchCase="0" style="color: red;">
+                      <div *ngSwitchCase="0" style="color: #2E86C1;">
                         สถานะ : จองคิว
                       </div>
-                      <div *ngSwitchCase="1" style="color: orange;">
+                      <div *ngSwitchCase="1" style="color: #F39C12;">
                         สถานะ : กำลังล้าง
                       </div>
-                      <div *ngSwitchCase="2" style="color : green">
+                      <div *ngSwitchCase="2" style="color : #2E86C1">
                         สถานะ : เสร็จสิ้นการล้าง
                       </div>
-                      <div *ngSwitchCase="3" style="color : green">
-                        สถานะ : เสร็จสิ้นบริการล้างรถ
+                      <div *ngSwitchCase="3" style="color : #F39C12;">
+                        สถานะ : กำลังดูดฝุ่น
+                      </div>
+                      <div *ngSwitchCase="4" style="color : #1E8449">
+                        สถานะ : รอการชำระเงิน
+                      </div>
+                      <div *ngSwitchCase="5" style="color : #145A32">
+                        สถานะ : เสร็จสิ้นการชำระเงิน
+                      </div>
+                      <div *ngSwitchCase="6" style="color : red">
+                        สถานะ : ยกเลิกบริการ
                       </div>
                     </div>
                   </p-card>

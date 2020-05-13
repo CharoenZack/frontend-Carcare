@@ -11,6 +11,7 @@ import * as moment from 'moment';
 export class CheckQueueComponent implements OnInit {
   display = false;
   carWashList = [];
+  emp = null;
   reservationList = [];
   public queueDetail = {
     license: null,
@@ -32,6 +33,7 @@ export class CheckQueueComponent implements OnInit {
   ngOnInit() {
     this.getAllCarWash();
     this.getAllReservation();
+    this.emp = localStorage.getItem('userId')
   }
 
   getAllCarWash() {
@@ -75,14 +77,17 @@ export class CheckQueueComponent implements OnInit {
       queueId: data.car_detail.resultReserve.queue_id,
       reservStatus: data.car_detail.resultReserve.reserv_status
     };
+    console.log(this.queueDetail.service);
   }
 
   updateStatus(queue) {
     const payload = {
       status: queue.reservStatus,
-      queue_id: queue.queueId
+      queue_id: queue.queueId,
+      service: queue.service,
+      employee_id: localStorage.getItem('userId')
     };
-
+    console.log(payload)
     this.reservationService.updateStatusReservationByStaff(payload).subscribe(rs => {
       this.display = false;
       location.reload();

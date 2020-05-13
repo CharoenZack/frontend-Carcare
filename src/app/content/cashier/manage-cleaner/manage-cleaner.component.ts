@@ -15,6 +15,7 @@ import { CarWashService } from 'src/app/shared/services/car-wash.service';
 export class ManageCleanerComponent implements OnInit {
   staff1: any[];
   staff2: any[];
+  usedId = '';
   display = false;
   displayEdit = false;
   positionList = [];
@@ -52,6 +53,7 @@ export class ManageCleanerComponent implements OnInit {
     this.formEditStaff = new FormGroup({
       editchannel: new FormControl(null, Validators.required)
     });
+    this.usedId = localStorage.getItem('userId');
   }
 
   initForm() {
@@ -75,20 +77,16 @@ export class ManageCleanerComponent implements OnInit {
     this.manageStaffService.getEmployeeWCar_wash().subscribe(rs => {
       rs.map(res => {
         this.staff1 = rs;
-      })
+      });
 
       console.log(this.staff1);
-
-
     });
   }
-
   loadData2() {
     this.manageStaffService.getEmployeeWCar_wash2().subscribe(rs => {
       this.staff2 = rs;
     });
   }
-
   getPosition() {
     this.positionService.getAllPositionNotAM().subscribe(rs => {
       rs.map(res => {
@@ -107,7 +105,6 @@ export class ManageCleanerComponent implements OnInit {
       this.loadData2();
     }
   }
-
   getAllcarWash() {
     this.carWashService.getAllcarWash().subscribe(rs => {
       rs.map(res => {
@@ -158,6 +155,23 @@ export class ManageCleanerComponent implements OnInit {
       this.onValueChange();
     }
   }
+
+  updateStatus(data) {
+    const empId = {
+      status: 1,
+      employee_id: data.employee_id
+    };
+    console.log(empId)
+    this.manageStaffService.updateStatusEmployee(empId).pipe(
+      switchMap(rs => {
+        this.msgs.push({ severity: 'success', summary: 'Update Status', detail: 'Update Status' });
+        return this.manageStaffService.getEmployeeWCar_wash().pipe(map(rs => {
+          return this.staff1 = rs;
+        }))
+      })
+    ).subscribe();
+  }
+
   confirm(id) {
     this.msgs = [];
     console.log(id);

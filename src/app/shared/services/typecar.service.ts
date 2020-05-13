@@ -65,7 +65,7 @@ export class TypecarService {
       model_id: data.model.value,
       car_id: data.car.value,
       addBrand: data.addBrand.toUpperCase(),
-      addModel: data.addModel.toUpperCase(),
+      addModel: data.addModel,
       type_car_id: data.typeCar.value,
     };
     console.log(payload)

@@ -19,7 +19,7 @@ export class MenubarComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private route: ActivatedRoute
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.personalId = this.route.snapshot.paramMap.get('id');
@@ -106,9 +106,9 @@ export class MenubarComponent implements OnInit {
             icon: 'pi pi-fw pi-users',
             routerLink: '/content/cashier/manageBooking'
           },
-          { label: 'ตรวจสอบโปรโมชั่น', icon: 'pi pi-fw pi-users' , routerLink: '/content/cashier/checkPromotion'},
-          { label: 'ตรวจสอบคิวล้างรถ', icon: 'pi pi-fw pi-users' , routerLink: '/content/cashier/manageQueue' },
-          { label: 'ชำระเงิน', icon: 'pi pi-fw pi-users' , routerLink: '/content/cashier/payment' }
+          { label: 'ตรวจสอบโปรโมชั่น', icon: 'pi pi-fw pi-users', routerLink: '/content/cashier/checkPromotion' },
+          { label: 'ตรวจสอบคิวล้างรถ', icon: 'pi pi-fw pi-users', routerLink: '/content/cashier/manageQueue' },
+          { label: 'ชำระเงิน', icon: 'pi pi-fw pi-users', routerLink: '/content/cashier/payment' }
         ];
         break;
       default:
@@ -117,6 +117,11 @@ export class MenubarComponent implements OnInit {
             label: 'จัดการโปรไฟล์',
             icon: 'pi pi-fw pi-users',
             routerLink: ['/content/staff/', this.userId]
+          },
+          {
+            label: 'ลงชื่อเข้างาน',
+            icon: 'pi pi-fw pi-users',
+            routerLink: '/content/cashier/manageEmployee'
           },
           {
             label: 'ตรวจสอบคิวล้างรถ',
@@ -128,8 +133,8 @@ export class MenubarComponent implements OnInit {
           //   icon: 'pi pi-fw pi-users',
           //   routerLink: '/content/staff/editQueue'
           // },
-          { label: 'อุปกรณ์', icon: 'pi pi-fw pi-users' , routerLink: '/content/staff/tool'},
-          { label: 'เบิกอุปกรณ์ล้างรถ', icon: 'pi pi-fw pi-users' , routerLink: '/content/staff/withdraw' }
+          { label: 'อุปกรณ์', icon: 'pi pi-fw pi-users', routerLink: '/content/staff/tool' },
+          { label: 'เบิกอุปกรณ์ล้างรถ', icon: 'pi pi-fw pi-users', routerLink: '/content/staff/withdraw' }
         ];
         break;
     }

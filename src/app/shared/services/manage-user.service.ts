@@ -204,6 +204,21 @@ export class ManageUserService {
       );
   }
 
+  updateStatusEmployee(data) {
+    return this.http
+      .patch('app/updateEmployeeByRegister/', data , {
+        headers: {
+          Authorization: `${localStorage.getItem('access-token')}`
+        }
+      })
+      .pipe(
+        map((rs: any) => {
+          return rs.data;
+        })
+      );
+  }
+
+
   deleteStaff(id) {
     return this.http
       .delete(`/app/deleteEmployeeWeid/${id}`, {
