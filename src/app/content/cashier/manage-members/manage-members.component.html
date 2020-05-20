@@ -225,9 +225,9 @@
 </p-confirmDialog>
 <p-dialog header="แจ้งเตือนรหัสผู้ใช้" [(visible)]="displayWarningMember" [modal]="true" [style]="{width: '50vw'}"
   [baseZIndex]="10000" [draggable]="false" [resizable]="false">
-  <p style="color : red">รหัสผู้ใช้นี้ถูกใช้งานแล้ว โปรดเปลี่ยนรหัสผู้ใช้</p>
+  <p style="color : red">ขออภัย! username นี้มีผู้ใช้แล้ว!</p>
 </p-dialog>
 <p-dialog header="แจ้งเตือนเลขทะเบียน" [(visible)]="displayWarningLicense" [modal]="true" [style]="{width: '50vw'}"
   [baseZIndex]="10000" [draggable]="false" [resizable]="false">
-  <p style="color : red">เลขทะเบียนดังกล่าวได้ถูกลงทะเบียนแล้วโปรดเปลี่ยนเลขทะเบียน</p>
+  <p style="color : red">ขออภัย! ป้ายทะเบียนนี้มีในระบบแล้ว!</p>
 </p-dialog>

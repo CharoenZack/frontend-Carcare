@@ -14,6 +14,7 @@ export class ManageManagerComponent implements OnInit {
   displayEdit = false;
   formEmployee: FormGroup;
   formEditEmployee: FormGroup;
+  displayWarningAdmin = false;
   user: any[];
   cols: any[];
   msgs: Message[] = [];
@@ -41,7 +42,7 @@ export class ManageManagerComponent implements OnInit {
       required: '*กรุณากรอกเบอร์โทรศัพท์'
     }
   };
-  constructor(private manageManagerSerivice: ManageUserService,private confirmationService : ConfirmationService) {}
+  constructor(private manageManagerSerivice: ManageUserService, private confirmationService: ConfirmationService) { }
 
   ngOnInit() {
     this.loadData();
@@ -53,9 +54,9 @@ export class ManageManagerComponent implements OnInit {
       { field: 'operation', header: 'ดำเนินการ' }
     ];
     this.formEditEmployee = new FormGroup({
-      editfname: new FormControl(null , Validators.required),
-      editlname: new FormControl(null , Validators.required),
-      editTel: new FormControl(null , Validators.required),
+      editfname: new FormControl(null, Validators.required),
+      editlname: new FormControl(null, Validators.required),
+      editTel: new FormControl(null, Validators.required),
       id: new FormControl(null)
     });
   }
@@ -66,39 +67,44 @@ export class ManageManagerComponent implements OnInit {
 
   initForm() {
     this.formEmployee = new FormGroup({
-      username: new FormControl(null , Validators.required),
-      password: new FormControl(null , Validators.required),
-      fname: new FormControl(null , Validators.required),
-      lname: new FormControl(null , Validators.required),
-      tel: new FormControl(null , Validators.required)
+      username: new FormControl(null, Validators.required),
+      password: new FormControl(null, Validators.required),
+      fname: new FormControl(null, Validators.required),
+      lname: new FormControl(null, Validators.required),
+      tel: new FormControl(null, Validators.required)
     });
     this.formEmployee
-    .valueChanges
-    .pipe(
-      debounceTime(500),
-      distinctUntilChanged()
-    )
-    .subscribe(() => this.onValueChange());
+      .valueChanges
+      .pipe(
+        debounceTime(500),
+        distinctUntilChanged()
+      )
+      .subscribe(() => this.onValueChange());
   }
 
   submitFormEmployee() {
-    if(this.formEmployee.valid){
-    this.msgs = [];
-    this.manageManagerSerivice
-      .createEmployee(this.formEmployee.getRawValue())
-      .pipe(
-        switchMap(rs => {
-          this.display = false;
-          this.msgs.push({severity:'info', summary:'Insert Employee', detail:'Insert Success'});
-          return this.manageManagerSerivice.getAllEmployee().pipe(map(rs=>{
-            return this.user = rs;
-          }))
-        })
-      )
-      .subscribe();
-      }else{
-        this.onValueChange()
-      }
+    if (this.formEmployee.valid) {
+      this.msgs = [];
+      this.manageManagerSerivice
+        .createEmployee(this.formEmployee.getRawValue())
+        .pipe(
+          switchMap(rs => {
+            if (rs.emp === false) {
+              this.displayWarningAdmin = true;
+            } else {
+              this.display = false;
+              this.formEmployee.reset();
+              this.msgs.push({ severity: 'info', summary: 'เพิ่มเจ้าของร้าน', detail: 'เพิ่มเจ้าของร้านสำเร็จ' });
+              return this.manageManagerSerivice.getAllEmployee().pipe(map(rs => {
+                return this.user = rs;
+              }))
+            }
+          })
+        )
+        .subscribe();
+    } else {
+      this.onValueChange()
+    }
   }
 
   private onValueChange() {
@@ -128,33 +134,33 @@ export class ManageManagerComponent implements OnInit {
   }
 
   updateEmployee() {
-      this.msgs = [];
-      this.manageManagerSerivice
-        .updateEmployee(this.formEditEmployee.getRawValue())
-        .pipe(
-          switchMap(rs => {
-            this.displayEdit = false;
-            this.msgs.push({severity:'info', summary:'Update Employee', detail:'Update Success'});
-            return this.manageManagerSerivice.getAllEmployee().pipe(map(rs=>{
-              return this.user = rs;
-            }))
-          })
-        )
-        .subscribe();
+    this.msgs = [];
+    this.manageManagerSerivice
+      .updateEmployee(this.formEditEmployee.getRawValue())
+      .pipe(
+        switchMap(rs => {
+          this.displayEdit = false;
+          this.msgs.push({ severity: 'info', summary: 'อัปเดตข้อมูลเจ้าของร้าน', detail: 'อัปเดตข้อมูลเจ้าของร้านสำเร็จ' });
+          return this.manageManagerSerivice.getAllEmployee().pipe(map(rs => {
+            return this.user = rs;
+          }))
+        })
+      )
+      .subscribe();
   }
 
   confirm(id) {
     this.msgs = [];
     this.confirmationService.confirm({
-        message: 'คุณต้องการลบข้อมูลผู้จัดการร้านคนนี้ใช่หรือไม่',
-        accept: () => {
-          this.manageManagerSerivice.deleteEmployee(id).pipe(switchMap(rs=>{
-            this.msgs.push({severity:'info', summary:'Delete Success', detail:'Delete Success'});
-            return this.manageManagerSerivice.getAllEmployee().pipe(map(rs=>{
-              return this.user = rs;
-            }))
-          })).subscribe()
-        }
+      message: 'คุณต้องการลบข้อมูลเจ้าของร้านคนนี้ใช่หรือไม่',
+      accept: () => {
+        this.manageManagerSerivice.deleteEmployee(id).pipe(switchMap(rs => {
+          this.msgs.push({ severity: 'info', summary: 'ลบข้อมูลเจ้าของร้าน', detail: 'ลบข้อมูลเจ้าของร้านสำเร็จ' });
+          return this.manageManagerSerivice.getAllEmployee().pipe(map(rs => {
+            return this.user = rs;
+          }))
+        })).subscribe()
+      }
     });
   }
 

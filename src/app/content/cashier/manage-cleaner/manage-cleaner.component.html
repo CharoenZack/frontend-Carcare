@@ -7,7 +7,7 @@
       <div class="line"></div>
       <br>
       <p-messages [(value)]="msgs"></p-messages>
-      <div style="text-align:left">
+      <div style="text-align:left" *ngIf=" usedId == '3'">
         <button pButton type="button" label="เพิ่ม" class="ui-button-rounded ui-button-success"
           style="font-size: 15px; width: 10%;" (click)="addStaff()"></button>
       </div>
@@ -126,7 +126,7 @@
                     </div>
                     <div style="text-align:center" *ngIf="usedId == rowData.employee_id && rowData.status == 0">
                       <button pButton type="button" label="ลงชื่อ" class="btn btn-info" style="width: 60%;"
-                        (click)="updateStatus(rowData.employee_id)"></button>
+                        (click)="updateStatus2(rowData)"></button>
                     </div>
                     <div style="text-align:center" *ngIf="usedId  == rowData.employee_id && rowData.status == 1">
                       <button pButton type="button" label="ลงชื่อแล้ว" class="btn btn-info" style="width: 60%;"
@@ -169,7 +169,7 @@
   </div>
 </p-dialog>
 
-<p-dialog header="จัดการพนักงานล้างรถ" [(visible)]="displayEdit" [modal]="true" [style]="{ width: '50vw' }"
+<p-dialog header="แก้ไขพนักงานล้างรถ" [(visible)]="displayEdit" [modal]="true" [style]="{ width: '50vw' }"
   [maximizable]="true" [baseZIndex]="10000" [draggable]="false" [resizable]="false">
   <div class="p-grid" [formGroup]="formEditStaff">
     <div class="p-col-4" style="text-align: right;">

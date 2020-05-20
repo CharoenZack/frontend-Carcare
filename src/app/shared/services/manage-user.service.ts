@@ -62,10 +62,8 @@ export class ManageUserService {
         }
       })
       .pipe(
-        map(res => {
-          return {
-            status: res['result']
-          };
+        map((rs: any) => {
+          return rs.result;
         })
       );
   }
@@ -167,7 +165,7 @@ export class ManageUserService {
       fname: data.fname,
       lname: data.lname,
       tel: data.tel,
-      status: 1,
+      status: 0,
       position: data.position.value
     };
     return this.http
@@ -177,10 +175,8 @@ export class ManageUserService {
         }
       })
       .pipe(
-        map(res => {
-          return {
-            status: res['result']
-          };
+        map((rs: any) => {
+          return rs.result;
         })
       );
   }

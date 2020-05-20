@@ -328,10 +328,11 @@ export class BookingComponent implements OnInit {
               this.display = false;
               this.msgs.push({
                 severity: 'info',
-                summary: 'Booking Complete',
-                detail: 'Booking Complete'
+                summary: 'จองคิว',
+                detail: 'จองคิวสำเร็จ'
               });
               this.formBooking.reset();
+              this.aboutCar = [];
               return this.reservationService
                 .getAllReservation(localStorage.getItem('userId'))
                 .pipe(
@@ -431,8 +432,8 @@ export class BookingComponent implements OnInit {
         switchMap(rs => {
           this.msgs.push({
             severity: 'info',
-            summary: 'Update Status Complete',
-            detail: 'Update Status Complete'
+            summary: 'อัปเดตสถานะ',
+            detail: 'อัปเดตสถานะสำเร็จ'
           });
           return this.reservationService
             .getAllReservation(localStorage.getItem('userId'))

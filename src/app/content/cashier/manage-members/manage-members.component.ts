@@ -174,8 +174,8 @@ export class ManageMembersComponent implements OnInit {
               this.display = false;
               this.msgs.push({
                 severity: 'info',
-                summary: 'Insert Employee',
-                detail: 'Insert Success'
+                summary: 'เพิ่มสมาชิก',
+                detail: 'เพิ่มสมาชิกสำเร็จ'
               });
               this.formMember.reset();
               return this.memberService
@@ -293,8 +293,8 @@ export class ManageMembersComponent implements OnInit {
             this.displayEdit = false;
             this.msgs.push({
               severity: 'info',
-              summary: 'Update Employee',
-              detail: 'Update Success',
+              summary: 'อัปเดตข้อมูลสมาชิก',
+              detail: 'อัปเดตข้อมูลสมาชิกสำเร็จ',
             });
             return this.memberService
               .getMemberByCashierId(localStorage.getItem('userId'))
@@ -320,8 +320,8 @@ export class ManageMembersComponent implements OnInit {
             switchMap((rs) => {
               this.msgs.push({
                 severity: 'info',
-                summary: 'Delete Success',
-                detail: 'Delete Success',
+                summary: 'ลบข้อมูลสมาชิก',
+                detail: 'ลบข้อมูลสมาชิกสำเร็จ',
               });
               return this.memberService
                 .getMemberByCashierId(localStorage.getItem('userId'))

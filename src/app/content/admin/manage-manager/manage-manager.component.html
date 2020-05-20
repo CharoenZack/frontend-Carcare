@@ -3,104 +3,66 @@
     <div style="text-align:center">
       <h1>จัดการเจ้าของร้าน</h1>
     </div>
-      <hr />
-      <p-messages [(value)]="msgs"></p-messages>
-            <p-table [paginator]="true" [rows]="10" [responsive]="true" [value]="user">
-              <ng-template pTemplate="caption">
-                <div style="text-align:left">
-                  <!-- <button pButton type="button" id="btn-Increase" label="เพิ่ม" class="ui-button-temple"
+    <hr />
+    <p-messages [(value)]="msgs"></p-messages>
+    <p-table [paginator]="true" [rows]="10" [responsive]="true" [value]="user">
+      <ng-template pTemplate="caption">
+        <div style="text-align:left">
+          <!-- <button pButton type="button" id="btn-Increase" label="เพิ่ม" class="ui-button-temple"
                     style="width: 20%"></button> -->
-                  <button
-                    pButton
-                    type="button"
-                    label="เพิ่ม"
-                    class="ui-button-rounded ui-button-success"
-                    style="font-size: 15px; width: 10%;"
-                    (click)="addManager()"
-                  ></button>
-                </div>
-              </ng-template>
-              <ng-template pTemplate="header" let-columns>
-                <tr>
-                  <th pSortableColumn="name">
-                    ชื่อ-นามสุกล
-                    <p-sortIcon
-                      field="nameAbbr"
-                      ariaLabel="Activate to sort"
-                      ariaLabelDesc="Activate to sort in descending order"
-                      ariaLabelAsc="Activate to sort in ascending order"
-                    >
-                    </p-sortIcon>
-                  </th>
-                  <th pSortableColumn="tel">
-                    เบอร์โทร
-                    <p-sortIcon
-                      field="name"
-                      ariaLabel="Activate to sort"
-                      ariaLabelDesc="Activate to sort in descending order"
-                      ariaLabelAsc="Activate to sort in ascending order"
-                    >
-                    </p-sortIcon>
-                  </th>
-                  <th pSortableColumn="date">
-                    ตำแหน่ง
-                    <p-sortIcon
-                      field="name"
-                      ariaLabel="Activate to sort"
-                      ariaLabelDesc="Activate to sort in descending order"
-                      ariaLabelAsc="Activate to sort in ascending order"
-                    >
-                    </p-sortIcon>
-                  </th>
-                  <th></th>
-                </tr>
-              </ng-template>
-              <ng-template pTemplate="body" let-rowData let-columns="columns">
-                <tr>
-                <td>{{ rowData.employee_fname }} {{ rowData.employee_lname }}</td>
-                <td>{{ rowData.employee_tel }}</td>
-                <td>ผู้จัดการร้าน</td>
-                  <td>
-                    <div style="text-align:center">
-                      <button
-                        pButton
-                        type="button"
-                        label="แก้ไข"
-                        class="ui-button-warning"
-                        style="width: 40%;"
-                        (click) = "editEmployee(rowData)"
-                      ></button>
-                      <button
-                        pButton
-                        type="button"
-                        label="ลบ"
-                        class="ui-button-danger"
-                        style="width: 40%;margin-left: 5mm"
-                        (click)="confirm(rowData.employee_id)"
-                      ></button>
-                    </div>
-                  </td>
-                </tr>
-              </ng-template>
-            </p-table>
-          </div>
+          <button pButton type="button" label="เพิ่ม" class="ui-button-rounded ui-button-success"
+            style="font-size: 15px; width: 10%;" (click)="addManager()"></button>
         </div>
-<p-dialog
-  header="เพิ่มเจ้าของร้าน"
-  [(visible)]="display"
-  [modal]="true"
-  [style]="{ width: '50vw' }"
-  [maximizable]="true"
-  [baseZIndex]="10000"
-  [draggable]="false"
-  [resizable]="false"
->
+      </ng-template>
+      <ng-template pTemplate="header" let-columns>
+        <tr>
+          <th pSortableColumn="name">
+            ชื่อ-นามสุกล
+            <p-sortIcon field="nameAbbr" ariaLabel="Activate to sort"
+              ariaLabelDesc="Activate to sort in descending order" ariaLabelAsc="Activate to sort in ascending order">
+            </p-sortIcon>
+          </th>
+          <th pSortableColumn="tel">
+            เบอร์โทร
+            <p-sortIcon field="name" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order"
+              ariaLabelAsc="Activate to sort in ascending order">
+            </p-sortIcon>
+          </th>
+          <th pSortableColumn="date">
+            ตำแหน่ง
+            <p-sortIcon field="name" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order"
+              ariaLabelAsc="Activate to sort in ascending order">
+            </p-sortIcon>
+          </th>
+          <th></th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-rowData let-columns="columns">
+        <tr>
+          <td>{{ rowData.employee_fname }} {{ rowData.employee_lname }}</td>
+          <td>{{ rowData.employee_tel }}</td>
+          <td>ผู้จัดการร้าน</td>
+          <td>
+            <div style="text-align:center">
+              <button pButton type="button" label="แก้ไข" class="ui-button-warning" style="width: 40%;"
+                (click)="editEmployee(rowData)"></button>
+              <button pButton type="button" label="ลบ" class="ui-button-danger" style="width: 40%;margin-left: 5mm"
+                (click)="confirm(rowData.employee_id)"></button>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+</div>
+<p-dialog header="เพิ่มเจ้าของร้าน" [(visible)]="display" [modal]="true" [style]="{ width: '50vw' }"
+  [maximizable]="true" [baseZIndex]="10000" [draggable]="false" [resizable]="false">
   <div class="p-grid" [formGroup]="formEmployee">
     <div class="p-col-4" style="text-align: right;">
       <label for="username">UserName</label>
     </div>
     <div class="p-col-4">
-      <input type="text" pInputText formControlName="username" id ="username"/>
+      <input type="text" pInputText formControlName="username" id="username" />
     </div>
     <div class="p-col-4" style="text-align: left;">
       <div *ngIf="formError.username" class="text-danger text-invalid">{{formError.username }}</div>
@@ -109,96 +71,80 @@
       <label for="password">Password</label>
     </div>
     <div class="p-col-4">
-      <input type="password" pInputText formControlName="password" id ="password"/>
+      <input type="password" pInputText formControlName="password" id="password" />
     </div>
     <div class="p-col-4" style="text-align: left;">
       <div *ngIf="formError.password" class="text-danger text-invalid">{{formError.password }}</div>
     </div>
-      <div class="p-col-4" style="text-align: right;">
-        <label for="fname">ชื่อ</label>
-      </div>
-      <div class="p-col-4">
-        <input type="text" pInputText formControlName="fname" id="fname"/>
-      </div>
-      <div class="p-col-4" style="text-align: left;">
-        <div *ngIf="formError.fname" class="text-danger text-invalid">{{formError.fname }}</div>
-      </div>
-      <div class="p-col-4" style="text-align: right;">
-        <label for="lname">นามสกุล</label>
-      </div>
-      <div class="p-col-4">
-        <input type="text" pInputText formControlName="lname" id="lname"/>
-      </div>
-      <div class="p-col-4" style="text-align: left;">
-        <div *ngIf="formError.lname" class="text-danger text-invalid">{{formError.lname }}</div>
-      </div>
-      <div class="p-col-4" style="text-align: right;">
-        <label for="phone">เบอร์โทรศัพท์</label>
-      </div>
-      <div class="p-col-4">
-        <input type="text" pInputText formControlName="tel" id ="tel"/>
-      </div>
-      <div class="p-col-4" style="text-align: left;">
-        <div *ngIf="formError.tel" class="text-danger text-invalid">{{formError.tel }}</div>
-      </div>
-      <div class="p-col-12" style="text-align: center;">
-        <button
-      type="button"
-      pButton
-      icon="pi pi-check"
-      label="บันทึก"
-      (click)="submitFormEmployee()"
-    ></button>
-      </div>
+    <div class="p-col-4" style="text-align: right;">
+      <label for="fname">ชื่อ</label>
+    </div>
+    <div class="p-col-4">
+      <input type="text" pInputText formControlName="fname" id="fname" />
+    </div>
+    <div class="p-col-4" style="text-align: left;">
+      <div *ngIf="formError.fname" class="text-danger text-invalid">{{formError.fname }}</div>
+    </div>
+    <div class="p-col-4" style="text-align: right;">
+      <label for="lname">นามสกุล</label>
+    </div>
+    <div class="p-col-4">
+      <input type="text" pInputText formControlName="lname" id="lname" />
+    </div>
+    <div class="p-col-4" style="text-align: left;">
+      <div *ngIf="formError.lname" class="text-danger text-invalid">{{formError.lname }}</div>
+    </div>
+    <div class="p-col-4" style="text-align: right;">
+      <label for="phone">เบอร์โทรศัพท์</label>
+    </div>
+    <div class="p-col-4">
+      <input type="text" pInputText formControlName="tel" id="tel" />
+    </div>
+    <div class="p-col-4" style="text-align: left;">
+      <div *ngIf="formError.tel" class="text-danger text-invalid">{{formError.tel }}</div>
+    </div>
+    <div class="p-col-12" style="text-align: center;">
+      <button type="button" pButton icon="pi pi-check" label="บันทึก" (click)="submitFormEmployee()"></button>
+    </div>
   </div>
 </p-dialog>
 
-<p-dialog
-  header="เพิ่มเจ้าของร้าน"
-  [(visible)]="displayEdit"
-  [modal]="true"
-  [style]="{ width: '50vw' }"
-  [maximizable]="true"
-  [baseZIndex]="10000"
-  [draggable]="false"
-  [resizable]="false"
->
+<p-dialog header="เพิ่มเจ้าของร้าน" [(visible)]="displayEdit" [modal]="true" [style]="{ width: '50vw' }"
+  [maximizable]="true" [baseZIndex]="10000" [draggable]="false" [resizable]="false">
   <div class="p-grid" [formGroup]="formEditEmployee">
-      <div class="p-col-4" style="text-align: right;">
-        <label for="editfname">ชื่อ</label>
-      </div>
-      <div class="p-col-8">
-        <input type="text" pInputText formControlName="editfname" id="editfname"/>
-      </div>
-      <div class="p-col-4" style="text-align: right;">
-        <label for="editlname">นามสกุล</label>
-      </div>
-      <div class="p-col-8">
-        <input type="text" pInputText formControlName="editlname" id="editlname"/>
-      </div>
-      <div class="p-col-4" style="text-align: right;">
-        <label for="editTel">เบอร์โทรศัพท์</label>
-      </div>
-      <div class="p-col-8">
-        <input type="text" pInputText formControlName="editTel" id ="editTel"/>
-      </div>
-      <input type="hidden" formControlName="id"/>
-      <div class="p-col-12" style="text-align: center;">
-        <button
-      type="button"
-      pButton
-      icon="pi pi-check"
-      (click)="display = false"
-      label="บันทึก"
-      (click)="updateEmployee()"
-    ></button>
-      </div>
+    <div class="p-col-4" style="text-align: right;">
+      <label for="editfname">ชื่อ</label>
+    </div>
+    <div class="p-col-8">
+      <input type="text" pInputText formControlName="editfname" id="editfname" />
+    </div>
+    <div class="p-col-4" style="text-align: right;">
+      <label for="editlname">นามสกุล</label>
+    </div>
+    <div class="p-col-8">
+      <input type="text" pInputText formControlName="editlname" id="editlname" />
+    </div>
+    <div class="p-col-4" style="text-align: right;">
+      <label for="editTel">เบอร์โทรศัพท์</label>
+    </div>
+    <div class="p-col-8">
+      <input type="text" pInputText formControlName="editTel" id="editTel" />
+    </div>
+    <input type="hidden" formControlName="id" />
+    <div class="p-col-12" style="text-align: center;">
+      <button type="button" pButton icon="pi pi-check" (click)="display = false" label="บันทึก"
+        (click)="updateEmployee()"></button>
+    </div>
   </div>
 </p-dialog>
 
 <p-confirmDialog #cd header="ลบข้อมูล" icon="pi pi-exclamation-triangle">
   <p-footer>
-    <button type="button" pButton icon="pi pi-check" label="คกลง" (click)="cd.accept()"></button>
-      <button type="button" pButton icon="pi pi-times" label="ยกเลิก" (click)="cd.reject()"></button>
+    <button type="button" pButton icon="pi pi-check" label="ตกลง" (click)="cd.accept()"></button>
+    <button type="button" pButton icon="pi pi-times" label="ยกเลิก" (click)="cd.reject()"></button>
   </p-footer>
 </p-confirmDialog>
+<p-dialog header="แจ้งเตือนรหัสผู้ใช้" [(visible)]="displayWarningAdmin" [modal]="true" [style]="{width: '50vw'}"
+  [baseZIndex]="10000" [draggable]="false" [resizable]="false">
+  <p style="color : red">รหัสผู้ใช้นี้ถูกใช้งานแล้ว โปรดเปลี่ยนรหัสผู้ใช้</p>
+</p-dialog>

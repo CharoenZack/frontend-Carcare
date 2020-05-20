@@ -152,3 +152,7 @@
     <button type="button" pButton icon="pi pi-times" label="ยกเลิก" (click)="cd.reject()"></button>
   </p-footer>
 </p-confirmDialog>
+<p-dialog header="แจ้งเตือนรหัสผู้ใช้" [(visible)]="displayWarningEmployee" [modal]="true" [style]="{width: '50vw'}"
+  [baseZIndex]="10000" [draggable]="false" [resizable]="false">
+  <p style="color : red">รหัสผู้ใช้นี้ถูกใช้งานแล้ว โปรดเปลี่ยนรหัสผู้ใช้</p>
+</p-dialog>

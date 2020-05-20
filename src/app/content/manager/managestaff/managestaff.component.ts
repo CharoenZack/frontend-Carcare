@@ -13,6 +13,7 @@ import { PositionService } from 'src/app/shared/services/position.service';
 export class ManagestaffComponent implements OnInit {
   display = false;
   displayEdit = false;
+  displayWarningEmployee = false;
   formStaff: FormGroup;
   formEditStaff: FormGroup;
   staff: any[];
@@ -93,11 +94,17 @@ export class ManagestaffComponent implements OnInit {
         .crateStaff(this.formStaff.getRawValue())
         .pipe(
           switchMap(rs => {
-            this.display = false;
-            this.msgs.push({ severity: 'info', summary: 'Insert Employee', detail: 'Insert Success' });
-            return this.manageStaffService.getAllStaff().pipe(map(rs => {
-              return this.staff = rs;
-            }))
+            if (rs.emp === false) {
+              this.displayWarningEmployee = true;
+            } else {
+              console.log(rs.emp)
+              this.display = false;
+              this.formStaff.reset();
+              this.msgs.push({ severity: 'info', summary: 'เพิ่มพนักงาน', detail: 'เพิ่มพนักงานสำเร็จ' });
+              return this.manageStaffService.getAllStaff().pipe(map(rs => {
+                return this.staff = rs;
+              }))
+            }
           })
         )
         .subscribe();
@@ -139,7 +146,7 @@ export class ManagestaffComponent implements OnInit {
       .pipe(
         switchMap(rs => {
           this.displayEdit = false;
-          this.msgs.push({ severity: 'info', summary: 'Update Employee', detail: 'Update Success' });
+          this.msgs.push({ severity: 'info', summary: 'อัปเดตข้อมูลพนักงาน', detail: 'อัปเดตข้อมูลพนักงานสำเร็จ' });
           return this.manageStaffService.getAllStaff().pipe(map(rs => {
             return this.staff = rs;
           }))
@@ -154,7 +161,7 @@ export class ManagestaffComponent implements OnInit {
       message: 'คุณต้องการลบข้อมูลพนักงานคนนี้ใช่หรือไม่',
       accept: () => {
         this.manageStaffService.deleteStaff(id).pipe(switchMap(rs => {
-          this.msgs.push({ severity: 'info', summary: 'Delete Success', detail: 'Delete Success' });
+          this.msgs.push({ severity: 'info', summary: 'ลบข้อมูลพนักงาน', detail: 'ลบข้อมูลพนักงานสำเร็จ' });
           return this.manageStaffService.getAllStaff().pipe(map(rs => {
             return this.staff = rs;
           }))
@@ -175,7 +182,7 @@ export class ManagestaffComponent implements OnInit {
         console.log(res);
         this.positionList = [
           ...this.positionList,
-          { label:res.position_work, value: res.position_id }
+          { label: res.position_work, value: res.position_id }
         ];
       })
     })

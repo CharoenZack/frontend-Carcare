@@ -144,6 +144,7 @@ export class ManageCleanerComponent implements OnInit {
         .pipe(
           switchMap(rs => {
             this.display = false;
+            this.formStaff.reset();
             this.msgs.push({ severity: 'info', summary: 'Insert Employee', detail: 'Insert Success' });
             return this.manageStaffService.getEmployeeWCar_wash().pipe(map(rs => {
               return this.staff1 = rs;
@@ -167,6 +168,22 @@ export class ManageCleanerComponent implements OnInit {
         this.msgs.push({ severity: 'success', summary: 'Update Status', detail: 'Update Status' });
         return this.manageStaffService.getEmployeeWCar_wash().pipe(map(rs => {
           return this.staff1 = rs;
+        }))
+      })
+    ).subscribe();
+  }
+
+  updateStatus2(data) {
+    const empId = {
+      status: 1,
+      employee_id: data.employee_id
+    };
+    console.log(empId)
+    this.manageStaffService.updateStatusEmployee(empId).pipe(
+      switchMap(rs => {
+        this.msgs.push({ severity: 'success', summary: 'Update Status', detail: 'Update Status' });
+        return this.manageStaffService.getEmployeeWCar_wash2().pipe(map(rs => {
+          return this.staff2 = rs;
         }))
       })
     ).subscribe();
