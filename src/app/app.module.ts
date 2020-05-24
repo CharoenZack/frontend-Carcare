@@ -17,7 +17,7 @@ import { MainModule } from './main/main.module';
 @NgModule({
   declarations: [
     AppComponent,
-    FormatSelectItemPipe
+    FormatSelectItemPipe,
   ],
   imports: [
     BrowserModule,

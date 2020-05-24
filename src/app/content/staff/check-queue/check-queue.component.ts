@@ -33,7 +33,8 @@ export class CheckQueueComponent implements OnInit {
   ngOnInit() {
     this.getAllCarWash();
     this.getAllReservation();
-    this.emp = localStorage.getItem('userId')
+    this.emp = localStorage.getItem('position');
+    console.log(this.emp)
   }
 
   getAllCarWash() {

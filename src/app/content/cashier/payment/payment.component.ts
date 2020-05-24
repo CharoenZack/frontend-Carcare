@@ -30,6 +30,7 @@ export class PaymentComponent implements OnInit {
           queue_id: res.queue_id
         }]
       })
+      console.log(this.payment)
     })
   }
 

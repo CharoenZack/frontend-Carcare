@@ -1,3 +1,4 @@
+import { ReportComponent } from './../content/cashier/report/report.component';
 import { EditQueueComponent } from '../content/staff/edit-queue/edit-queue.component';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
@@ -117,6 +118,10 @@ const routes: Routes = [
           {
             path : 'payment',
             component : PaymentComponent
+          },
+          {
+            path : 'report',
+            component : ReportComponent
           },
           {
             path : ':id',

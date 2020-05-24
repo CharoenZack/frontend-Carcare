@@ -1,0 +1,73 @@
+<div class="p-grid">
+  <div class="p-col-12">
+    <div style="text-align:center">
+      <h1>รายงานสรุปยอด</h1>
+    </div>
+    <hr />
+    <p-table #dt styleClass="ui-table-customers" [paginator]="true" [rows]="10" [responsive]="true" [value]="reportData"
+      [rowHover]="true" [rows]="10" [paginator]="true" [filterDelay]="0"
+      [globalFilterFields]="['members_name','queue_date','car','license', 'total_prices']">
+      <ng-template pTemplate="caption">
+        <div style="text-align: left;  width: 500px;">
+          <p-calendar (onSelect)="onDateSelect($event)" [showButtonBar]="true" styleClass="ui-column-filter"
+            [(ngModel)]="dates" appendTo="body" placeholder="วันที่ใช้บริการ" [readonlyInput]="true"
+            dateFormat="yy-mm-dd">
+          </p-calendar>
+          <p-calendar *ngIf="manage == 2" (onSelect)="onDateSelect($event)" [showButtonBar]="true"
+            styleClass="ui-column-filter" [(ngModel)]="dates" appendTo="body" placeholder="วันที่ใช้บริการ"
+            [readonlyInput]="true" dateFormat="yy-mm-dd">
+          </p-calendar>
+          <p-dropdown [options]="month" (onChange)="onMonthSelect($event)" [(ngModel)]="selectMonth" optionLabel="name"
+            value="code" placeholder="โปรดเลือกเดือน">
+          </p-dropdown>
+          <button type="button" pButton icon="pi pi-file-excel" iconPos="left" label="EXCEL" (click)="exportExcel()"
+            style="margin-right: 0.5em;" class="ui-button-success"></button>
+        </div>
+        <h3>รายงานการใช้บริการ</h3>
+      </ng-template>
+      <ng-template pTemplate="header">
+        <tr>
+          <th pSortableColumn="members_name">ชื่อสมาชิก <p-sortIcon field="members_name"></p-sortIcon>
+          </th>
+          <th pSortableColumn="queue_date">วันที่ใช้บริการ <p-sortIcon field="queue_date"></p-sortIcon>
+          </th>
+          <th pSortableColumn="car">ประเภทรถ <p-sortIcon field="car"></p-sortIcon>
+          </th>
+          <th pSortableColumn="license">เลขทะเบียน <p-sortIcon field="license"></p-sortIcon>
+          </th>
+          <th pSortableColumn="service">บริการ <p-sortIcon field="service"></p-sortIcon>
+          </th>
+          <th pSortableColumn="total_price">ยอดเงินทั้งหมด <p-sortIcon field="total_price"></p-sortIcon>
+          </th>
+          <th>
+          </th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-rowData let-columns="columns">
+        <tr>
+          <td>{{ rowData.members_name }}</td>
+          <td>{{ rowData.queue_date }}</td>
+          <td>{{ rowData.car }}</td>
+          <td>{{ rowData.license }}</td>
+          <td>{{ rowData.service }}</td>
+          <td>{{ rowData.total_price }} บาท</td>
+          <td></td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="footer">
+        <tr>
+          <td colspan="5">รวมยอดทั้งหมด</td>
+          <td>{{totalReport}} บาท</td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="8" style="text-align:left">ไม่มีข้อมูล.</td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="summary">
+        จำนวน {{reportData?.length}} รายการ
+      </ng-template>
+    </p-table>
+  </div>
+</div>

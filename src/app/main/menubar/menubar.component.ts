@@ -78,7 +78,7 @@ export class MenubarComponent implements OnInit {
             routerLink: '/content/manager/manageWithdraw'
           },
           {
-            label: 'จัดการการคินอุปกรณ์',
+            label: 'จัดการการคืนอุปกรณ์',
             icon: 'pi pi-fw pi-users',
             routerLink: '/content/manager/manageReturn'
           }
@@ -88,7 +88,7 @@ export class MenubarComponent implements OnInit {
         this.menuSideBar = [
           {
             label: 'จัดการโปรไฟล์',
-            icon: 'pi pi-fw pi-users',
+            icon: 'pi pi-fw pi-home',
             routerLink: ['/content/cashier/', this.userId]
           },
           {
@@ -98,17 +98,19 @@ export class MenubarComponent implements OnInit {
           },
           {
             label: 'จัดการสมาชิก',
-            icon: 'pi pi-fw pi-users',
+            icon: 'pi pi-fw pi-user-plus',
             routerLink: '/content/cashier/manageMember'
           },
           {
             label: 'จัดการการจองคิว',
-            icon: 'pi pi-fw pi-users',
+            icon: 'pi pi-fw pi-calendar',
             routerLink: '/content/cashier/manageBooking'
           },
-          { label: 'ตรวจสอบโปรโมชั่น', icon: 'pi pi-fw pi-users', routerLink: '/content/cashier/checkPromotion' },
-          { label: 'ตรวจสอบคิวล้างรถ', icon: 'pi pi-fw pi-users', routerLink: '/content/cashier/manageQueue' },
-          { label: 'ชำระเงิน', icon: 'pi pi-fw pi-users', routerLink: '/content/cashier/payment' }
+          { label: 'ตรวจสอบโปรโมชั่น', icon: 'pi pi-fw pi-copy', routerLink: '/content/cashier/checkPromotion' },
+          { label: 'ตรวจสอบคิวล้างรถ', icon: 'pi pi-fw pi-table', routerLink: '/content/cashier/manageQueue' },
+          { label: 'ชำระเงิน', icon: 'pi pi-fw pi-money-bill', routerLink: '/content/cashier/payment' },
+          { label: 'รายงานสรุปยอด', icon: 'pi pi-fw pi-file', routerLink: '/content/cashier/report' },
+
         ];
         break;
       default:

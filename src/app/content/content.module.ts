@@ -65,6 +65,7 @@ import { ProfileStaffComponent } from './staff/profile-staff/profile-staff.compo
 import { ProfileCashierComponent } from './cashier/profile-cashier/profile-cashier.component';
 import { ManageCleanerComponent } from './cashier/manage-cleaner/manage-cleaner.component';
 import { EditQueueComponent } from './staff/edit-queue/edit-queue.component';
+import { ReportComponent } from './cashier/report/report.component';
 @NgModule({
   declarations: [
     ContentComponent,
@@ -92,7 +93,8 @@ import { EditQueueComponent } from './staff/edit-queue/edit-queue.component';
     ProfileStaffComponent,
     ProfileCashierComponent,
     ManageCleanerComponent,
-    EditQueueComponent
+    EditQueueComponent,
+    ReportComponent
   ],
   imports: [
     CommonModule,

@@ -1,0 +1,32 @@
+:host ::ng-deep .ui-table-customers {
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.14),
+    0 2px 1px -1px rgba(201, 96, 96, 0.12);
+}
+.ui-paginator .ui-dropdown {
+  float: left;
+}
+
+.ui-paginator .ui-paginator-current {
+  float: right;
+}
+.ui-table-globalfilter-container {
+  float: right;
+}
+.ui-table-globalfilter-container input {
+  width: 200px;
+}
+.ui-column-filter {
+  display: block;
+  width: 200px;
+}
+
+.ui-table-caption {
+  border: 0 none;
+  padding: 12px;
+  text-align: left;
+  font-size: 20px;
+}
+.ui-paginator {
+  border: 0 none;
+  padding: 1em;
+}

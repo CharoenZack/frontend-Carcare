@@ -6,18 +6,18 @@ import { map } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class MemberService {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   insertMember(data) {
     const payload = {
-      username : data.username,
-      password : data.password,
-      fname : data.fname,
-      lname : data.lname,
-      address : data.address,
-      tel : data.tel,
-      cashier_id : data.cashier_id,
-      car_detail_id : data.carList
+      username: data.username,
+      password: data.password,
+      fname: data.fname,
+      lname: data.lname,
+      address: data.address,
+      tel: data.tel,
+      cashier_id: data.cashier_id,
+      car_detail_id: data.carList
     }
     console.log(data);
     return this.http
@@ -47,7 +47,7 @@ export class MemberService {
       );
   }
 
-  getMemberForEdit(id){
+  getMemberForEdit(id) {
     return this.http
       .get(`/app/getMemberForEdit/${id}`, {
         headers: {
@@ -63,15 +63,15 @@ export class MemberService {
 
   updateMember(data) {
     const payload = {
-      username : data.editUsername,
-      password : data.editPassword,
-      cashier_id : data.editMemberCashierId,
+      username: data.editUsername,
+      password: data.editPassword,
+      cashier_id: data.editMemberCashierId,
       fname: data.editfname,
       lname: data.editlname,
       address: data.editaddress,
       tel: data.editTel,
       id: data.editId,
-      car_detail_id : data.editCarList
+      car_detail_id: data.editCarList
     };
     return this.http
       .patch('/app/updateMemberSef_el_etWeid', payload, {
@@ -100,12 +100,12 @@ export class MemberService {
       );
   }
 
-  getAllmembers(){
-    return this.http.get(`/app/getAllMember` , {
+  getAllmembers() {
+    return this.http.get(`/app/getAllMember`, {
       headers: {
         Authorization: `${localStorage.getItem('access-token')}`
       }
-    }).pipe(map((rs:any)=>{
+    }).pipe(map((rs: any) => {
       return rs.data;
     }))
   }

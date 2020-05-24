@@ -202,6 +202,7 @@ export class BookingComponent implements OnInit {
   }
 
   selectMember(event) {
+    console.log(event)
     this.carList = [{ label: 'โปรดเลือกรถ', value: 0 }];
     this.carService.getCarByMember(event.value.value).subscribe(rs => {
       rs.map(res => {

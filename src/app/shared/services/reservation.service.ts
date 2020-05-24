@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
+import * as moment from 'moment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ReservationService {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   getAllReservation(id) {
     return this.http
@@ -134,10 +135,52 @@ export class ReservationService {
         })
       );
   }
+  getReservationForReport(data) {
+    const date = {
+      date: data
+    }
+    console.log(data)
+    return this.http
+      .post(
+        'app/getAllReservationWReport', date,
+        {
+          headers: {
+            Authorization: `${localStorage.getItem('access-token')}`
+          }
+        }
+      )
+      .pipe(
+        map((rs: any) => {
+          return rs.data;
+        })
+      );
+
+  }
+  getAllReservationWReportSelectMonth(data) {
+    const date = {
+      code: data.code
+    }
+    console.log(date)
+    return this.http
+      .post(
+        'app/getAllReservationWReportSelectMonth', date,
+        {
+          headers: {
+            Authorization: `${localStorage.getItem('access-token')}`
+          }
+        }
+      )
+      .pipe(
+        map((rs: any) => {
+          return rs.data;
+        })
+      );
+
+  }
 
   updateStatusReservationByStaff(reservation) {
     return this.http
-      .post('app/updateStatusReservationByStaff/', reservation , {
+      .post('app/updateStatusReservationByStaff/', reservation, {
         headers: {
           Authorization: `${localStorage.getItem('access-token')}`
         }
