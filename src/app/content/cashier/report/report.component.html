@@ -13,11 +13,7 @@
             [(ngModel)]="dates" appendTo="body" placeholder="วันที่ใช้บริการ" [readonlyInput]="true"
             dateFormat="yy-mm-dd">
           </p-calendar>
-          <p-calendar *ngIf="manage == 2" (onSelect)="onDateSelect($event)" [showButtonBar]="true"
-            styleClass="ui-column-filter" [(ngModel)]="dates" appendTo="body" placeholder="วันที่ใช้บริการ"
-            [readonlyInput]="true" dateFormat="yy-mm-dd">
-          </p-calendar>
-          <p-dropdown [options]="month" (onChange)="onMonthSelect($event)" [(ngModel)]="selectMonth" optionLabel="name"
+          <p-dropdown  *ngIf="manage == 2"  [options]="month" (onChange)="onMonthSelect($event)" [(ngModel)]="selectMonth" optionLabel="name"
             value="code" placeholder="โปรดเลือกเดือน">
           </p-dropdown>
           <button type="button" pButton icon="pi pi-file-excel" iconPos="left" label="EXCEL" (click)="exportExcel()"

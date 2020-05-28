@@ -95,7 +95,7 @@ export class ManageMembersComponent implements OnInit {
 
   ngOnInit() {
     this.memberService
-      .getMemberByCashierId(localStorage.getItem('userId'))
+      .getMemberByCashierId()
       .subscribe((rs) => {
         this.members = rs;
       });
@@ -179,7 +179,7 @@ export class ManageMembersComponent implements OnInit {
               });
               this.formMember.reset();
               return this.memberService
-                .getMemberByCashierId(localStorage.getItem('userId'))
+                .getMemberByCashierId()
                 .pipe(
                   map(res => {
                     console.log(this.memberService);
@@ -297,7 +297,7 @@ export class ManageMembersComponent implements OnInit {
               detail: 'อัปเดตข้อมูลสมาชิกสำเร็จ',
             });
             return this.memberService
-              .getMemberByCashierId(localStorage.getItem('userId'))
+              .getMemberByCashierId()
               .pipe(
                 map((res) => {
                   return (this.members = res);
@@ -324,7 +324,7 @@ export class ManageMembersComponent implements OnInit {
                 detail: 'ลบข้อมูลสมาชิกสำเร็จ',
               });
               return this.memberService
-                .getMemberByCashierId(localStorage.getItem('userId'))
+                .getMemberByCashierId()
                 .pipe(
                   map((rs) => {
                     return (this.members = rs);

@@ -33,9 +33,9 @@ export class MemberService {
       );
   }
 
-  getMemberByCashierId(id) {
+  getMemberByCashierId() {
     return this.http
-      .get(`/app/getMemberWcid/${id}`, {
+      .get(`/app/getMemberWcid`, {
         headers: {
           Authorization: `${localStorage.getItem('access-token')}`
         }

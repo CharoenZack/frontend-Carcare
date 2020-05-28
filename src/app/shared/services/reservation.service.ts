@@ -119,10 +119,10 @@ export class ReservationService {
       );
   }
 
-  getReservationForPayment(id) {
+  getReservationForPayment() {
     return this.http
       .get(
-        `app/getAllReservationsJEmployeeJMembersJCar_washJType_carJPositionWrs3/${id}`,
+        `app/getAllReservationsJEmployeeJMembersJCar_washJType_carJPositionWrs3`,
         {
           headers: {
             Authorization: `${localStorage.getItem('access-token')}`

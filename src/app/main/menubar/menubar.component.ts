@@ -68,20 +68,15 @@ export class MenubarComponent implements OnInit {
             routerLink: '/content/manager/manageTool'
           },
           {
-            label: 'จัดการโปรโมชั่น',
+            label: 'จัดการโปรโมชัน',
             icon: 'pi pi-fw pi-shopping-cart',
             routerLink: '/content/manager/managePromotion'
           },
           {
-            label: 'จัดการการเบิกอุปกรณ์',
-            icon: 'pi pi-fw pi-users',
-            routerLink: '/content/manager/manageWithdraw'
+            label: 'รายงานสรุปยอด',
+            icon: 'pi pi-fw pi-file',
+            routerLink: '/content/cashier/report'
           },
-          {
-            label: 'จัดการการคืนอุปกรณ์',
-            icon: 'pi pi-fw pi-users',
-            routerLink: '/content/manager/manageReturn'
-          }
         ];
         break;
       case 3:

@@ -3,11 +3,13 @@ import { ReservationService } from 'src/app/shared/services/reservation.service'
 import { Message } from 'primeng/api';
 import { switchMap } from 'rxjs/internal/operators/switchMap';
 import { map } from 'rxjs/internal/operators/map';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-payment',
   templateUrl: './payment.component.html',
-  styleUrls: ['./payment.component.css']
+  styleUrls: ['./payment.component.css'],
+
 })
 export class PaymentComponent implements OnInit {
 
@@ -15,19 +17,19 @@ export class PaymentComponent implements OnInit {
   public payment = [];
   msgs: Message[] = [];
   ngOnInit() {
-    let service = '';
-    this.reservationService.getReservationForPayment(localStorage.getItem('userId')).subscribe(rs => {
+    this.reservationService.getReservationForPayment().subscribe(rs => {
       rs.map(res => {
         this.payment = [...this.payment, {
-          license: res.member_license,
-          car: res.model_name + ' ' + res.brand + ' ' + res.size,
-          total_price: res.total_price,
-          members_name: res.members_fname + ' ' + res.members_lname,
-          end_date: res.end_date,
-          service: res.service_name,
-          reserv_status: res.reserv_status,
-          reserv_id: res.reserv_id,
-          queue_id: res.queue_id
+          license: res.resultReserve.member_license,
+          car: res.resultReserve.model_name + ' ' + res.resultReserve.brand + ' ' + res.resultReserve.size,
+          total_price: res.resultReserve.total_price,
+          members_name: res.resultReserve.members_fname + ' ' + res.resultReserve.members_lname,
+          queue_date: moment(res.resultReserve.queue_date).format('DD-MM-YYYY') ,
+          end_date: res.resultReserve.end_date,
+          service: res.service,
+          reserv_status: res.resultReserve.reserv_status,
+          reserv_id: res.resultReserve.reserv_id,
+          queue_id: res.resultReserve.queue_id
         }]
       })
       console.log(this.payment)
@@ -48,23 +50,19 @@ export class PaymentComponent implements OnInit {
           summary: 'Update Status Complete',
           detail: 'Update Status Complete'
         });
-        return this.reservationService.getReservationForPayment(localStorage.getItem('userId')).pipe(map(rs => {
+        return this.reservationService.getReservationForPayment().pipe(map(rs => {
           rs.map(res => {
-            if (service === '') {
-              service += res.service_name;
-            } else {
-              service += ',' + res.service_name;
-            }
             this.payment = [{
-              license: res.member_license,
-              car: res.model_name + ' ' + res.brand + ' ' + res.size,
-              total_price: res.total_price,
-              members_name: res.members_fname + ' ' + res.members_lname,
-              end_date: res.end_date,
-              service,
-              reserv_status: res.reserv_status,
-              reserv_id: res.reserv_id,
-              queue_id: res.queue_id
+              license: res.resultReserve.member_license,
+              car: res.resultReserve.model_name + ' ' + res.resultReserve.brand + ' ' + res.resultReserve.size,
+              total_price: res.resultReserve.total_price,
+              members_name: res.resultReserve.members_fname + ' ' + res.resultReserve.members_lname,
+              queue_date: moment(res.resultReserve.queue_date).format('DD-MM-YYYY') ,
+              end_date: res.resultReserve.end_date,
+              service: res.service,
+              reserv_status: res.resultReserve.reserv_status,
+              reserv_id: res.resultReserve.reserv_id,
+              queue_id: res.resultReserve.queue_id
             }]
             location.reload();
           })

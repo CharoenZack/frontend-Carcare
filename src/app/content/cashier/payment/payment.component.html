@@ -14,6 +14,12 @@
               ariaLabelDesc="Activate to sort in descending order" ariaLabelAsc="Activate to sort in ascending order">
             </p-sortIcon>
           </th>
+          <th pSortableColumn="queue_date">
+            วันที่ใช้บริการ
+            <p-sortIcon field="queue_date" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order"
+              ariaLabelAsc="Activate to sort in ascending order">
+            </p-sortIcon>
+          </th>
           <th pSortableColumn="car">
             ประเภทรถ
             <p-sortIcon field="car" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order"
@@ -52,6 +58,7 @@
       <ng-template pTemplate="body" let-rowData let-columns="columns">
         <tr>
           <td>{{ rowData.members_name }}</td>
+          <td>{{ rowData.queue_date }}</td>
           <td>{{ rowData.car }}</td>
           <td>{{ rowData.license }}</td>
           <td>{{ rowData.service }}</td>

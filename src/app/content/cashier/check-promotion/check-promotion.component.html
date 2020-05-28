@@ -20,7 +20,7 @@
             </p-sortIcon>
           </th>
           <th pSortableColumn="date">
-            วันที่สิ้นสุดโปรโมชั่น
+            วันที่สิ้นสุดโปรโมชัน
             <p-sortIcon field="name" ariaLabel="Activate to sort" ariaLabelDesc="Activate to sort in descending order"
               ariaLabelAsc="Activate to sort in ascending order">
             </p-sortIcon>
@@ -31,20 +31,14 @@
               ariaLabelAsc="Activate to sort in ascending order">
             </p-sortIcon>
           </th>
-          <th>ดำเนินการ</th>
         </tr>
       </ng-template>
       <ng-template pTemplate="body" let-rowData let-columns="columns">
         <tr>
           <td>{{ rowData.detail }}</td>
-          <td>{{ rowData.date_start }}</td>
-          <td>{{ rowData.date_end }}</td>
+          <td>{{ rowData.date_start | date:'dd-MM-yyyy'}}</td>
+          <td>{{ rowData.date_end | date:'dd-MM-yyyy'}}</td>
           <td>{{ rowData.discount_percent }}</td>
-          <td>
-            <div style="text-align:center">
-              <button pButton type="button" label="ตรวจสอบ" class="ui-button-warning" style="width: 100%;"></button>
-            </div>
-          </td>
         </tr>
       </ng-template>
     </p-table>

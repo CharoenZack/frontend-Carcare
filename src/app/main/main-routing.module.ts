@@ -73,14 +73,6 @@ const routes: Routes = [
             path: 'managePromotion',
             component: ManagePromotionComponent
           },
-          {
-            path: 'manageWithdraw',
-            component: ManageWithdrawComponent,
-          },
-          {
-            path: 'manageReturn',
-            component: ManageReturnComponent,
-          },
         ]
       },
       {

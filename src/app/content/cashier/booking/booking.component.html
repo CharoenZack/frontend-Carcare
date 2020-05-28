@@ -74,7 +74,7 @@
               <ng-template pTemplate="body" let-rowData let-columns="columns">
                 <tr>
                   <td>{{ rowData.members_fname}} {{ rowData.members_lname}}</td>
-                  <td>{{ rowData.queue_date}}</td>
+                  <td>{{ rowData.queue_date | date:'dd-MM-yyyy'}}</td>
                   <td>{{ rowData.start_date}}</td>
                   <td>{{ rowData.model_name+' '+rowData.brand+' '+rowData.size}}</td>
                   <td>{{ rowData.service_name }}</td>
